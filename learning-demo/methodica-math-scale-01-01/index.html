@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -7,14 +7,13 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="app">
+  <main id="app">
 
     <!-- ═══════════════════════════════════════
          GLOBAL — Flag / Report Issue button
     ════════════════════════════════════════ -->
-    <button class="flag-btn" id="flag-btn" onclick="openReportModal()" aria-label="דיווח על בעיה">
-      <span class="flag-icon" aria-hidden="true">⚑</span>
-      <span class="flag-label">מצאתי תקלה</span>
+    <button class="flag-btn" id="flag-btn" onmouseenter="openReportModal()" aria-label="דיווח על בעיה">
+      <span class="flag-icon" aria-hidden="true"><svg width="12" height="17" viewBox="0 0 12 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.397164 17C0.177722 17 0 16.8239 0 16.6065V0.393501C0 0.176082 0.177722 0 0.397164 0C0.616607 0 0.794329 0.176082 0.794329 0.393501V16.607C0.794329 16.8245 0.616607 17.0005 0.397164 17.0005V17Z" fill="#484848"/><path d="M2.76227 9.90917C1.91972 9.90917 1.06958 9.7492 0.213483 9.30738C0.0823588 9.23974 0 9.10499 0 8.95844V1.54473C0 1.40837 0.0715221 1.28168 0.188558 1.20974C0.305594 1.13834 0.45189 1.13136 0.574886 1.19256C0.577053 1.19363 0.578679 1.19471 0.580846 1.19578C2.31309 2.08961 4.05563 1.63975 5.90003 1.16357C7.80946 0.670755 9.78336 0.161835 11.7865 1.19524C11.9176 1.26289 12 1.39763 12 1.54419V8.9579C12 9.08835 11.9344 9.21075 11.8255 9.28376C11.7166 9.35677 11.5774 9.3718 11.4555 9.32349C11.443 9.31866 11.4311 9.31329 11.4197 9.30738C9.68745 8.41355 7.94491 8.86342 6.10051 9.33905C5.00709 9.62089 3.89199 9.90864 2.76281 9.90864L2.76227 9.90917ZM0.793787 8.7131C2.45559 9.46682 4.13094 9.03413 5.90003 8.57782C7.62469 8.13278 9.40191 7.67432 11.2062 8.35181V1.79006C9.54441 1.03634 7.86906 1.46903 6.09997 1.92534C4.37531 2.37038 2.59755 2.82884 0.793787 2.15135V8.7131Z" fill="#484848"/></svg></span>
     </button>
     <section class="screen active" data-screen="0">
       <div class="s0-content">
@@ -56,9 +55,8 @@
           <!-- Section A: טקסט + מגרש + סליידר -->
           <div class="hook-section hook-section-a">
             <p class="hook-intro">
-              אתם רוצים לצלם עם רחפן את משחק גמר ליגת הכדורגל של קבוצת הנוער העירונית.
-              הגדירו את גובה הרחפן באמצעות הכפתור ובדקו:
-              <strong>באיזה יחס נוכל לראות את מספר החולצה של השחקן במרכז המגרש?</strong>
+              אתם רוצים לצלם עם רחפן את משחק גמר ליגת הכדורגל של קבוצת הנוער העירונית.<br>
+              השתמשו בכפתור ובדקו: <strong>באיזה יחס נוכל לראות את מספר החולצה של השחקן במרכז המגרש כדי לזהות מיהו?</strong>
             </p>
             <div class="scale-zone">
               <div style="display:flex; flex-direction:column; align-items:flex-start;">
@@ -82,13 +80,13 @@
                   <label class="scale-step">
                     <input type="radio" name="scale" value="10" class="sr-only scale-input" onchange="setScale(10)">
                     <span class="scale-marker"></span>
-                    <span class="scale-label">10 : 1</span>
+                    <span class="scale-label">1 : 10</span>
                   </label>
                 </div>
               </div>
               </div>
               <div class="field-container" data-scale="1000">
-                <img id="field-img" src="./assets/images/Football yard.png" alt="מגרש כדורגל מהאוויר">
+                <img id="field-img" src="./assets/images/Football yard.jpg" alt="מגרש כדורגל מהאוויר">
               </div>
             </div>
           </div>
@@ -96,23 +94,23 @@
           <!-- Section B: גילינו + מפת עיר -->
           <div class="hook-section hook-section-b">
             <p class="hook-body">
-              גילינו שביחס של 10 : 1 נוכל לראות את מספר החולצה של השחקן במרכז, ואם נרצה לראות את המגרש כולו - נעבור ליחס של 1,000 : 1.
+              ראינו שביחס של 1 : 10 נוכל לראות את מספר החולצה של השחקן במרכז, ואם נרצה לראות את המגרש כולו - נעבור ליחס של 1 : 1,000.
             </p>
             <p class="hook-body">
-              <strong>זהו למעשה קנה מידה</strong> – הגדלה של המספר הימני ביחס (לדוגמה, <mark style="background:#CE82FF; color:inherit; border-radius:3px; padding:0 2px;">1,000</mark> : 1), מאפשרת לנו לכווץ מרחקים מהמציאות אל תוך המסך הקטן של הרחפן, ועדיין לייצג אותם במדוייק.
+              <strong>זהו למעשה קנה מידה</strong> – הגדלה של המספר הימני ביחס (לדוגמה, 1,000 : 1), מאפשרת לנו לכווץ מרחקים מהמציאות אל תוך המסך הקטן של הרחפן, ועדיין לייצג אותם במדוייק.
             </p>
             <p class="hook-body">
-              נשתמש בקנה מידה במקומות נוספים, למשל במפות - כשעיר שלמה מופיעה במדוייק על נייר די קטן:
+              נשתמש בקנה מידה במקומות נוספים, למשל במפות - כשעיר שלמה מופיעה במדוייק על נייר די קטן: ​
             </p>
-            <img class="hook-map-img" src="./assets/images/Tel Aviv Map.png" alt="מפת תל אביב">
+            <img class="hook-map-img" src="./assets/images/Tel Aviv Map.jpg" alt="מפת תל אביב">
           </div>
 
           <!-- Section C: אדריכלות -->
           <div class="hook-section hook-section-c">
             <p class="hook-body">
-              או למשל בתכנית אדריכלית – כששרטוט מדוייק של בית שלם נכנס על מסך מחשב:
+              או למשל בתכנית אדריכלית – כששרטוט מדוייק של בית מוצג בשלמותו על מסך מחשב: ​
             </p>
-            <img class="hook-plan-img" src="./assets/images/Architacture plan.png" alt="תכנית אדריכלית">
+            <img class="hook-plan-img" src="./assets/images/Architacture plan.jpg" alt="תכנית אדריכלית">
           </div>
 
         </div>
@@ -120,18 +118,19 @@
 
       <!-- Character widget 1 (absolute, bottom-left) -->
       <div class="character-widget s1-char-visible" id="s1-char-widget-1">
-        <div class="speech-bubble">מה אני רואה שם?<br>הוא מספר 6?</div>
-        <img id="s1-char-img-1" src="./assets/images/Character2_binoculars.png" alt="דמות מלווה">
+        <div class="speech-bubble">מה אני רואה שם?<br>המספר על החולצה הוא 6?</div>
+        <img id="s1-char-img-1" src="./assets/images/Character2_binoculars.png" alt="דמות עם משקפת">
       </div>
 
       <!-- Character widget 2 (absolute, bottom-left) -->
       <div class="character-widget s1-char-hidden" id="s1-char-widget-2">
         <div class="speech-bubble">בואו נלמד על קנה מידה!</div>
-        <img id="s1-char-img-2" src="./assets/images/Character2_binoculars.png" alt="דמות מלווה">
+        <img id="s1-char-img-2" src="./assets/images/Character2_binoculars.png" alt="דמות עם משקפת">
       </div>
 
       <!-- Bottom bar -->
-      <div class="bottom-bar">
+      <div class="bottom-bar s3-bottom-bar">
+        <button class="btn-back-s3" type="button" onclick="goTo(0)">חזרה</button>
         <button class="btn-continue" id="s1-continue" disabled onclick="goTo(2)">להמשיך</button>
       </div>
 
@@ -139,29 +138,36 @@
 
     <section class="screen" data-screen="2">
       <div class="s0-content">
-        <h1 class="s0-title">בואו נלמד על קנה מידה</h1>
-        <p class="s2-subtitle">בחרו איך תרצו ללמוד:</p>
+        <div style="width: 810px; height: 171px;">
+          <h1 class="s0-title">בואו נלמד על קנה מידה</h1>
+          <p class="s2-subtitle">בחרו איך תרצו ללמוד:</p>
+        </div>
         <div class="option-cards" role="radiogroup" aria-label="בחרו איך תרצו ללמוד">
 
-          <div class="option-card" role="radio" aria-checked="false"
-               tabindex="0" data-value="video" onclick="selectDesign(this)">
-            <div class="option-card-img">
-              <img id="s2-char-a" src="" alt="לצפות בסרטון קצר">
+          <div class="s2-card-col">
+            <div class="option-card" role="radio" aria-checked="false"
+                 tabindex="0" data-value="video" onclick="selectDesign(this)">
+              <div class="option-card-img">
+                <img id="s2-char-a" src="" alt="לצפות בסרטון קצר">
+              </div>
             </div>
             <span class="s2-card-label">לצפות בסרטון קצר</span>
           </div>
 
-          <div class="option-card" role="radio" aria-checked="false"
-               tabindex="0" data-value="cards" onclick="selectDesign(this)">
-            <div class="option-card-img">
-              <img id="s2-char-b" src="" alt="להפוך קלפים">
+          <div class="s2-card-col">
+            <div class="option-card" role="radio" aria-checked="false"
+                 tabindex="0" data-value="cards" onclick="selectDesign(this)">
+              <div class="option-card-img">
+                <img id="s2-char-b" src="" alt="להפוך קלפים">
+              </div>
             </div>
             <span class="s2-card-label">להפוך קלפים</span>
           </div>
 
         </div>
       </div>
-      <div class="bottom-bar">
+      <div class="bottom-bar s3-bottom-bar">
+        <button class="btn-back-s3" type="button" onclick="goTo(1)">חזרה</button>
         <button class="btn-continue" id="s2-continue" disabled onclick="advanceFromS2()">
           להמשיך
         </button>
@@ -169,90 +175,244 @@
     </section>
 
     <section class="screen" data-screen="3" id="s3">
-      <div class="select-content">
-        <div class="select-head">
-          <h1 class="select-title">מהו קנה מידה?</h1>
-          <div class="select-body">
-            <p>קנה מידה הוא היחס בין אורך של עצם בשרטוט, במפה, בתרשים, בדגם או באיור לבין אורכו במציאות.</p>
-            <p>מצד ימין של היחס יצויין האורך במציאות, ומצד שמאל יצויין האורך בתמונה.</p>
-            <p><strong>לחצו על כל תמונת רחפן, כדי ללמוד על קנה המידה בה:</strong></p>
+      <div class="hook-card">
+      <div class="hook-card-inner" id="s3-body">
+        <div class="select-content">
+          <div class="select-head">
+            <h1 class="select-title">מהו קנה מידה?</h1>
+            <div class="select-body">
+              <p>קנה מידה הוא היחס בין אורך של עצם בשרטוט, במפה, בתרשים, בדגם או באיור לבין אורכו המתאים במציאות.</p>
+              <p>המספר הימני ביחס מייצג את האורך במציאות, והמספר השמאלי ביחס מייצג את האורך המתאים בתמונה או בסרטוט.</p>
+              <p><strong>לחצו על כל תמונת רחפן, כדי ללמוד על קנה המידה בה:</strong></p>
+            </div>
+          </div>
+          <div class="option-cards frc-row" role="group" aria-label="כרטיסיות — לחצו לגלות">
+
+            <!-- קלף 1: 1:1,000 -->
+            <button class="frc-card" data-index="0" type="button"
+                    aria-expanded="false" aria-label="כרטיסייה 1 — יחס 1:1,000. לחצו להפוך"
+                    onclick="frcFlip(this)">
+              <div class="frc-card-inner">
+                <div class="frc-card-front">
+                  <div class="frc-field-container" data-zoom="1000">
+                    <img src="./assets/images/Football yard.jpg" alt="מגרש כדורגל — יחס 1:1,000">
+                  </div>
+                </div>
+                <div class="frc-card-back" aria-hidden="true">
+                  <div class="frc-back-thumb" data-zoom="1000">
+                    <img src="./assets/images/Football yard.jpg" alt="">
+                  </div>
+                  <span class="frc-ratio-label">1 : 1,000</span>
+                  <div class="frc-card-back-content">
+                    <p>כל 1 ס"מ בתמונה<br>מייצג 1,000 ס"מ במציאות.</p>
+                  </div>
+                </div>
+              </div>
+            </button>
+
+            <!-- קלף 2: 1:100 -->
+            <button class="frc-card" data-index="1" type="button"
+                    aria-expanded="false" aria-label="כרטיסייה 2 — יחס 1:100. לחצו להפוך"
+                    onclick="frcFlip(this)">
+              <div class="frc-card-inner">
+                <div class="frc-card-front">
+                  <div class="frc-field-container" data-zoom="100">
+                    <img src="./assets/images/Football yard.jpg" alt="מגרש כדורגל — יחס 1:100">
+                  </div>
+                </div>
+                <div class="frc-card-back" aria-hidden="true">
+                  <div class="frc-back-thumb" data-zoom="100">
+                    <img src="./assets/images/Football yard.jpg" alt="">
+                  </div>
+                  <span class="frc-ratio-label">1 : 100</span>
+                  <div class="frc-card-back-content">
+                    <p>כל 1 ס"מ בתמונה<br>מייצג 100 ס"מ במציאות.</p>
+                  </div>
+                </div>
+              </div>
+            </button>
+
+            <!-- קלף 3: 10:1 -->
+            <button class="frc-card" data-index="2" type="button"
+                    aria-expanded="false" aria-label="כרטיסייה 3 — יחס 10:1. לחצו להפוך"
+                    onclick="frcFlip(this)">
+              <div class="frc-card-inner">
+                <div class="frc-card-front">
+                  <div class="frc-field-container" data-zoom="10">
+                    <img src="./assets/images/Football yard.jpg" alt="מגרש כדורגל — יחס 10:1">
+                  </div>
+                </div>
+                <div class="frc-card-back" aria-hidden="true">
+                  <div class="frc-back-thumb" data-zoom="10">
+                    <img src="./assets/images/Football yard.jpg" alt="">
+                  </div>
+                  <span class="frc-ratio-label">1 : 10</span>
+                  <div class="frc-card-back-content">
+                    <p>כל 1 ס"מ בתמונה<br>מייצג 10 ס"מ במציאות.</p>
+                  </div>
+                </div>
+              </div>
+            </button>
+
           </div>
         </div>
-        <div class="option-cards frc-row" role="group" aria-label="כרטיסיות — לחצו לגלות">
 
-          <!-- קלף 1: 1:1,000 -->
-          <button class="frc-card" data-index="0" type="button"
-                  aria-expanded="false" aria-label="כרטיסייה 1 — יחס 1:1,000. לחצו להפוך"
-                  onclick="frcFlip(this)">
-            <div class="frc-card-inner">
-              <div class="frc-card-front">
-                <div class="frc-field-container" data-zoom="1000">
-                  <img src="./assets/images/Football yard.png" alt="מגרש כדורגל — יחס 1:1,000">
+        <!-- Questions section — hidden until all cards flipped -->
+        <div class="sq-section sq-locked" id="s3-sq-section">
+
+          <!-- Q1 -->
+          <div class="s5-q1-wrap">
+            <div class="s5-question-block">
+              <div class="s5-text-col">
+                <div class="s5-title">ועכשיו אתם:</div>
+                <div class="s5-question-text">
+                  קנה המידה של תכנית הבית שלפניכם הוא 100 : 1.<br>
+                  מה מייצג המספר 100 בקנה המידה?
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:flex-start;">
+                  <div class="s5-answers" role="group" aria-label="אפשרויות תשובה">
+                    <button class="s5-opt" data-index="0" type="button" onclick="sqSelect(0)" aria-label="אפשרות 1: את האורך במציאות">
+                      <span class="s5-opt-circle"></span>
+                      <span class="s5-opt-text">את האורך במציאות</span>
+                    </button>
+                    <button class="s5-opt" data-index="1" type="button" onclick="sqSelect(1)" aria-label="אפשרות 2: את האורך בתמונה">
+                      <span class="s5-opt-circle"></span>
+                      <span class="s5-opt-text">את האורך בתמונה</span>
+                    </button>
+                  </div>
+                  <button class="btn-continue s5-btn-check" id="s3q-check" type="button" disabled onclick="sqSubmit()" style="align-self:flex-end; margin-top:16px;">
+                    צדקתי?
+                  </button>
+                </div>
+                <div class="s5-inline-feedback" id="s3q-inline-feedback" hidden>
+                  <div class="s5-fb-icon" id="s3q-fb-icon"></div>
+                  <div class="s5-fb-text">
+                    <span class="s5-fb-bold" id="s3q-fb-bold"></span>
+                    <span class="s5-fb-regular" id="s3q-fb-regular"></span>
+                  </div>
                 </div>
               </div>
-              <div class="frc-card-back" aria-hidden="true">
-                <div class="frc-back-thumb" data-zoom="1000">
-                  <img src="./assets/images/Football yard.png" alt="">
-                </div>
-                <span class="frc-ratio-label">1 : 1,000</span>
-                <div class="frc-card-back-content">
-                  <p>כל 1 ס"מ בתמונה<br>שווה ל-1,000 ס"מ במציאות.</p>
-                </div>
+              <div class="s5-img-wrap">
+                <img src="./assets/images/Architacture plan for Q1.jpg" alt="תכנית אדריכלית לדוגמה">
               </div>
             </div>
-          </button>
+          </div>
 
-          <!-- קלף 2: 1:100 -->
-          <button class="frc-card" data-index="1" type="button"
-                  aria-expanded="false" aria-label="כרטיסייה 2 — יחס 1:100. לחצו להפוך"
-                  onclick="frcFlip(this)">
-            <div class="frc-card-inner">
-              <div class="frc-card-front">
-                <div class="frc-field-container" data-zoom="100">
-                  <img src="./assets/images/Football yard.png" alt="מגרש כדורגל — יחס 1:100">
+          <!-- Info section -->
+          <div class="s5-info-section">
+            <p class="s5-info-p"><strong>שימו לב: נוכל לבנות קנה מידה רק בתנאי שיחידות המידה של התמונה ובמציאות זהות. ​</strong></p>
+            <p class="s5-info-p"><strong>אם הן אינן זהות, עלינו להמיר אותן כך שתהיינה זהות.​</strong></p>
+            <p class="s5-info-p">לדוגמה, כשאורך קו מסויים בתמונה הוא 4 ס"מ, ואורכו במציאות הוא 8 מטרים – נמיר את המטרים לסנטימטרים על מנת לבנות את קנה המידה. ​</p>
+            <p class="s5-info-p">8 מטרים = 800 ס"מ​</p>
+            <p class="s5-info-p">4 ס"מ בתמונה הם 800 ס"מ במציאות. נצמצם 800 : 4 ונקבל את קנה המידה 200 : 1.</p>
+            <p class="s5-info-spacer"></p>
+            <p class="s5-info-p"><strong>זכרו:</strong></p>
+            <p class="s5-info-p">10 מ"מ = 1 ס"מ</p>
+            <p class="s5-info-p">100 ס"מ = 1 מטר</p>
+            <p class="s5-info-p">1,000 מטרים = 1 ק"מ</p>
+          </div>
+
+          <!-- Q2 -->
+          <div class="s5-q2-wrap" id="s3q-q2-wrap">
+            <div class="s5-title">בחרו את המספרים המתאימים מכל רשימה, והשלימו את המרת היחידות:</div>
+            <div class="s5-fill-rows">
+              <div class="s5-fill-row">
+                <span class="s5-fill-text">ב-3 ק"מ יש</span>
+                <div class="sq-dropdown" data-row="0">
+                  <button class="s5-dd-trigger" type="button" onclick="sqQ2Toggle(0)">
+                    <span class="s5-dd-icon" id="s3q-dd-icon-0"></span>
+                    <span class="s5-dd-value" id="s3q-dd-val-0">-</span>
+                    <span class="s5-dd-chevron"><svg width="16" height="8" viewBox="0 0 16 8" fill="none"><path d="M1 1L8 7L15 1" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                  <div class="s5-dd-panel" id="s3q-dd-panel-0" hidden>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(0,'300')">300</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(0,'3,000')">3,000</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(0,'30,000')">30,000</button>
+                  </div>
                 </div>
+                <span class="s5-fill-text">מטרים</span>
               </div>
-              <div class="frc-card-back" aria-hidden="true">
-                <div class="frc-back-thumb" data-zoom="100">
-                  <img src="./assets/images/Football yard.png" alt="">
+              <div class="s5-fill-row">
+                <span class="s5-fill-text">ב-17 מטרים יש</span>
+                <div class="sq-dropdown" data-row="1">
+                  <button class="s5-dd-trigger" type="button" onclick="sqQ2Toggle(1)">
+                    <span class="s5-dd-icon" id="s3q-dd-icon-1"></span>
+                    <span class="s5-dd-value" id="s3q-dd-val-1">-</span>
+                    <span class="s5-dd-chevron"><svg width="16" height="8" viewBox="0 0 16 8" fill="none"><path d="M1 1L8 7L15 1" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                  <div class="s5-dd-panel" id="s3q-dd-panel-1" hidden>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(1,'170')">170</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(1,'1,700')">1,700</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(1,'17,000')">17,000</button>
+                  </div>
                 </div>
-                <span class="frc-ratio-label">1 : 100</span>
-                <div class="frc-card-back-content">
-                  <p>כל 1 ס"מ בתמונה<br>שווה ל-100 ס"מ במציאות.</p>
+                <span class="s5-fill-text">ס"מ</span>
+              </div>
+              <div class="s5-fill-row">
+                <span class="s5-fill-text">ב-32 ס"מ יש</span>
+                <div class="sq-dropdown" data-row="2">
+                  <button class="s5-dd-trigger" type="button" onclick="sqQ2Toggle(2)">
+                    <span class="s5-dd-icon" id="s3q-dd-icon-2"></span>
+                    <span class="s5-dd-value" id="s3q-dd-val-2">-</span>
+                    <span class="s5-dd-chevron"><svg width="16" height="8" viewBox="0 0 16 8" fill="none"><path d="M1 1L8 7L15 1" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                  <div class="s5-dd-panel" id="s3q-dd-panel-2" hidden>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(2,'320')">320</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(2,'3,200')">3,200</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(2,'32,000')">32,000</button>
+                  </div>
                 </div>
+                <span class="s5-fill-text">מ"מ</span>
+              </div>
+              <div class="s5-fill-row">
+                <span class="s5-fill-text">ב-7 ק"מ יש</span>
+                <div class="sq-dropdown" data-row="3">
+                  <button class="s5-dd-trigger" type="button" onclick="sqQ2Toggle(3)">
+                    <span class="s5-dd-icon" id="s3q-dd-icon-3"></span>
+                    <span class="s5-dd-value" id="s3q-dd-val-3">-</span>
+                    <span class="s5-dd-chevron"><svg width="16" height="8" viewBox="0 0 16 8" fill="none"><path d="M1 1L8 7L15 1" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                  <div class="s5-dd-panel" id="s3q-dd-panel-3" hidden>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(3,'7,000')">7,000</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(3,'70,000')">70,000</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(3,'700,000')">700,000</button>
+                  </div>
+                </div>
+                <span class="s5-fill-text">ס"מ</span>
               </div>
             </div>
-          </button>
-
-          <!-- קלף 3: 10:1 -->
-          <button class="frc-card" data-index="2" type="button"
-                  aria-expanded="false" aria-label="כרטיסייה 3 — יחס 10:1. לחצו להפוך"
-                  onclick="frcFlip(this)">
-            <div class="frc-card-inner">
-              <div class="frc-card-front">
-                <div class="frc-field-container" data-zoom="10">
-                  <img src="./assets/images/Football yard.png" alt="מגרש כדורגל — יחס 10:1">
-                </div>
-              </div>
-              <div class="frc-card-back" aria-hidden="true">
-                <div class="frc-back-thumb" data-zoom="10">
-                  <img src="./assets/images/Football yard.png" alt="">
-                </div>
-                <span class="frc-ratio-label">10 : 1</span>
-                <div class="frc-card-back-content">
-                  <p>כל 1 ס"מ בתמונה<br>שווה ל-10 ס"מ במציאות.</p>
-                </div>
+            <button class="btn-continue s5-q2-btn-check" id="s3q-q2-check" type="button" disabled onclick="sqQ2Submit()" style="margin-right:205px;">
+              צדקתי?
+            </button>
+            <div class="s5-inline-feedback" id="s3q-q2-inline-feedback" hidden>
+              <div class="s5-fb-icon" id="s3q-q2-fb-icon"></div>
+              <div class="s5-fb-text">
+                <span class="s5-fb-bold" id="s3q-q2-fb-bold"></span>
+                <span class="s5-fb-regular" id="s3q-q2-fb-regular"></span>
               </div>
             </div>
-          </button>
+          </div>
 
         </div>
       </div>
+      </div>
+
+      <div class="character-widget hidden" id="s3-char-widget">
+        <div class="speech-bubble">לאורך כל היחידה,<br>שימו לב ליחידות המידה!</div>
+        <img id="s3-char-img" src="./assets/images/Character1.png" alt="דמות מלווה">
+      </div>
+
       <div class="bottom-bar s3-bottom-bar">
         <button class="btn-back-s3" type="button" onclick="goTo(2)">חזרה</button>
         <div class="s3-mode-toggle" role="group" aria-label="מצב למידה">
-          <button class="s3-toggle-opt" data-view="video" type="button" onclick="goTo(4)">לצפות בסרטון</button>
-          <button class="s3-toggle-opt s3-toggle-opt--active" data-view="cards" type="button">להפוך קלפים</button>
+          <button class="s3-toggle-opt" data-view="video" type="button" onclick="goTo(4)">
+            <span class="s3-toggle-icon"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12.479" cy="12.479" r="10.679" fill="currentColor" stroke="white" stroke-width="1"/><path d="M9.49976 7.1123C9.57521 7.1123 9.64824 7.13153 9.72144 7.17383L18.2429 12.0938C18.3842 12.1753 18.4664 12.3162 18.4666 12.4795C18.4666 12.643 18.3843 12.7846 18.2429 12.8662L9.72144 17.7861C9.64824 17.8284 9.5752 17.8477 9.49976 17.8477C9.25346 17.8474 9.05249 17.6458 9.05249 17.3994V7.55957C9.05272 7.31342 9.2536 7.11254 9.49976 7.1123Z" fill="white" stroke="white" stroke-linecap="round"/></svg></span>
+            לצפות בסרטון
+          </button>
+          <button class="s3-toggle-opt s3-toggle-opt--active" data-view="cards" type="button">
+            <span class="s3-toggle-icon"><svg width="20" height="26" viewBox="0 0 20 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.13776 0.75H16.3622C17.6809 0.75 18.75 1.81903 18.75 3.13775V24.6276H0.75V3.13775C0.75 1.81903 1.81903 0.75 3.13776 0.75Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/><path d="M14.5259 4.97461H4.97485V6.444H14.5259V4.97461Z" fill="white" stroke="white"/><path d="M14.5259 10.1172H4.97485V11.5866H14.5259V10.1172Z" fill="white" stroke="white"/><path d="M14.5255 15.2598H8.64795V16.7292H14.5255V15.2598Z" fill="white" stroke="white"/></svg></span>
+            להפוך קלפים
+          </button>
         </div>
         <button class="btn-continue" id="s3-continue" disabled onclick="advanceFromS3()">
           להמשיך
@@ -262,46 +422,192 @@
 
     <section class="screen" data-screen="4" id="s4">
 
-      <div class="s4-content">
+      <div class="hook-card">
+      <div class="hook-card-inner" id="s4-body">
 
-        <div class="s4-head">
-          <h1 class="s4-title">מהו קנה מידה?</h1>
-          <p class="s4-subtitle"><strong>לחצו על הסרטון לצפייה:</strong></p>
-        </div>
+        <div class="s4-content">
 
-        <div class="s4-player-wrap">
-
-          <!-- Placeholder (לפני לחיצה) -->
-          <div class="s4-placeholder" id="s4-placeholder">
-            <div class="s4-placeholder-icon">▶</div>
+          <div class="s4-head">
+            <h1 class="s4-title">מהו קנה מידה?</h1>
+            <p class="s4-subtitle"><strong>לחצו על הסרטון לצפייה:</strong></p>
           </div>
 
-          <!-- Playing state (לאחר לחיצה) -->
-          <div class="s4-playing" id="s4-playing" hidden>
-            <p class="s4-playing-label">הסרטון מתנגן...</p>
-            <div class="s4-placeholder-progress">
-              <div class="s4-progress-bar" id="s4-progress-bar"></div>
+          <div class="s4-player-wrap">
+
+            <video id="s4-video" class="s4-video" src="./assets/videos/Video.mp4" preload="auto"></video>
+
+            <!-- כפתור play — נעלם כשהסרטון מתחיל -->
+            <button class="s4-play-btn" id="s4-play-btn" type="button" onclick="s4Start()" aria-label="הפעל סרטון">
+              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="16,10 38,22 16,34" fill="white"/>
+              </svg>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Questions section — hidden until video ends -->
+        <div class="sq-section sq-locked" id="s4-sq-section">
+
+          <!-- Q1 -->
+          <div class="s5-q1-wrap">
+            <div class="s5-question-block">
+              <div class="s5-text-col">
+                <div class="s5-title">ועכשיו אתם:</div>
+                <div class="s5-question-text">
+                  קנה המידה של תכנית הבית שלפניכם הוא 100 : 1.<br>
+                  מה מייצג המספר 100 בקנה המידה?
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:flex-start;">
+                  <div class="s5-answers" role="group" aria-label="אפשרויות תשובה">
+                    <button class="s5-opt" data-index="0" type="button" onclick="sqSelect(0)" aria-label="אפשרות 1: את האורך במציאות">
+                      <span class="s5-opt-circle"></span>
+                      <span class="s5-opt-text">את האורך במציאות</span>
+                    </button>
+                    <button class="s5-opt" data-index="1" type="button" onclick="sqSelect(1)" aria-label="אפשרות 2: את האורך בתמונה">
+                      <span class="s5-opt-circle"></span>
+                      <span class="s5-opt-text">את האורך בתמונה</span>
+                    </button>
+                  </div>
+                  <button class="btn-continue s5-btn-check" id="s4q-check" type="button" disabled onclick="sqSubmit()" style="align-self:flex-end; margin-top:16px;">
+                    צדקתי?
+                  </button>
+                </div>
+                <div class="s5-inline-feedback" id="s4q-inline-feedback" hidden>
+                  <div class="s5-fb-icon" id="s4q-fb-icon"></div>
+                  <div class="s5-fb-text">
+                    <span class="s5-fb-bold" id="s4q-fb-bold"></span>
+                    <span class="s5-fb-regular" id="s4q-fb-regular"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="s5-img-wrap">
+                <img src="./assets/images/Architacture plan for Q1.jpg" alt="תכנית אדריכלית לדוגמה">
+              </div>
             </div>
           </div>
 
-          <!-- כפתור "להתחיל" — תמיד נגיש -->
-          <button class="s4-start-btn" id="s4-start-btn" type="button" onclick="s4Start()">
-            להתחיל
-          </button>
+          <!-- Info section -->
+          <div class="s5-info-section">
+            <p class="s5-info-p"><strong>שימו לב: נוכל לבנות קנה מידה רק בתנאי שיחידות המידה של התמונה ובמציאות זהות. ​</strong></p>
+            <p class="s5-info-p"><strong>אם הן אינן זהות, עלינו להמיר אותן כך שתהיינה זהות.​</strong></p>
+            <p class="s5-info-p">לדוגמה, כשאורך קו מסויים בתמונה הוא 4 ס"מ, ואורכו במציאות הוא 8 מטרים – נמיר את המטרים לסנטימטרים על מנת לבנות את קנה המידה. ​</p>
+            <p class="s5-info-p">8 מטרים = 800 ס"מ​</p>
+            <p class="s5-info-p">4 ס"מ בתמונה הם 800 ס"מ במציאות. נצמצם 800 : 4 ונקבל את קנה המידה 200 : 1.</p>
+            <p class="s5-info-spacer"></p>
+            <p class="s5-info-p"><strong>זכרו:</strong></p>
+            <p class="s5-info-p">10 מ"מ = 1 ס"מ</p>
+            <p class="s5-info-p">100 ס"מ = 1 מטר</p>
+            <p class="s5-info-p">1,000 מטרים = 1 ק"מ</p>
+          </div>
+
+          <!-- Q2 -->
+          <div class="s5-q2-wrap" id="s4q-q2-wrap">
+            <div class="s5-title">בחרו את המספרים המתאימים מכל רשימה, והשלימו את המרת היחידות:</div>
+            <div class="s5-fill-rows">
+              <div class="s5-fill-row">
+                <span class="s5-fill-text">ב-3 ק"מ יש</span>
+                <div class="sq-dropdown" data-row="0">
+                  <button class="s5-dd-trigger" type="button" onclick="sqQ2Toggle(0)">
+                    <span class="s5-dd-icon" id="s4q-dd-icon-0"></span>
+                    <span class="s5-dd-value" id="s4q-dd-val-0">-</span>
+                    <span class="s5-dd-chevron"><svg width="16" height="8" viewBox="0 0 16 8" fill="none"><path d="M1 1L8 7L15 1" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                  <div class="s5-dd-panel" id="s4q-dd-panel-0" hidden>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(0,'300')">300</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(0,'3,000')">3,000</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(0,'30,000')">30,000</button>
+                  </div>
+                </div>
+                <span class="s5-fill-text">מטרים</span>
+              </div>
+              <div class="s5-fill-row">
+                <span class="s5-fill-text">ב-17 מטרים יש</span>
+                <div class="sq-dropdown" data-row="1">
+                  <button class="s5-dd-trigger" type="button" onclick="sqQ2Toggle(1)">
+                    <span class="s5-dd-icon" id="s4q-dd-icon-1"></span>
+                    <span class="s5-dd-value" id="s4q-dd-val-1">-</span>
+                    <span class="s5-dd-chevron"><svg width="16" height="8" viewBox="0 0 16 8" fill="none"><path d="M1 1L8 7L15 1" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                  <div class="s5-dd-panel" id="s4q-dd-panel-1" hidden>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(1,'170')">170</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(1,'1,700')">1,700</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(1,'17,000')">17,000</button>
+                  </div>
+                </div>
+                <span class="s5-fill-text">ס"מ</span>
+              </div>
+              <div class="s5-fill-row">
+                <span class="s5-fill-text">ב-32 ס"מ יש</span>
+                <div class="sq-dropdown" data-row="2">
+                  <button class="s5-dd-trigger" type="button" onclick="sqQ2Toggle(2)">
+                    <span class="s5-dd-icon" id="s4q-dd-icon-2"></span>
+                    <span class="s5-dd-value" id="s4q-dd-val-2">-</span>
+                    <span class="s5-dd-chevron"><svg width="16" height="8" viewBox="0 0 16 8" fill="none"><path d="M1 1L8 7L15 1" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                  <div class="s5-dd-panel" id="s4q-dd-panel-2" hidden>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(2,'320')">320</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(2,'3,200')">3,200</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(2,'32,000')">32,000</button>
+                  </div>
+                </div>
+                <span class="s5-fill-text">מ"מ</span>
+              </div>
+              <div class="s5-fill-row">
+                <span class="s5-fill-text">ב-7 ק"מ יש</span>
+                <div class="sq-dropdown" data-row="3">
+                  <button class="s5-dd-trigger" type="button" onclick="sqQ2Toggle(3)">
+                    <span class="s5-dd-icon" id="s4q-dd-icon-3"></span>
+                    <span class="s5-dd-value" id="s4q-dd-val-3">-</span>
+                    <span class="s5-dd-chevron"><svg width="16" height="8" viewBox="0 0 16 8" fill="none"><path d="M1 1L8 7L15 1" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                  <div class="s5-dd-panel" id="s4q-dd-panel-3" hidden>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(3,'7,000')">7,000</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(3,'70,000')">70,000</button>
+                    <button class="s5-dd-opt" type="button" onclick="sqQ2Select(3,'700,000')">700,000</button>
+                  </div>
+                </div>
+                <span class="s5-fill-text">ס"מ</span>
+              </div>
+            </div>
+            <button class="btn-continue s5-q2-btn-check" id="s4q-q2-check" type="button" disabled onclick="sqQ2Submit()" style="margin-right:205px;">
+              צדקתי?
+            </button>
+            <div class="s5-inline-feedback" id="s4q-q2-inline-feedback" hidden>
+              <div class="s5-fb-icon" id="s4q-q2-fb-icon"></div>
+              <div class="s5-fb-text">
+                <span class="s5-fb-bold" id="s4q-q2-fb-bold"></span>
+                <span class="s5-fb-regular" id="s4q-q2-fb-regular"></span>
+              </div>
+            </div>
+          </div>
 
         </div>
+
+      </div>
       </div>
 
       <div class="character-widget" id="s4-char-widget">
         <div class="speech-bubble">אני כבר מוכנה עם פופקורן</div>
-        <img id="s4-char-img" src="./assets/images/Character1_popcorn.png" alt="דמות מלווה">
+        <img id="s4-char-img" src="./assets/images/Character1_popcorn.png" alt="דמות עם פופקורן">
+      </div>
+
+      <div class="character-widget hidden" id="s4-char-widget-roller">
+        <div class="speech-bubble">לאורך כל היחידה,<br>שימו לב ליחידות המידה!</div>
+        <img id="s4-char-img-roller" src="./assets/images/Character1_roller.png" alt="דמות עם סרגל">
       </div>
 
       <div class="bottom-bar s3-bottom-bar">
         <button class="btn-back-s3" type="button" onclick="goTo(2)">חזרה</button>
         <div class="s3-mode-toggle" role="group" aria-label="מצב למידה">
-          <button class="s3-toggle-opt s3-toggle-opt--active" data-view="video" type="button">לצפות בסרטון</button>
-          <button class="s3-toggle-opt" data-view="cards" type="button" onclick="goTo(3)">להפוך קלפים</button>
+          <button class="s3-toggle-opt s3-toggle-opt--active" data-view="video" type="button">
+            <span class="s3-toggle-icon"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12.479" cy="12.479" r="10.679" fill="currentColor" stroke="white" stroke-width="1"/><path d="M9.49976 7.1123C9.57521 7.1123 9.64824 7.13153 9.72144 7.17383L18.2429 12.0938C18.3842 12.1753 18.4664 12.3162 18.4666 12.4795C18.4666 12.643 18.3843 12.7846 18.2429 12.8662L9.72144 17.7861C9.64824 17.8284 9.5752 17.8477 9.49976 17.8477C9.25346 17.8474 9.05249 17.6458 9.05249 17.3994V7.55957C9.05272 7.31342 9.2536 7.11254 9.49976 7.1123Z" fill="white" stroke="white" stroke-linecap="round"/></svg></span>
+            לצפות בסרטון
+          </button>
+          <button class="s3-toggle-opt" data-view="cards" type="button" onclick="goTo(3)">
+            <span class="s3-toggle-icon"><svg width="20" height="26" viewBox="0 0 20 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.13776 0.75H16.3622C17.6809 0.75 18.75 1.81903 18.75 3.13775V24.6276H0.75V3.13775C0.75 1.81903 1.81903 0.75 3.13776 0.75Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/><path d="M14.5259 4.97461H4.97485V6.444H14.5259V4.97461Z" fill="white" stroke="white"/><path d="M14.5259 10.1172H4.97485V11.5866H14.5259V10.1172Z" fill="white" stroke="white"/><path d="M14.5255 15.2598H8.64795V16.7292H14.5255V15.2598Z" fill="white" stroke="white"/></svg></span>
+            להפוך קלפים
+          </button>
         </div>
         <button class="btn-continue" id="s4-continue" disabled onclick="advanceFromS3()">
           להמשיך
@@ -310,202 +616,18 @@
 
     </section>
 
-    <section class="screen" data-screen="5" id="s5">
-
-      <!-- Scrollable body (top: 0 — no header; bottom: 74px for bottom bar) -->
-      <div class="s5-body">
-
-        <!-- ─── Q1: question block ─── -->
-        <div class="s5-q1-wrap">
-          <div class="s5-question-block">
-
-            <!-- Text + answers (right column in RTL) -->
-            <div class="s5-text-col">
-              <div class="s5-title">ועכשיו אתם:</div>
-              <div class="s5-question-text">
-                קנה המידה של תכנית הבית שלפניכם הוא 100 : 1.<br>
-                מה מייצג המספר 100 בקנה המידה?
-              </div>
-              <div style="display:flex; flex-direction:column; align-items:flex-start;">
-                <div class="s5-answers" role="group" aria-label="אפשרויות תשובה">
-                  <button class="s5-opt" data-index="0" type="button" onclick="s5Select(0)"
-                          aria-label="אפשרות 1: את האורך במציאות">
-                    <span class="s5-opt-circle"></span>
-                    <span class="s5-opt-text">את האורך במציאות</span>
-                  </button>
-                  <button class="s5-opt" data-index="1" type="button" onclick="s5Select(1)"
-                          aria-label="אפשרות 2: את האורך בתמונה">
-                    <span class="s5-opt-circle"></span>
-                    <span class="s5-opt-text">את האורך בתמונה</span>
-                  </button>
-                </div>
-                <!-- בדוק — מיושר לשמאל לפי s5-answers -->
-                <button class="btn-continue s5-btn-check" id="s5-check" type="button" disabled onclick="s5Submit()" style="align-self:flex-end; margin-top:16px;">
-                  צדקתי?
-                </button>
-              </div>
-              <!-- Inline feedback — icon first = physical RIGHT in RTL -->
-              <div class="s5-inline-feedback" id="s5-inline-feedback" hidden>
-                <div class="s5-fb-icon" id="s5-fb-icon"></div>
-                <div class="s5-fb-text">
-                  <span class="s5-fb-bold" id="s5-fb-bold"></span>
-                  <span class="s5-fb-regular" id="s5-fb-regular"></span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Image (left column in RTL) -->
-            <div class="s5-img-wrap">
-              <img src="./assets/images/Architacture plan for Q1.png" alt="תכנית אדריכלית לדוגמה">
-            </div>
-
-          </div>
-        </div>
-
-        <!-- ─── Informational text ─── -->
-        <div class="s5-info-section">
-          <p class="s5-info-p"><strong>שימו לב: נוכל לבנות קנה מידה רק בתנאי שיחידות המידה זהות.</strong></p>
-          <p class="s5-info-p"><strong>אם הן אינן זהות, עלינו להמיר אותן כך שיהיה זהות.</strong></p>
-          <p class="s5-info-p">לדוגמה, כשאורך קו מסויין בתמונה הוא 4 ס"מ, ואורכו במציאות הוא 8 מטרים – נמיר את המטרים לסנטימטרים על מנת לבנות את קנה המידה.</p>
-          <p class="s5-info-p">8 מטרים = 800 ס"מ</p>
-          <p class="s5-info-p">מכאן שקנה המידה שלנו יהיה 800 : 4</p>
-          <p class="s5-info-spacer"></p>
-          <p class="s5-info-p"><strong>זכרו:</strong></p>
-          <p class="s5-info-p">10 מ"מ = 1 ס"מ</p>
-          <p class="s5-info-p">100 ס"מ = 1 מטר</p>
-          <p class="s5-info-p">1,000 מטרים = 1 ק"מ</p>
-        </div>
-
-        <!-- ─── Q2: dropdown fill-in-the-blank ─── -->
-        <div class="s5-q2-wrap" id="s5-q2-wrap">
-          <div class="s5-title">בחרו את המספרים המתאימים מכל רשימה, והשלימו את המרות היחידות:</div>
-
-          <div class="s5-fill-rows">
-
-            <!-- שורה 0: ב-3 ק"מ יש [dropdown] מטרים -->
-            <div class="s5-fill-row">
-              <span class="s5-fill-text">ב-3 ק"מ יש</span>
-              <div class="s5-dropdown" data-row="0">
-                <button class="s5-dd-trigger" type="button" onclick="s5Q2Toggle(0)">
-                  <span class="s5-dd-icon" id="s5-dd-icon-0"></span>
-                  <span class="s5-dd-value" id="s5-dd-val-0">-</span>
-                  <span class="s5-dd-chevron"><svg width="16" height="8" viewBox="0 0 16 8" fill="none"><path d="M1 1L8 7L15 1" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                </button>
-                <div class="s5-dd-panel" id="s5-dd-panel-0" hidden>
-                  <button class="s5-dd-opt" type="button" onclick="s5Q2Select(0,'300')">300</button>
-                  <button class="s5-dd-opt" type="button" onclick="s5Q2Select(0,'3,000')">3,000</button>
-                  <button class="s5-dd-opt" type="button" onclick="s5Q2Select(0,'30,000')">30,000</button>
-                </div>
-              </div>
-              <span class="s5-fill-text">מטרים</span>
-            </div>
-
-            <!-- שורה 1: ב-17 מטרים יש [dropdown] ס"מ -->
-            <div class="s5-fill-row">
-              <span class="s5-fill-text">ב-17 מטרים יש</span>
-              <div class="s5-dropdown" data-row="1">
-                <button class="s5-dd-trigger" type="button" onclick="s5Q2Toggle(1)">
-                  <span class="s5-dd-icon" id="s5-dd-icon-1"></span>
-                  <span class="s5-dd-value" id="s5-dd-val-1">-</span>
-                  <span class="s5-dd-chevron"><svg width="16" height="8" viewBox="0 0 16 8" fill="none"><path d="M1 1L8 7L15 1" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                </button>
-                <div class="s5-dd-panel" id="s5-dd-panel-1" hidden>
-                  <button class="s5-dd-opt" type="button" onclick="s5Q2Select(1,'170')">170</button>
-                  <button class="s5-dd-opt" type="button" onclick="s5Q2Select(1,'1,700')">1,700</button>
-                  <button class="s5-dd-opt" type="button" onclick="s5Q2Select(1,'17,000')">17,000</button>
-                </div>
-              </div>
-              <span class="s5-fill-text">ס"מ</span>
-            </div>
-
-            <!-- שורה 2: ב-32 ס"מ יש [dropdown] מ"מ -->
-            <div class="s5-fill-row">
-              <span class="s5-fill-text">ב-32 ס"מ יש</span>
-              <div class="s5-dropdown" data-row="2">
-                <button class="s5-dd-trigger" type="button" onclick="s5Q2Toggle(2)">
-                  <span class="s5-dd-icon" id="s5-dd-icon-2"></span>
-                  <span class="s5-dd-value" id="s5-dd-val-2">-</span>
-                  <span class="s5-dd-chevron"><svg width="16" height="8" viewBox="0 0 16 8" fill="none"><path d="M1 1L8 7L15 1" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                </button>
-                <div class="s5-dd-panel" id="s5-dd-panel-2" hidden>
-                  <button class="s5-dd-opt" type="button" onclick="s5Q2Select(2,'320')">320</button>
-                  <button class="s5-dd-opt" type="button" onclick="s5Q2Select(2,'3,200')">3,200</button>
-                  <button class="s5-dd-opt" type="button" onclick="s5Q2Select(2,'32,000')">32,000</button>
-                </div>
-              </div>
-              <span class="s5-fill-text">מ"מ</span>
-            </div>
-
-            <!-- שורה 3: ב-7 ק"מ יש [dropdown] ס"מ -->
-            <div class="s5-fill-row">
-              <span class="s5-fill-text">ב-7 ק"מ יש</span>
-              <div class="s5-dropdown" data-row="3">
-                <button class="s5-dd-trigger" type="button" onclick="s5Q2Toggle(3)">
-                  <span class="s5-dd-icon" id="s5-dd-icon-3"></span>
-                  <span class="s5-dd-value" id="s5-dd-val-3">-</span>
-                  <span class="s5-dd-chevron"><svg width="16" height="8" viewBox="0 0 16 8" fill="none"><path d="M1 1L8 7L15 1" stroke="#AEAEAE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                </button>
-                <div class="s5-dd-panel" id="s5-dd-panel-3" hidden>
-                  <button class="s5-dd-opt" type="button" onclick="s5Q2Select(3,'7,000')">7,000</button>
-                  <button class="s5-dd-opt" type="button" onclick="s5Q2Select(3,'70,000')">70,000</button>
-                  <button class="s5-dd-opt" type="button" onclick="s5Q2Select(3,'700,000')">700,000</button>
-                </div>
-              </div>
-              <span class="s5-fill-text">ס"מ</span>
-            </div>
-
-          </div>
-
-          <!-- בדוק — physical LEFT (align-self: flex-end in RTL column) -->
-          <button class="btn-continue s5-q2-btn-check" id="s5-q2-check" type="button" disabled onclick="s5Q2Submit()" style="margin-right:205px;">
-            צדקתי?
-          </button>
-          <!-- Inline feedback — icon first = physical RIGHT in RTL -->
-          <div class="s5-inline-feedback" id="s5-q2-inline-feedback" hidden>
-            <div class="s5-fb-icon" id="s5-q2-fb-icon"></div>
-            <div class="s5-fb-text">
-              <span class="s5-fb-bold" id="s5-q2-fb-bold"></span>
-              <span class="s5-fb-regular" id="s5-q2-fb-regular"></span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Character widget — same structure as screen 1/2, positioned on physical right -->
-      <div class="character-widget hidden" id="s5-char-widget">
-        <div class="speech-bubble">לאורך כל היחידה,<br>שימו לב ליחידות המידה!</div>
-        <img id="s5-char-img" src="./assets/images/Character1.png" alt="דמות מלווה">
-      </div>
-
-      <!-- Bottom bar (same pattern as screens 3 & 4) -->
-      <div class="bottom-bar s3-bottom-bar" id="s5-bottom-bar">
-
-        <!-- Center: toggle pill (dynamic based on selectedDesign) -->
-        <div class="s3-mode-toggle" role="group" aria-label="מצב למידה" id="s5-mode-toggle">
-          <button class="s3-toggle-opt" data-view="video" type="button" id="s5-toggle-video">לצפות בסרטון</button>
-          <button class="s3-toggle-opt" data-view="cards" type="button" id="s5-toggle-cards">להפוך קלפים</button>
-        </div>
-
-        <!-- Left: "המשך" continue button -->
-        <button class="btn-continue" id="s5-continue" type="button" disabled onclick="s5Continue()">
-          המשך
-        </button>
-
-      </div>
-
-    </section>
-
     <section class="screen" data-screen="6" id="s6">
 
       <div class="s0-content">
-        <h1 class="s0-title">עוד מעט נתחיל לתרגל,</h1>
-        <p class="s2-subtitle">רגע לפני, בואו נפתור תרגיל אחד יחד</p>
-        <img id="s6-char-img" src="./assets/images/Character1_holdhands.png" alt="דמות מלווה" class="s6-char-img">
+        <div class="s6-text-block">
+          <h1 class="s0-title">עוד מעט נתחיל לתרגל,</h1>
+          <p class="s2-subtitle">רגע לפני, בואו נפתור תרגיל אחד יחד</p>
+        </div>
+        <img id="s6-char-img" src="./assets/images/Character1_holdhands.png" alt="דמויות מחזיקות ידיים" class="s6-char-img">
       </div>
 
       <div class="bottom-bar s3-bottom-bar">
-        <button class="btn-back-s3" type="button" onclick="goTo(5)">חזרה</button>
+        <button class="btn-back-s3" type="button" onclick="goTo(window.lomdaState.selectedDesign === 'video' ? 4 : 3)">חזרה</button>
         <button class="btn-continue" id="s6-continue" type="button" onclick="goTo(7)">המשך</button>
       </div>
 
@@ -519,8 +641,9 @@
         <p class="s7-prompt">התבוננו בתרגיל הבא. אל תפתרו אותו, רק הסתכלו על הנתונים וחישבו האם יש לכם כיוון לפתרון.</p>
       </div>
 
-      <!-- כרטיס: מסגרת כחולה, רקע לבן, תמונה מרכזית בין הטקסטים -->
-      <div class="s7-card">
+      <div class="s8-layout">
+      <!-- כרטיס -->
+      <div class="s7-card s8-card">
 
         <p class="s7-card-desc">
           אורך משטח ההחלקה לסקייטבורד שבתמונה הוא 5 ס"מ.<br>
@@ -531,13 +654,14 @@
           <img src="./assets/images/Guided practice Q1.png" alt="משטח החלקה לסקייטבורד">
         </div>
 
-        <p class="s7-card-q"><strong>1. מה מהבאים נכון?</strong></p>
+        <p class="s7-card-q"><strong>1. סמנו את הטענה הנכונה:​</strong></p>
         <div class="s7-options">
-          <p class="s7-opt">א. הנתונים הם 5 ו-10, לכן קנה המידה הוא 10 : 5</p>
-          <p class="s7-opt">ב. אורך המשטח הוא 10 מטרים שהם 100 ס"מ, ולכן קנה המידה הוא 100 : 5</p>
-          <p class="s7-opt">ג. אורך המשטח הוא 10 מטרים שהם 1,000 ס"מ, ולכן קנה המידה הוא 1,000 : 5</p>
+          <p class="s7-opt">א. היחס בין אורך המשטח בתמונה לאורכו במציאות הוא 10 : 5, ולכן קנה המידה הוא 2 : 1​</p>
+          <p class="s7-opt">ב. 10 מטרים הם 100 ס"מ, ולכן היחס בין האורכים הוא 100 : 5 וקנה המידה הוא 20 : 1​</p>
+          <p class="s7-opt">ג. 10 מטרים הם 1,000 ס"מ, ולכן היחס בין האורכים הוא 1,000 : 5 וקנה המידה הוא 200 : 1</p>
         </div>
 
+      </div>
       </div>
 
       <!-- Character widget — same structure & classes as screen 1 -->
@@ -577,11 +701,11 @@
             <img src="./assets/images/Guided practice Q1.png" alt="משטח החלקה לסקייטבורד">
           </div>
 
-          <p class="s7-card-q"><strong>1. מה מהבאים נכון?</strong></p>
+          <p class="s7-card-q"><strong>1. סמנו את הטענה הנכונה:​</strong></p>
           <div class="s7-options">
-            <p class="s7-opt">א. הנתונים הם 5 ו-10, לכן קנה המידה הוא 10 : 5</p>
-            <p class="s7-opt">ב. אורך המשטח הוא 10 מטרים שהם 100 ס"מ, ולכן קנה המידה הוא 100 : 5</p>
-            <p class="s7-opt">ג. אורך המשטח הוא 10 מטרים שהם 1,000 ס"מ, ולכן קנה המידה הוא 1,000 : 5</p>
+            <p class="s7-opt">א. היחס בין אורך המשטח בתמונה לאורכו במציאות הוא 10 : 5, ולכן קנה המידה הוא 2 : 1​</p>
+            <p class="s7-opt">ב. 10 מטרים הם 100 ס"מ, ולכן היחס בין האורכים הוא 100 : 5 וקנה המידה הוא 20 : 1​</p>
+            <p class="s7-opt">ג. 10 מטרים הם 1,000 ס"מ, ולכן היחס בין האורכים הוא 1,000 : 5 וקנה המידה הוא 200 : 1</p>
           </div>
 
         </div>
@@ -634,11 +758,11 @@
             <img src="./assets/images/Guided practice Q1.png" alt="משטח החלקה לסקייטבורד">
           </div>
 
-          <p class="s7-card-q"><strong>1. מה מהבאים נכון?</strong></p>
+          <p class="s7-card-q"><strong>1. סמנו את הטענה הנכונה:​</strong></p>
           <div class="s7-options">
-            <p class="s7-opt">א. הנתונים הם 5 ו-10, לכן קנה המידה הוא 10 : 5</p>
-            <p class="s7-opt">ב. אורך המשטח הוא 10 מטרים שהם 100 ס"מ, ולכן קנה המידה הוא 100 : 5</p>
-            <p class="s7-opt">ג. אורך המשטח הוא 10 מטרים שהם 1,000 ס"מ, ולכן קנה המידה הוא 1,000 : 5</p>
+            <p class="s7-opt">א. היחס בין אורך המשטח בתמונה לאורכו במציאות הוא 10 : 5, ולכן קנה המידה הוא 2 : 1​</p>
+            <p class="s7-opt">ב. 10 מטרים הם 100 ס"מ, ולכן היחס בין האורכים הוא 100 : 5 וקנה המידה הוא 20 : 1​</p>
+            <p class="s7-opt">ג. 10 מטרים הם 1,000 ס"מ, ולכן היחס בין האורכים הוא 1,000 : 5 וקנה המידה הוא 200 : 1</p>
           </div>
 
         </div>
@@ -691,11 +815,11 @@
             <img src="./assets/images/Guided practice Q1.png" alt="משטח החלקה לסקייטבורד">
           </div>
 
-          <p class="s7-card-q"><strong>1. מה מהבאים נכון?</strong></p>
+          <p class="s7-card-q"><strong>1. סמנו את הטענה הנכונה:​</strong></p>
           <div class="s7-options">
-            <p class="s7-opt">א. הנתונים הם 5 ו-10, לכן קנה המידה הוא 10 : 5</p>
-            <p class="s7-opt">ב. אורך המשטח הוא 10 מטרים שהם 100 ס"מ, ולכן קנה המידה הוא 100 : 5</p>
-            <p class="s7-opt">ג. אורך המשטח הוא 10 מטרים שהם 1,000 ס"מ, ולכן קנה המידה הוא 1,000 : 5</p>
+            <p class="s7-opt">א. היחס בין אורך המשטח בתמונה לאורכו במציאות הוא 10 : 5, ולכן קנה המידה הוא 2 : 1​</p>
+            <p class="s7-opt">ב. 10 מטרים הם 100 ס"מ, ולכן היחס בין האורכים הוא 100 : 5 וקנה המידה הוא 20 : 1​</p>
+            <p class="s7-opt">ג. 10 מטרים הם 1,000 ס"מ, ולכן היחס בין האורכים הוא 1,000 : 5 וקנה המידה הוא 200 : 1</p>
           </div>
 
         </div>
@@ -748,20 +872,20 @@
             <img src="./assets/images/Guided practice Q1.png" alt="משטח החלקה לסקייטבורד">
           </div>
 
-          <p class="s7-card-q s11-black"><strong>1. מה מהבאים נכון?</strong></p>
+          <p class="s7-card-q s11-black"><strong>1. סמנו את הטענה הנכונה:​</strong></p>
           <div class="s7-options">
-            <p class="s7-opt s11-black">א. הנתונים הם 5 ו-10, לכן קנה המידה הוא 10 : 5</p>
-            <p class="s7-opt s11-black">ב. אורך המשטח הוא 10 מטרים שהם 100 ס"מ, ולכן קנה המידה הוא 100 : 5</p>
-            <p class="s7-opt s11-black"><span class="s8-highlight">ג. אורך המשטח הוא 10 מטרים שהם 1,000 ס"מ, ולכן קנה המידה הוא 1,000 : 5</span></p>
+            <p class="s7-opt s11-black">א. היחס בין אורך המשטח בתמונה לאורכו במציאות הוא 10 : 5, ולכן קנה המידה הוא 2 : 1​</p>
+            <p class="s7-opt s11-black">ב. 10 מטרים הם 100 ס"מ, ולכן היחס בין האורכים הוא 100 : 5 וקנה המידה הוא 20 : 1​</p>
+            <p class="s7-opt s11-black"><span class="s8-highlight">ג. 10 מטרים הם 1,000 ס"מ, ולכן היחס בין האורכים הוא 1,000 : 5 וקנה המידה הוא 200 : 1</span></p>
           </div>
 
         </div>
 
         <!-- פופאפ — physical LEFT (second child in RTL) -->
         <div class="s8-popup" id="s11-popup">
-          <p class="s8-popup-text">ב-10 מטרים יש 1,000 סנטימטרים, וידוע שאורך המשטח בתמונה הוא 5 ס"מ.</p>
-          <p class="s8-popup-text">מכאן, שקנה המידה הוא 1,000 : 5.</p>
-          <p class="s8-popup-text">כלומר, תשובה ג היא הנכונה.</p>
+          <p class="s8-popup-text">ב-10 מטרים יש 1,000 סנטימרים, ונתון שאורך המשטח בתמונה הוא 5 ס"מ.​</p>
+          <p class="s8-popup-text">מכאן, שהיחס בין האורך בתמונה והאורך במציאות הוא 1,000 : 5, וקנה המידה הוא 200 : 1 (צמצמנו את היחס ב-5).​</p>
+          <p class="s8-popup-text">כלומר, תשובה ג היא הנכונה.​</p>
         </div>
 
       </div>
@@ -782,8 +906,9 @@
         <p class="s7-prompt">התבוננו בתרגיל הבא. אל תפתרו אותו, רק הסתכלו על הנתונים וחישבו האם יש לכם כיוון לפתרון.</p>
       </div>
 
+      <div class="s8-layout">
       <!-- כרטיס -->
-      <div class="s7-card">
+      <div class="s7-card s8-card">
 
         <p class="s7-card-desc">
           אורך משטח ההחלקה לסקייטבורד שבתמונה הוא 5 ס"מ.<br>
@@ -794,80 +919,24 @@
           <img src="./assets/images/Guided practice Q1.png" alt="משטח החלקה לסקייטבורד">
         </div>
 
-        <p class="s7-card-q"><strong>2. גילינו שקנה המידה הוא 1,000 : 5. השלימו:</strong></p>
+        <p class="s7-card-q"><strong>2. ראינו שהיחס הוא 1,000 : 5. ולכן קנה המידה הוא 200 : 1. השלימו: ​</strong></p>
         <div class="s7-options">
-          <p class="s7-opt">היחס המצומצם הוא: _______ : 1</p>
-          <p class="s7-opt">1 ס"מ בתמונה מייצג _______ ס"מ במציאות</p>
+          <p class="s7-opt">1 ס"מ בתמונה מייצג _______ ס"מ במציאות​</p>
         </div>
 
+      </div>
       </div>
 
       <!-- Character widget -->
       <div class="character-widget" id="s12-char-widget">
-        <div class="speech-bubble">יש לכם רעיון איך לפתור?</div>
+        <div class="speech-bubble">חישבו: מה המשמעות של קנה מידה?​</div>
         <img id="s12-char-img" src="./assets/images/Character1.png" alt="דמות מלווה">
       </div>
 
       <!-- Bottom bar -->
       <div class="bottom-bar s3-bottom-bar">
         <button class="btn-back-s3" type="button" onclick="goTo(11)">חזרה</button>
-        <button class="btn-continue" id="s12-continue" type="button" onclick="goTo(13)">המשך</button>
-      </div>
-
-    </section>
-
-    <section class="screen" data-screen="13" id="s13">
-
-      <!-- כותרת + הנחיה -->
-      <div class="s7-header">
-        <h1 class="s7-title">קנה מידה – בואו נפתור תרגיל ראשון יחד</h1>
-        <p class="s7-prompt">התבוננו בתרגיל הבא. אל תפתרו אותו, רק הסתכלו על הנתונים וחישבו האם יש לכם כיוון לפתרון.</p>
-      </div>
-
-      <!-- Layout: כרטיס (ימין) + פופאפ (שמאל) — RTL flex row -->
-      <div class="s8-layout">
-
-        <!-- כרטיס — physical RIGHT (first child in RTL) -->
-        <div class="s7-card s8-card">
-
-          <p class="s7-card-desc">
-            אורך משטח ההחלקה לסקייטבורד שבתמונה הוא 5 ס"מ.<br>
-            אורך המשטח במציאות הוא 10 מטרים.
-          </p>
-
-          <div class="s7-card-img">
-            <img src="./assets/images/Guided practice Q1.png" alt="משטח החלקה לסקייטבורד">
-          </div>
-
-          <p class="s7-card-q s13-black"><strong>2. גילינו שקנה המידה הוא <span class="s8-highlight">1,000 : 5.</span> השלימו:</strong></p>
-          <div class="s7-options">
-            <p class="s7-opt s13-black">היחס המצומצם הוא: <span class="s8-highlight">_______ : 1</span></p>
-            <p class="s7-opt">1 ס"מ בתמונה מייצג _______ ס"מ במציאות</p>
-          </div>
-
-        </div>
-
-        <!-- פופאפ — physical LEFT (second child in RTL) -->
-        <div class="s8-popup" id="s13-popup">
-          <p class="s8-popup-text">גילינו ש-5 ס"מ בתמונה מייצגים 1,000 ס"מ במציאות.</p>
-          <p class="s8-popup-text">מה עלינו לעשות כדי לגלות מה מייצג 1 ס"מ בתמונה?</p>
-          <div class="s8-popup-btns">
-            <button class="s8-btn s8-btn-no s13-btn-wide" type="button" id="s13-btn-divide" onclick="s13Answer('divide')">
-              <span class="s8-correct-mark" id="s13-correct-mark">
-                <svg width="20" height="20" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="none" stroke="#a51cff75" stroke-width="2"/><path d="M8 14.5L12 18.5L20 10" stroke="#a51cff75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </span>
-              לחלק ב-5 את הצד השני
-            </button>
-            <button class="s8-btn s13-btn-wide" type="button" id="s13-btn-multiply" onclick="s13Answer('multiply')">לכפול פי 5 את הצד השני</button>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Bottom bar -->
-      <div class="bottom-bar s3-bottom-bar">
-        <button class="btn-back-s3" type="button" onclick="goTo(12)">חזרה</button>
-        <button class="btn-continue" id="s13-continue" type="button" disabled onclick="goTo(14)">המשך</button>
+        <button class="btn-continue" id="s12-continue" type="button" onclick="goTo(14)">המשך</button>
       </div>
 
     </section>
@@ -895,25 +964,24 @@
             <img src="./assets/images/Guided practice Q1.png" alt="משטח החלקה לסקייטבורד">
           </div>
 
-          <p class="s7-card-q s13-black"><strong>2. גילינו שקנה המידה הוא 1,000 : 5. השלימו:</strong></p>
+          <p class="s7-card-q s13-black"><strong>2. ראינו שהיחס הוא 1,000 : 5. ולכן קנה המידה הוא 200 : 1. השלימו: ​</strong></p>
           <div class="s7-options">
-            <p class="s7-opt s13-black">היחס המצומצם הוא: _______ : 1</p>
-            <p class="s7-opt s13-black"><span class="s8-highlight">1 ס"מ בתמונה מייצג _______ ס"מ במציאות</span></p>
+            <p class="s7-opt s13-black">1 ס"מ בתמונה מייצג _______ ס"מ במציאות​</p>
           </div>
 
         </div>
 
         <!-- פופאפ — physical LEFT (second child in RTL) -->
         <div class="s8-popup" id="s14-popup">
-          <p class="s8-popup-text">חילקנו גם את 1,000 ב-5, וקיבלנו יחס מצומצם של 200 : 1.</p>
-          <p class="s8-popup-text">המשמעות היא שכל 1 ס"מ מייצג 200 ס"מ במציאות.</p>
+          <p class="s8-popup-text">קנה המידה הוא 200 : 1. ​</p>
+          <p class="s8-popup-text">המשמעות היא שכל 1 ס"מ מייצג 200 ס"מ במציאות.​</p>
         </div>
 
       </div>
 
       <!-- Bottom bar -->
       <div class="bottom-bar s3-bottom-bar">
-        <button class="btn-back-s3" type="button" onclick="goTo(13)">חזרה</button>
+        <button class="btn-back-s3" type="button" onclick="goTo(12)">חזרה</button>
         <button class="btn-continue" id="s14-continue" type="button" onclick="goTo(15)">המשך</button>
       </div>
 
@@ -922,8 +990,10 @@
     <section class="screen" data-screen="15" id="s15">
 
       <div class="s0-content">
-        <h1 class="s0-title">ועכשיו, תרגיל לחימום!</h1>
-        <img id="s15-char-img" src="./assets/images/Character1_workout.png" alt="דמות מלווה" class="s6-char-img">
+        <div class="s6-text-block">
+          <h1 class="s0-title">ועכשיו, תרגיל לחימום!</h1>
+        </div>
+        <img id="s15-char-img" src="./assets/images/Character1_workout.png" alt="דמות מתאמנת" class="s6-char-img">
       </div>
 
       <div class="bottom-bar s3-bottom-bar">
@@ -943,7 +1013,7 @@
 
             <div class="s5-text-col">
               <div class="s5-question-text">
-                <strong>קנה מידה של 1:100 אומר שכל 1 ס"מ בשרטוט שווה ל-100 ס"מ במציאות.</strong>
+                <strong>קנה מידה של 1:100 אומר שכל יחידת אורך אחת בסרטוט מייצגת 100 יחידות אורך מתאימות במציאות.  ​</strong>
               </div>
               <div class="s5-answers" role="group" aria-label="אפשרויות תשובה">
                 <button class="s5-opt" data-index="0" type="button" onclick="s16Select(0)"
@@ -988,7 +1058,7 @@
           </svg>
           <div class="s16-hint-popup-title">רמז</div>
         </div>
-        <div class="s16-hint-popup-text">זכרו את סדר הכתיבה הקבוע של קנה המידה -<br>(אורך בשרטוט) : (אורך במציאות)</div>
+        <div class="s16-hint-popup-text">זכרו את סדר הכתיבה הקבוע של קנה המידה:​<br>אורך במציאות : אורך בשרטוט ​<br>(בקנה מידה האורך בשרטוט מיוצג על ידי המספר 1).​</div>
         <button class="s16-hint-popup-close" type="button" onclick="s16CloseHint()">חזרה לשאלה</button>
       </div>
 
@@ -996,15 +1066,19 @@
         <button class="btn-back-s3" type="button" onclick="goTo(15)">חזרה</button>
         <div class="s16-hint-continue-group">
           <button class="s16-hint-btn" type="button" id="s16-hint-btn" onclick="s16ToggleHint()">
-            <svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M11 1C6.58 1 3 4.58 3 9C3 11.76 4.39 14.19 7 15.67L7.5 15.97V19C7.5 19.55 7.95 20 8.5 20H13.5C14.05 20 14.5 19.55 14.5 19V15.97L15 15.67C17.61 14.19 19 11.76 19 9C19 4.58 15.42 1 11 1Z" fill="#a51cff75"/>
-              <rect x="8" y="20.5" width="6" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="8.75" y="22.5" width="4.5" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="9.5" y="24.5" width="3" height="1.25" rx="0.625" fill="#a51cff75"/>
+            <svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M17.7926 3.61917C16.3677 2.23483 14.5058 1.54348 12.5489 1.67126C9.08003 1.89734 6.27294 4.77251 6.01804 8.35706C5.85655 10.6293 6.70359 12.8001 8.34383 14.3105C9.23044 15.128 9.74025 16.3207 9.74025 17.5822H11.2285H14.7734H16.2616C16.2616 16.3404 16.792 15.1264 17.7182 14.2516C19.17 12.882 20.0012 10.9308 20.0012 8.89933C20.0012 6.86787 19.1954 4.98058 17.791 3.61589L17.7926 3.61917ZM13.0001 6.40096C11.6702 6.40096 10.5857 7.52154 10.5857 8.90096C10.5857 9.32528 10.2516 9.67095 9.84157 9.67095C9.43151 9.67095 9.09745 9.32528 9.09745 8.90096C9.09745 6.67291 10.8485 4.86098 13.0001 4.86098C13.4134 4.86098 13.7474 5.20666 13.7474 5.63097C13.7474 6.05528 13.4134 6.40096 13.0001 6.40096Z" fill="#8300D9"/>
+              <path d="M9.73877 20.4807C9.73877 21.1852 9.99842 21.847 10.4781 22.3467L10.494 22.3631C10.9784 22.866 11.6244 23.1445 12.3115 23.1445H13.689C14.3777 23.1445 15.0252 22.8677 15.5113 22.3614C15.9957 21.8601 16.2633 21.1917 16.2633 20.484V18.8457H9.73877V20.4807ZM11.227 20.3857H14.7719V20.484C14.7719 20.7805 14.6611 21.0639 14.4568 21.2753C14.2542 21.4817 13.9755 21.6046 13.689 21.6046H12.3115C12.0281 21.6046 11.759 21.4899 11.5563 21.2867L11.5452 21.2736C11.3426 21.0672 11.227 20.7789 11.227 20.4823V20.3873V20.3857Z" fill="#8300D9"/>
+              <path d="M25.2557 8.13086H22.6069C22.1953 8.13086 21.8628 8.47653 21.8628 8.90085C21.8628 9.32516 22.1969 9.67084 22.6069 9.67084H25.2557C25.6673 9.67084 25.9998 9.32516 25.9998 8.90085C25.9998 8.47653 25.6657 8.13086 25.2557 8.13086Z" fill="#8300D9"/>
+              <path d="M4.1386 8.90085C4.1386 8.4749 3.80453 8.13086 3.39447 8.13086H0.744124C0.332481 8.13086 0 8.47653 0 8.90085C0 9.32516 0.334064 9.67084 0.744124 9.67084H3.39289C3.80453 9.67084 4.13701 9.32516 4.13701 8.90085H4.1386Z" fill="#8300D9"/>
+              <path d="M20.8703 3.96945C21.0175 3.96945 21.1663 3.92357 21.2961 3.83019L23.4668 2.25745C23.804 2.01335 23.8847 1.53333 23.6488 1.18438C23.4129 0.835427 22.9491 0.750237 22.6118 0.995978L20.4412 2.56872C20.104 2.81282 20.0232 3.29284 20.2591 3.64179C20.4032 3.85641 20.6344 3.97108 20.8703 3.97108V3.96945Z" fill="#8300D9"/>
+              <path d="M4.70362 13.9729L2.53299 15.5456C2.19576 15.7897 2.11502 16.2697 2.35092 16.6187C2.49499 16.8333 2.72615 16.948 2.96205 16.948C3.10929 16.948 3.25812 16.9021 3.38794 16.8087L5.55857 15.236C5.8958 14.9919 5.97654 14.5118 5.74064 14.1629C5.50474 13.8139 5.04085 13.7288 4.70362 13.9745V13.9729Z" fill="#8300D9"/>
+              <path d="M23.4668 15.5441L21.2962 13.9714C20.959 13.7273 20.4951 13.8125 20.2592 14.1598C20.0233 14.5087 20.1056 14.9887 20.4412 15.2328L22.6119 16.8056C22.7417 16.9006 22.8905 16.9448 23.0378 16.9448C23.2721 16.9448 23.5032 16.8302 23.6489 16.6156C23.8848 16.2666 23.8025 15.7866 23.4668 15.5425V15.5441Z" fill="#8300D9"/>
+              <path d="M5.55862 2.56951L3.388 0.996766C3.05077 0.752663 2.58688 0.837853 2.35097 1.18517C2.11507 1.53412 2.1974 2.01413 2.53304 2.25824L4.70367 3.83098C4.8335 3.926 4.98232 3.97023 5.12956 3.97023C5.36388 3.97023 5.59504 3.85555 5.74069 3.64094C5.9766 3.29199 5.89427 2.81197 5.55862 2.56787V2.56951Z" fill="#8300D9"/>
             </svg>
             אפשר רמז?
           </button>
-          <button class="btn-continue" id="s16-continue" type="button" disabled onclick="goTo(17)">צדקתי?</button>
+          <button class="btn-continue" id="s16-continue" type="button" disabled onclick="s16Submit()">צדקתי?</button>
         </div>
       </div>
 
@@ -1013,13 +1087,14 @@
     <section class="screen" data-screen="17" id="s17">
 
       <div class="s0-content">
-        <p class="s2-subtitle">סיימנו את שלב הלימוד, ועכשיו נעבור לתרגול.</p>
-        <h1 class="s0-title s17-big">מיד יוצגו 5 תרגילים.</h1>
-        <p class="s2-subtitle">מענה נכון על 4 תרגילים ומעלה – נעבור לתרגול המתקדם.</p>
-        <p class="s2-subtitle">פחות מזה – נתרגל עוד קצת לחיזוק.</p>
+        <div class="s6-text-block">
+          <p class="s2-subtitle">סיימנו את שלב הלימוד, ועכשיו נעבור לתרגול.</p>
+          <h1 class="s0-title s17-big">מיד יוצגו 5 תרגילים.</h1>
+          <p class="s2-subtitle">צריך לענות נכון על 4 תרגילים לפחות.​</p>
+        </div>
         <div class="s17-img-wrap">
           <img id="s17-char-img" src="./assets/images/Character1.png" alt="דמות מלווה" class="s6-char-img">
-          <div class="s17-bubble">אם לא תגיעו ל-80%, נמשיך לתרגל עוד קצת, עד שנצליח :)</div>
+          <div class="s17-bubble">לא הכל ברור? אפשר לפנות אל הצ'אט או אל המורה לחיזוק! ​</div>
         </div>
       </div>
 
@@ -1043,35 +1118,15 @@
 
       <!-- Question navigation dots -->
       <div class="s18-nav" dir="rtl">
-        <!-- Q1 (active) -->
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--active"></div>
-          <div class="s18-nav-label s18-nav-label--on">1</div>
-        </div>
+        <div class="s18-nav-item" data-q="1"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 1</div></div>
         <div class="s18-nav-line"></div>
-        <!-- Q2 -->
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--off"></div>
-          <div class="s18-nav-label s18-nav-label--off">2</div>
-        </div>
+        <div class="s18-nav-item" data-q="2"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 2</div></div>
         <div class="s18-nav-line"></div>
-        <!-- Q3 -->
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--off"></div>
-          <div class="s18-nav-label s18-nav-label--off">3</div>
-        </div>
+        <div class="s18-nav-item" data-q="3"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 3</div></div>
         <div class="s18-nav-line"></div>
-        <!-- Q4 -->
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--off"></div>
-          <div class="s18-nav-label s18-nav-label--off">4</div>
-        </div>
+        <div class="s18-nav-item" data-q="4"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 4</div></div>
         <div class="s18-nav-line"></div>
-        <!-- Q5 -->
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--off"></div>
-          <div class="s18-nav-label s18-nav-label--off">5</div>
-        </div>
+        <div class="s18-nav-item" data-q="5"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 5</div></div>
       </div>
 
       <!-- Question -->
@@ -1082,21 +1137,21 @@
             <div class="s18-q-inner">
               <div class="s18-q-text-wrap">
                 <div class="s18-q-text">
-                  לפניכם תמונה של קונסולת משחק.<br>
-                  קנה המידה של התמונה הוא 6 : 1.<br>
-                  הזיזו את הסרגל אל הקונסולה ומדדו את אורכה.<br>
-                  <strong>מהו האורך של הקונסולה במציאות?</strong>
+                  לפניכם תמונה של נעל כדורסל. ​<br>
+                  קנה המידה של התמונה הוא 6 : 1.​<br>
+                  הזיזו את הסרגל אל הנעל ומדדו את אורכה. ​<br>
+                  <strong>מהו האורך של הנעל במציאות בס"מ?</strong>
                 </div>
               </div>
               <div class="s18-fill-row">
-                <span class="s18-fill-text">הקלידו את התשובה:</span>
-                <input class="s18-answer-box" id="s18-answer-input" type="text" dir="rtl" oninput="s18CheckInput()">
+                <span class="s18-fill-text" id="label-s18">הקלידו את התשובה:</span>
+                <input class="s18-answer-box" id="s18-answer-input" type="text" dir="rtl" oninput="s18CheckInput()" aria-labelledby="label-s18">
               </div>
             </div>
           </div>
           <!-- LEFT column: console image -->
           <div class="s18-q-left">
-            <img class="s18-console-img" src="./assets/images/Play_Consulse.png" alt="קונסולת משחק">
+            <img class="s18-console-img" src="./assets/images/Shoes.png" alt="נעל כדורסל">
           </div>
         </div>
       </div>
@@ -1121,7 +1176,7 @@
           </svg>
           <div class="s16-hint-popup-title">רמז</div>
         </div>
-        <div class="s16-hint-popup-text">נסו לחשוב – פי כמה גדול אורך הקונסולה במציאות מאורך הקונסולה בתמונה?</div>
+        <div class="s16-hint-popup-text">נסו לחשוב – פי כמה גדול אורך הנעל במציאות מהאורך שלה בתמונה?​</div>
         <button class="s16-hint-popup-close" type="button" onclick="s18CloseHint()">חזרה לשאלה</button>
       </div>
 
@@ -1139,11 +1194,15 @@
         <button class="btn-back-s3" type="button" onclick="goTo(17)">חזרה</button>
         <div class="s16-hint-continue-group">
           <button class="s16-hint-btn" type="button" id="s18-hint-btn" hidden onclick="s18ToggleHint()">
-            <svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M11 1C6.58 1 3 4.58 3 9C3 11.76 4.39 14.19 7 15.67L7.5 15.97V19C7.5 19.55 7.95 20 8.5 20H13.5C14.05 20 14.5 19.55 14.5 19V15.97L15 15.67C17.61 14.19 19 11.76 19 9C19 4.58 15.42 1 11 1Z" fill="#a51cff75"/>
-              <rect x="8" y="20.5" width="6" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="8.75" y="22.5" width="4.5" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="9.5" y="24.5" width="3" height="1.25" rx="0.625" fill="#a51cff75"/>
+            <svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M17.7926 3.61917C16.3677 2.23483 14.5058 1.54348 12.5489 1.67126C9.08003 1.89734 6.27294 4.77251 6.01804 8.35706C5.85655 10.6293 6.70359 12.8001 8.34383 14.3105C9.23044 15.128 9.74025 16.3207 9.74025 17.5822H11.2285H14.7734H16.2616C16.2616 16.3404 16.792 15.1264 17.7182 14.2516C19.17 12.882 20.0012 10.9308 20.0012 8.89933C20.0012 6.86787 19.1954 4.98058 17.791 3.61589L17.7926 3.61917ZM13.0001 6.40096C11.6702 6.40096 10.5857 7.52154 10.5857 8.90096C10.5857 9.32528 10.2516 9.67095 9.84157 9.67095C9.43151 9.67095 9.09745 9.32528 9.09745 8.90096C9.09745 6.67291 10.8485 4.86098 13.0001 4.86098C13.4134 4.86098 13.7474 5.20666 13.7474 5.63097C13.7474 6.05528 13.4134 6.40096 13.0001 6.40096Z" fill="#8300D9"/>
+              <path d="M9.73877 20.4807C9.73877 21.1852 9.99842 21.847 10.4781 22.3467L10.494 22.3631C10.9784 22.866 11.6244 23.1445 12.3115 23.1445H13.689C14.3777 23.1445 15.0252 22.8677 15.5113 22.3614C15.9957 21.8601 16.2633 21.1917 16.2633 20.484V18.8457H9.73877V20.4807ZM11.227 20.3857H14.7719V20.484C14.7719 20.7805 14.6611 21.0639 14.4568 21.2753C14.2542 21.4817 13.9755 21.6046 13.689 21.6046H12.3115C12.0281 21.6046 11.759 21.4899 11.5563 21.2867L11.5452 21.2736C11.3426 21.0672 11.227 20.7789 11.227 20.4823V20.3873V20.3857Z" fill="#8300D9"/>
+              <path d="M25.2557 8.13086H22.6069C22.1953 8.13086 21.8628 8.47653 21.8628 8.90085C21.8628 9.32516 22.1969 9.67084 22.6069 9.67084H25.2557C25.6673 9.67084 25.9998 9.32516 25.9998 8.90085C25.9998 8.47653 25.6657 8.13086 25.2557 8.13086Z" fill="#8300D9"/>
+              <path d="M4.1386 8.90085C4.1386 8.4749 3.80453 8.13086 3.39447 8.13086H0.744124C0.332481 8.13086 0 8.47653 0 8.90085C0 9.32516 0.334064 9.67084 0.744124 9.67084H3.39289C3.80453 9.67084 4.13701 9.32516 4.13701 8.90085H4.1386Z" fill="#8300D9"/>
+              <path d="M20.8703 3.96945C21.0175 3.96945 21.1663 3.92357 21.2961 3.83019L23.4668 2.25745C23.804 2.01335 23.8847 1.53333 23.6488 1.18438C23.4129 0.835427 22.9491 0.750237 22.6118 0.995978L20.4412 2.56872C20.104 2.81282 20.0232 3.29284 20.2591 3.64179C20.4032 3.85641 20.6344 3.97108 20.8703 3.97108V3.96945Z" fill="#8300D9"/>
+              <path d="M4.70362 13.9729L2.53299 15.5456C2.19576 15.7897 2.11502 16.2697 2.35092 16.6187C2.49499 16.8333 2.72615 16.948 2.96205 16.948C3.10929 16.948 3.25812 16.9021 3.38794 16.8087L5.55857 15.236C5.8958 14.9919 5.97654 14.5118 5.74064 14.1629C5.50474 13.8139 5.04085 13.7288 4.70362 13.9745V13.9729Z" fill="#8300D9"/>
+              <path d="M23.4668 15.5441L21.2962 13.9714C20.959 13.7273 20.4951 13.8125 20.2592 14.1598C20.0233 14.5087 20.1056 14.9887 20.4412 15.2328L22.6119 16.8056C22.7417 16.9006 22.8905 16.9448 23.0378 16.9448C23.2721 16.9448 23.5032 16.8302 23.6489 16.6156C23.8848 16.2666 23.8025 15.7866 23.4668 15.5425V15.5441Z" fill="#8300D9"/>
+              <path d="M5.55862 2.56951L3.388 0.996766C3.05077 0.752663 2.58688 0.837853 2.35097 1.18517C2.11507 1.53412 2.1974 2.01413 2.53304 2.25824L4.70367 3.83098C4.8335 3.926 4.98232 3.97023 5.12956 3.97023C5.36388 3.97023 5.59504 3.85555 5.74069 3.64094C5.9766 3.29199 5.89427 2.81197 5.55862 2.56787V2.56951Z" fill="#8300D9"/>
             </svg>
             אפשר רמז?
           </button>
@@ -1164,32 +1223,17 @@
         </button>
       </div>
 
-      <!-- Nav dots — Q1 done, Q2 active, Q3-Q5 off -->
+      <!-- Nav dots -->
       <div class="s18-nav" dir="rtl">
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--done"></div>
-          <div class="s18-nav-label s18-nav-label--on">1</div>
-        </div>
-        <div class="s18-nav-line s18-nav-line--done"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--active"></div>
-          <div class="s18-nav-label s18-nav-label--on">2</div>
-        </div>
+        <div class="s18-nav-item" data-q="1"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 1</div></div>
         <div class="s18-nav-line"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--off"></div>
-          <div class="s18-nav-label s18-nav-label--off">3</div>
-        </div>
+        <div class="s18-nav-item" data-q="2"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 2</div></div>
         <div class="s18-nav-line"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--off"></div>
-          <div class="s18-nav-label s18-nav-label--off">4</div>
-        </div>
+        <div class="s18-nav-item" data-q="3"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 3</div></div>
         <div class="s18-nav-line"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--off"></div>
-          <div class="s18-nav-label s18-nav-label--off">5</div>
-        </div>
+        <div class="s18-nav-item" data-q="4"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 4</div></div>
+        <div class="s18-nav-line"></div>
+        <div class="s18-nav-item" data-q="5"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 5</div></div>
       </div>
 
       <!-- Question -->
@@ -1203,18 +1247,19 @@
                   לפניכם תרשים של חדר ילדים.<br>
                   אורך שולחן הכתיבה בתרשים הוא 7 ס"מ.<br>
                   אורך השולחן במציאות הוא 1.4 מטרים.<br>
-                  <strong>א. מהו קנה המידה המצומצם של התרשים?</strong>
+                  <strong>א. מהו קנה המידה של התרשים?​</strong>
                 </div>
               </div>
               <div class="s18-fill-row">
-                <span class="s18-fill-text">הקלידו את התשובה:</span>
-                <input class="s18-answer-box" id="s19-answer-input" type="text" dir="rtl" oninput="s19CheckInput()">
+                <span class="s18-fill-text" id="label-s19a">השלימו את התשובה:</span>
+                <input class="s18-answer-box" id="s19-answer-input" type="text" dir="rtl" oninput="s19CheckInput()" aria-labelledby="label-s19a label-s19b">
+                <span class="s18-fill-text" id="label-s19b">: 1</span>
               </div>
             </div>
           </div>
           <!-- LEFT column: bedroom image -->
           <div class="s18-q-left">
-            <img class="s18-console-img" src="./assets/images/Bed Room.png" alt="תרשים חדר ילדים">
+            <img class="s18-console-img" src="./assets/images/Bed Room.jpg" alt="תרשים חדר ילדים">
           </div>
         </div>
       </div>
@@ -1239,7 +1284,7 @@
           </svg>
           <div class="s16-hint-popup-title">רמז</div>
         </div>
-        <div class="s16-hint-popup-text">זכרו - כדי לבנות קנה מידה, הנתון המייצג את השרטוט והנתון המייצג את המציאות חייבים להיות באותן יחידות. בדקו כמה סנטימטרים יש ב-1.4 מטרים.</div>
+        <div class="s16-hint-popup-text">זכרו - כדי לבנות קנה מידה, הנתון המייצג את השרטוט והנתון המייצג את המציאות חייבים להיות באותן יחידות מידה. בדקו כמה סנטימטרים יש ב-1.4 מטרים.​</div>
         <button class="s16-hint-popup-close" type="button" onclick="s19CloseHint()">חזרה לשאלה</button>
       </div>
 
@@ -1248,11 +1293,15 @@
         <button class="btn-back-s3" type="button" onclick="goTo(18)">חזרה</button>
         <div class="s16-hint-continue-group">
           <button class="s16-hint-btn" type="button" id="s19-hint-btn" hidden onclick="s19ToggleHint()">
-            <svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M11 1C6.58 1 3 4.58 3 9C3 11.76 4.39 14.19 7 15.67L7.5 15.97V19C7.5 19.55 7.95 20 8.5 20H13.5C14.05 20 14.5 19.55 14.5 19V15.97L15 15.67C17.61 14.19 19 11.76 19 9C19 4.58 15.42 1 11 1Z" fill="#a51cff75"/>
-              <rect x="8" y="20.5" width="6" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="8.75" y="22.5" width="4.5" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="9.5" y="24.5" width="3" height="1.25" rx="0.625" fill="#a51cff75"/>
+            <svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M17.7926 3.61917C16.3677 2.23483 14.5058 1.54348 12.5489 1.67126C9.08003 1.89734 6.27294 4.77251 6.01804 8.35706C5.85655 10.6293 6.70359 12.8001 8.34383 14.3105C9.23044 15.128 9.74025 16.3207 9.74025 17.5822H11.2285H14.7734H16.2616C16.2616 16.3404 16.792 15.1264 17.7182 14.2516C19.17 12.882 20.0012 10.9308 20.0012 8.89933C20.0012 6.86787 19.1954 4.98058 17.791 3.61589L17.7926 3.61917ZM13.0001 6.40096C11.6702 6.40096 10.5857 7.52154 10.5857 8.90096C10.5857 9.32528 10.2516 9.67095 9.84157 9.67095C9.43151 9.67095 9.09745 9.32528 9.09745 8.90096C9.09745 6.67291 10.8485 4.86098 13.0001 4.86098C13.4134 4.86098 13.7474 5.20666 13.7474 5.63097C13.7474 6.05528 13.4134 6.40096 13.0001 6.40096Z" fill="#8300D9"/>
+              <path d="M9.73877 20.4807C9.73877 21.1852 9.99842 21.847 10.4781 22.3467L10.494 22.3631C10.9784 22.866 11.6244 23.1445 12.3115 23.1445H13.689C14.3777 23.1445 15.0252 22.8677 15.5113 22.3614C15.9957 21.8601 16.2633 21.1917 16.2633 20.484V18.8457H9.73877V20.4807ZM11.227 20.3857H14.7719V20.484C14.7719 20.7805 14.6611 21.0639 14.4568 21.2753C14.2542 21.4817 13.9755 21.6046 13.689 21.6046H12.3115C12.0281 21.6046 11.759 21.4899 11.5563 21.2867L11.5452 21.2736C11.3426 21.0672 11.227 20.7789 11.227 20.4823V20.3873V20.3857Z" fill="#8300D9"/>
+              <path d="M25.2557 8.13086H22.6069C22.1953 8.13086 21.8628 8.47653 21.8628 8.90085C21.8628 9.32516 22.1969 9.67084 22.6069 9.67084H25.2557C25.6673 9.67084 25.9998 9.32516 25.9998 8.90085C25.9998 8.47653 25.6657 8.13086 25.2557 8.13086Z" fill="#8300D9"/>
+              <path d="M4.1386 8.90085C4.1386 8.4749 3.80453 8.13086 3.39447 8.13086H0.744124C0.332481 8.13086 0 8.47653 0 8.90085C0 9.32516 0.334064 9.67084 0.744124 9.67084H3.39289C3.80453 9.67084 4.13701 9.32516 4.13701 8.90085H4.1386Z" fill="#8300D9"/>
+              <path d="M20.8703 3.96945C21.0175 3.96945 21.1663 3.92357 21.2961 3.83019L23.4668 2.25745C23.804 2.01335 23.8847 1.53333 23.6488 1.18438C23.4129 0.835427 22.9491 0.750237 22.6118 0.995978L20.4412 2.56872C20.104 2.81282 20.0232 3.29284 20.2591 3.64179C20.4032 3.85641 20.6344 3.97108 20.8703 3.97108V3.96945Z" fill="#8300D9"/>
+              <path d="M4.70362 13.9729L2.53299 15.5456C2.19576 15.7897 2.11502 16.2697 2.35092 16.6187C2.49499 16.8333 2.72615 16.948 2.96205 16.948C3.10929 16.948 3.25812 16.9021 3.38794 16.8087L5.55857 15.236C5.8958 14.9919 5.97654 14.5118 5.74064 14.1629C5.50474 13.8139 5.04085 13.7288 4.70362 13.9745V13.9729Z" fill="#8300D9"/>
+              <path d="M23.4668 15.5441L21.2962 13.9714C20.959 13.7273 20.4951 13.8125 20.2592 14.1598C20.0233 14.5087 20.1056 14.9887 20.4412 15.2328L22.6119 16.8056C22.7417 16.9006 22.8905 16.9448 23.0378 16.9448C23.2721 16.9448 23.5032 16.8302 23.6489 16.6156C23.8848 16.2666 23.8025 15.7866 23.4668 15.5425V15.5441Z" fill="#8300D9"/>
+              <path d="M5.55862 2.56951L3.388 0.996766C3.05077 0.752663 2.58688 0.837853 2.35097 1.18517C2.11507 1.53412 2.1974 2.01413 2.53304 2.25824L4.70367 3.83098C4.8335 3.926 4.98232 3.97023 5.12956 3.97023C5.36388 3.97023 5.59504 3.85555 5.74069 3.64094C5.9766 3.29199 5.89427 2.81197 5.55862 2.56787V2.56951Z" fill="#8300D9"/>
             </svg>
             אפשר רמז?
           </button>
@@ -1273,32 +1322,17 @@
         </button>
       </div>
 
-      <!-- Nav dots — Q1 done, Q2 active, Q3-Q5 off -->
+      <!-- Nav dots -->
       <div class="s18-nav" dir="rtl">
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--done"></div>
-          <div class="s18-nav-label s18-nav-label--on">1</div>
-        </div>
-        <div class="s18-nav-line s18-nav-line--done"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--active"></div>
-          <div class="s18-nav-label s18-nav-label--on">2</div>
-        </div>
+        <div class="s18-nav-item" data-q="1"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 1</div></div>
         <div class="s18-nav-line"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--off"></div>
-          <div class="s18-nav-label s18-nav-label--off">3</div>
-        </div>
+        <div class="s18-nav-item" data-q="2"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 2</div></div>
         <div class="s18-nav-line"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--off"></div>
-          <div class="s18-nav-label s18-nav-label--off">4</div>
-        </div>
+        <div class="s18-nav-item" data-q="3"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 3</div></div>
         <div class="s18-nav-line"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--off"></div>
-          <div class="s18-nav-label s18-nav-label--off">5</div>
-        </div>
+        <div class="s18-nav-item" data-q="4"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 4</div></div>
+        <div class="s18-nav-line"></div>
+        <div class="s18-nav-item" data-q="5"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 5</div></div>
       </div>
 
       <!-- Question -->
@@ -1309,9 +1343,10 @@
             <div class="s18-q-inner">
               <div class="s18-q-text-wrap">
                 <div class="s18-q-text">
-                  גילינו שקנה המידה הוא 20 : 1.<br>
-                  נרצה לפרוס בחדר שטיח שמידותיו במציאות הן:<br>
-                  אורך 1.8 מטרים, רוחב 2.4 מטרים.<br>
+                  ראינו שקנה המידה הוא 20 : 1.<br>
+                  נרצה לפרוס בחדר שטיח  בצורת מלבן שמידותיו במציאות הן:​<br>
+                  רוחב 1.8 מטרים​<br>
+                  אורך 2.4 מטרים<br>
                   <strong>ב. מה יהיו מידות השטיח בתרשים?</strong>
                 </div>
               </div>
@@ -1337,7 +1372,7 @@
           </div>
           <!-- LEFT column: bedroom image -->
           <div class="s18-q-left">
-            <img class="s18-console-img" src="./assets/images/Bed Room.png" alt="תרשים חדר ילדים">
+            <img class="s18-console-img" src="./assets/images/Bed Room.jpg" alt="תרשים חדר ילדים">
           </div>
         </div>
       </div>
@@ -1362,7 +1397,7 @@
           </svg>
           <div class="s16-hint-popup-title">רמז</div>
         </div>
-        <div class="s16-hint-popup-text">כדי להשוות בין מידות השטיח לבין מידות החלל בתרשים, חשבו תחילה: באילו יחידות כתובות המידות, ופי כמה השטיח במציאות גדול יותר מהשטיח בתרשים?</div>
+        <div class="s16-hint-popup-text">כדי להשוות בין מידות השטיח במציאות לבין מידות השטיח בתרשים, חשבו תחילה: באילו יחידות כתובות המידות, ופי כמה גדול השטיח במציאות מהשטיח בתרשים?​</div>
         <button class="s16-hint-popup-close" type="button" onclick="s20CloseHint()">חזרה לשאלה</button>
       </div>
 
@@ -1371,11 +1406,15 @@
         <button class="btn-back-s3" type="button" onclick="goTo(19)">חזרה</button>
         <div class="s16-hint-continue-group">
           <button class="s16-hint-btn" type="button" id="s20-hint-btn" hidden onclick="s20ToggleHint()">
-            <svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M11 1C6.58 1 3 4.58 3 9C3 11.76 4.39 14.19 7 15.67L7.5 15.97V19C7.5 19.55 7.95 20 8.5 20H13.5C14.05 20 14.5 19.55 14.5 19V15.97L15 15.67C17.61 14.19 19 11.76 19 9C19 4.58 15.42 1 11 1Z" fill="#a51cff75"/>
-              <rect x="8" y="20.5" width="6" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="8.75" y="22.5" width="4.5" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="9.5" y="24.5" width="3" height="1.25" rx="0.625" fill="#a51cff75"/>
+            <svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M17.7926 3.61917C16.3677 2.23483 14.5058 1.54348 12.5489 1.67126C9.08003 1.89734 6.27294 4.77251 6.01804 8.35706C5.85655 10.6293 6.70359 12.8001 8.34383 14.3105C9.23044 15.128 9.74025 16.3207 9.74025 17.5822H11.2285H14.7734H16.2616C16.2616 16.3404 16.792 15.1264 17.7182 14.2516C19.17 12.882 20.0012 10.9308 20.0012 8.89933C20.0012 6.86787 19.1954 4.98058 17.791 3.61589L17.7926 3.61917ZM13.0001 6.40096C11.6702 6.40096 10.5857 7.52154 10.5857 8.90096C10.5857 9.32528 10.2516 9.67095 9.84157 9.67095C9.43151 9.67095 9.09745 9.32528 9.09745 8.90096C9.09745 6.67291 10.8485 4.86098 13.0001 4.86098C13.4134 4.86098 13.7474 5.20666 13.7474 5.63097C13.7474 6.05528 13.4134 6.40096 13.0001 6.40096Z" fill="#8300D9"/>
+              <path d="M9.73877 20.4807C9.73877 21.1852 9.99842 21.847 10.4781 22.3467L10.494 22.3631C10.9784 22.866 11.6244 23.1445 12.3115 23.1445H13.689C14.3777 23.1445 15.0252 22.8677 15.5113 22.3614C15.9957 21.8601 16.2633 21.1917 16.2633 20.484V18.8457H9.73877V20.4807ZM11.227 20.3857H14.7719V20.484C14.7719 20.7805 14.6611 21.0639 14.4568 21.2753C14.2542 21.4817 13.9755 21.6046 13.689 21.6046H12.3115C12.0281 21.6046 11.759 21.4899 11.5563 21.2867L11.5452 21.2736C11.3426 21.0672 11.227 20.7789 11.227 20.4823V20.3873V20.3857Z" fill="#8300D9"/>
+              <path d="M25.2557 8.13086H22.6069C22.1953 8.13086 21.8628 8.47653 21.8628 8.90085C21.8628 9.32516 22.1969 9.67084 22.6069 9.67084H25.2557C25.6673 9.67084 25.9998 9.32516 25.9998 8.90085C25.9998 8.47653 25.6657 8.13086 25.2557 8.13086Z" fill="#8300D9"/>
+              <path d="M4.1386 8.90085C4.1386 8.4749 3.80453 8.13086 3.39447 8.13086H0.744124C0.332481 8.13086 0 8.47653 0 8.90085C0 9.32516 0.334064 9.67084 0.744124 9.67084H3.39289C3.80453 9.67084 4.13701 9.32516 4.13701 8.90085H4.1386Z" fill="#8300D9"/>
+              <path d="M20.8703 3.96945C21.0175 3.96945 21.1663 3.92357 21.2961 3.83019L23.4668 2.25745C23.804 2.01335 23.8847 1.53333 23.6488 1.18438C23.4129 0.835427 22.9491 0.750237 22.6118 0.995978L20.4412 2.56872C20.104 2.81282 20.0232 3.29284 20.2591 3.64179C20.4032 3.85641 20.6344 3.97108 20.8703 3.97108V3.96945Z" fill="#8300D9"/>
+              <path d="M4.70362 13.9729L2.53299 15.5456C2.19576 15.7897 2.11502 16.2697 2.35092 16.6187C2.49499 16.8333 2.72615 16.948 2.96205 16.948C3.10929 16.948 3.25812 16.9021 3.38794 16.8087L5.55857 15.236C5.8958 14.9919 5.97654 14.5118 5.74064 14.1629C5.50474 13.8139 5.04085 13.7288 4.70362 13.9745V13.9729Z" fill="#8300D9"/>
+              <path d="M23.4668 15.5441L21.2962 13.9714C20.959 13.7273 20.4951 13.8125 20.2592 14.1598C20.0233 14.5087 20.1056 14.9887 20.4412 15.2328L22.6119 16.8056C22.7417 16.9006 22.8905 16.9448 23.0378 16.9448C23.2721 16.9448 23.5032 16.8302 23.6489 16.6156C23.8848 16.2666 23.8025 15.7866 23.4668 15.5425V15.5441Z" fill="#8300D9"/>
+              <path d="M5.55862 2.56951L3.388 0.996766C3.05077 0.752663 2.58688 0.837853 2.35097 1.18517C2.11507 1.53412 2.1974 2.01413 2.53304 2.25824L4.70367 3.83098C4.8335 3.926 4.98232 3.97023 5.12956 3.97023C5.36388 3.97023 5.59504 3.85555 5.74069 3.64094C5.9766 3.29199 5.89427 2.81197 5.55862 2.56787V2.56951Z" fill="#8300D9"/>
             </svg>
             אפשר רמז?
           </button>
@@ -1396,32 +1435,17 @@
         </button>
       </div>
 
-      <!-- Nav dots — Q1 done, Q2 done, Q3 active, Q4-Q5 off -->
+      <!-- Nav dots -->
       <div class="s18-nav" dir="rtl">
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--done"></div>
-          <div class="s18-nav-label s18-nav-label--on">1</div>
-        </div>
-        <div class="s18-nav-line s18-nav-line--done"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--done"></div>
-          <div class="s18-nav-label s18-nav-label--on">2</div>
-        </div>
-        <div class="s18-nav-line s18-nav-line--done"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--active"></div>
-          <div class="s18-nav-label s18-nav-label--on">3</div>
-        </div>
+        <div class="s18-nav-item" data-q="1"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 1</div></div>
         <div class="s18-nav-line"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--off"></div>
-          <div class="s18-nav-label s18-nav-label--off">4</div>
-        </div>
+        <div class="s18-nav-item" data-q="2"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 2</div></div>
         <div class="s18-nav-line"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--off"></div>
-          <div class="s18-nav-label s18-nav-label--off">5</div>
-        </div>
+        <div class="s18-nav-item" data-q="3"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 3</div></div>
+        <div class="s18-nav-line"></div>
+        <div class="s18-nav-item" data-q="4"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 4</div></div>
+        <div class="s18-nav-line"></div>
+        <div class="s18-nav-item" data-q="5"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 5</div></div>
       </div>
 
       <!-- Question -->
@@ -1438,8 +1462,8 @@
                 </div>
               </div>
               <div class="s18-fill-row">
-                <span class="s18-fill-text">הקלידו את התשובה:</span>
-                <input class="s18-answer-box" id="s21-answer-input" type="text" dir="rtl" oninput="s21CheckInput()">
+                <span class="s18-fill-text" id="label-s21">הקלידו את התשובה:</span>
+                <input class="s18-answer-box" id="s21-answer-input" type="text" dir="rtl" oninput="s21CheckInput()" aria-labelledby="label-s21">
               </div>
             </div>
           </div>
@@ -1485,11 +1509,15 @@
         <button class="btn-back-s3" type="button" onclick="goTo(20)">חזרה</button>
         <div class="s16-hint-continue-group">
           <button class="s16-hint-btn" type="button" id="s21-hint-btn" hidden onclick="s21ToggleHint()">
-            <svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M11 1C6.58 1 3 4.58 3 9C3 11.76 4.39 14.19 7 15.67L7.5 15.97V19C7.5 19.55 7.95 20 8.5 20H13.5C14.05 20 14.5 19.55 14.5 19V15.97L15 15.67C17.61 14.19 19 11.76 19 9C19 4.58 15.42 1 11 1Z" fill="#a51cff75"/>
-              <rect x="8" y="20.5" width="6" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="8.75" y="22.5" width="4.5" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="9.5" y="24.5" width="3" height="1.25" rx="0.625" fill="#a51cff75"/>
+            <svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M17.7926 3.61917C16.3677 2.23483 14.5058 1.54348 12.5489 1.67126C9.08003 1.89734 6.27294 4.77251 6.01804 8.35706C5.85655 10.6293 6.70359 12.8001 8.34383 14.3105C9.23044 15.128 9.74025 16.3207 9.74025 17.5822H11.2285H14.7734H16.2616C16.2616 16.3404 16.792 15.1264 17.7182 14.2516C19.17 12.882 20.0012 10.9308 20.0012 8.89933C20.0012 6.86787 19.1954 4.98058 17.791 3.61589L17.7926 3.61917ZM13.0001 6.40096C11.6702 6.40096 10.5857 7.52154 10.5857 8.90096C10.5857 9.32528 10.2516 9.67095 9.84157 9.67095C9.43151 9.67095 9.09745 9.32528 9.09745 8.90096C9.09745 6.67291 10.8485 4.86098 13.0001 4.86098C13.4134 4.86098 13.7474 5.20666 13.7474 5.63097C13.7474 6.05528 13.4134 6.40096 13.0001 6.40096Z" fill="#8300D9"/>
+              <path d="M9.73877 20.4807C9.73877 21.1852 9.99842 21.847 10.4781 22.3467L10.494 22.3631C10.9784 22.866 11.6244 23.1445 12.3115 23.1445H13.689C14.3777 23.1445 15.0252 22.8677 15.5113 22.3614C15.9957 21.8601 16.2633 21.1917 16.2633 20.484V18.8457H9.73877V20.4807ZM11.227 20.3857H14.7719V20.484C14.7719 20.7805 14.6611 21.0639 14.4568 21.2753C14.2542 21.4817 13.9755 21.6046 13.689 21.6046H12.3115C12.0281 21.6046 11.759 21.4899 11.5563 21.2867L11.5452 21.2736C11.3426 21.0672 11.227 20.7789 11.227 20.4823V20.3873V20.3857Z" fill="#8300D9"/>
+              <path d="M25.2557 8.13086H22.6069C22.1953 8.13086 21.8628 8.47653 21.8628 8.90085C21.8628 9.32516 22.1969 9.67084 22.6069 9.67084H25.2557C25.6673 9.67084 25.9998 9.32516 25.9998 8.90085C25.9998 8.47653 25.6657 8.13086 25.2557 8.13086Z" fill="#8300D9"/>
+              <path d="M4.1386 8.90085C4.1386 8.4749 3.80453 8.13086 3.39447 8.13086H0.744124C0.332481 8.13086 0 8.47653 0 8.90085C0 9.32516 0.334064 9.67084 0.744124 9.67084H3.39289C3.80453 9.67084 4.13701 9.32516 4.13701 8.90085H4.1386Z" fill="#8300D9"/>
+              <path d="M20.8703 3.96945C21.0175 3.96945 21.1663 3.92357 21.2961 3.83019L23.4668 2.25745C23.804 2.01335 23.8847 1.53333 23.6488 1.18438C23.4129 0.835427 22.9491 0.750237 22.6118 0.995978L20.4412 2.56872C20.104 2.81282 20.0232 3.29284 20.2591 3.64179C20.4032 3.85641 20.6344 3.97108 20.8703 3.97108V3.96945Z" fill="#8300D9"/>
+              <path d="M4.70362 13.9729L2.53299 15.5456C2.19576 15.7897 2.11502 16.2697 2.35092 16.6187C2.49499 16.8333 2.72615 16.948 2.96205 16.948C3.10929 16.948 3.25812 16.9021 3.38794 16.8087L5.55857 15.236C5.8958 14.9919 5.97654 14.5118 5.74064 14.1629C5.50474 13.8139 5.04085 13.7288 4.70362 13.9745V13.9729Z" fill="#8300D9"/>
+              <path d="M23.4668 15.5441L21.2962 13.9714C20.959 13.7273 20.4951 13.8125 20.2592 14.1598C20.0233 14.5087 20.1056 14.9887 20.4412 15.2328L22.6119 16.8056C22.7417 16.9006 22.8905 16.9448 23.0378 16.9448C23.2721 16.9448 23.5032 16.8302 23.6489 16.6156C23.8848 16.2666 23.8025 15.7866 23.4668 15.5425V15.5441Z" fill="#8300D9"/>
+              <path d="M5.55862 2.56951L3.388 0.996766C3.05077 0.752663 2.58688 0.837853 2.35097 1.18517C2.11507 1.53412 2.1974 2.01413 2.53304 2.25824L4.70367 3.83098C4.8335 3.926 4.98232 3.97023 5.12956 3.97023C5.36388 3.97023 5.59504 3.85555 5.74069 3.64094C5.9766 3.29199 5.89427 2.81197 5.55862 2.56787V2.56951Z" fill="#8300D9"/>
             </svg>
             אפשר רמז?
           </button>
@@ -1510,32 +1538,17 @@
         </button>
       </div>
 
-      <!-- Nav dots — Q1-Q3 done, Q4 active, Q5 off -->
+      <!-- Nav dots -->
       <div class="s18-nav" dir="rtl">
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--done"></div>
-          <div class="s18-nav-label s18-nav-label--on">1</div>
-        </div>
-        <div class="s18-nav-line s18-nav-line--done"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--done"></div>
-          <div class="s18-nav-label s18-nav-label--on">2</div>
-        </div>
-        <div class="s18-nav-line s18-nav-line--done"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--done"></div>
-          <div class="s18-nav-label s18-nav-label--on">3</div>
-        </div>
-        <div class="s18-nav-line s18-nav-line--done"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--active"></div>
-          <div class="s18-nav-label s18-nav-label--on">4</div>
-        </div>
+        <div class="s18-nav-item" data-q="1"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 1</div></div>
         <div class="s18-nav-line"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--off"></div>
-          <div class="s18-nav-label s18-nav-label--off">5</div>
-        </div>
+        <div class="s18-nav-item" data-q="2"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 2</div></div>
+        <div class="s18-nav-line"></div>
+        <div class="s18-nav-item" data-q="3"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 3</div></div>
+        <div class="s18-nav-line"></div>
+        <div class="s18-nav-item" data-q="4"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 4</div></div>
+        <div class="s18-nav-line"></div>
+        <div class="s18-nav-item" data-q="5"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 5</div></div>
       </div>
 
       <!-- Question -->
@@ -1552,40 +1565,40 @@
                     <button class="s22-help-btn" type="button" onclick="s22ToggleHelp()" aria-label="מה זה מרחק אווירי?">
                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="9" cy="9" r="8.25" stroke="#a51cff75" stroke-width="1.5"/>
-                        <text x="9" y="13.5" text-anchor="middle" font-family="Assistant,sans-serif" font-size="11" font-weight="700" fill="#a51cff75">i</text>
+                        <text x="9" y="13.5" text-anchor="middle" font-family="Assistant,sans-serif" font-size="11" font-weight="700" fill="#8300D9">i</text>
                       </svg>
                     </button>
                     <span class="s22-help-tooltip" id="s22-help-tooltip">מרחק אווירי הוא המסלול הקצר והישיר ביותר בין שתי נקודות על פני כדור הארץ. מכיוון שכדור הארץ הוא כדורי, כשמשרטטים את המסלול הישיר הזה על גבי מפה שטוחה, הוא נראה כמו קשת של מעגל.</span>
                   </span>
-                  בין שתי המדינות הוא כ-7,000 ק"מ.<br>
-                  קנה המידה של מפת העולם המוצגת הוא 100,000,000 : 1<br>
-                  (1 ס"מ במפה מייצג 10 ק"מ במציאות).<br>
-                  <strong>מה יהיה בקירוב אורכו של קו הטיסה המייצג מרחק זה במפה (בס"מ)?</strong>
+                  בין שתי המדינות <strong>על המפה</strong> הוא 7 ס"מ.<br>
+                  קנה המידה של המפה המוצגת הוא 100,000,000 : 1 ​<br>
+                  (1 ס"מ במפה מייצג 1,000 ק"מ במציאות).<br>
+                  <strong>מה יהיה אורכו של קו הטיסה במציאות (בק"מ)?​</strong>
                 </div>
               </div>
               <div class="s5-answers" role="group" aria-label="אפשרויות תשובה">
                 <button class="s5-opt" data-index="0" type="button" onclick="s22Select(0)">
                   <span class="s5-opt-circle"></span>
-                  <span class="s5-opt-text">7,000 ס"מ</span>
+                  <span class="s5-opt-text">700 ק"מ​</span>
                 </button>
                 <button class="s5-opt" data-index="1" type="button" onclick="s22Select(1)">
                   <span class="s5-opt-circle"></span>
-                  <span class="s5-opt-text">700 ס"מ</span>
+                  <span class="s5-opt-text">7,000 ק"מ​</span>
                 </button>
                 <button class="s5-opt" data-index="2" type="button" onclick="s22Select(2)">
                   <span class="s5-opt-circle"></span>
-                  <span class="s5-opt-text">70 ס"מ</span>
+                  <span class="s5-opt-text">70,000 ק"מ​</span>
                 </button>
                 <button class="s5-opt" data-index="3" type="button" onclick="s22Select(3)">
                   <span class="s5-opt-circle"></span>
-                  <span class="s5-opt-text">7 ס"מ</span>
+                  <span class="s5-opt-text">700,000 ק"מ</span>
                 </button>
               </div>
             </div>
           </div>
           <!-- LEFT column: map image -->
           <div class="s18-q-left">
-            <img class="s18-console-img" src="./assets/images/Map.png" alt="מפת עולם">
+            <img class="s18-console-img" src="./assets/images/Map.jpg" alt="מפת עולם">
           </div>
         </div>
       </div>
@@ -1610,7 +1623,7 @@
           </svg>
           <div class="s16-hint-popup-title">רמז</div>
         </div>
-        <div class="s16-hint-popup-text">קנה מידה חייב להיות ביחידות מידה זהות.<br>בדקו כמה סנטימטרים יש בקילומטר אחד.</div>
+        <div class="s16-hint-popup-text">קנה מידה חייב להיות ביחידות מידה זהות. ​<br>בדקו כמה סנטימטרים יש בקילומטר אחד.​</div>
         <button class="s16-hint-popup-close" type="button" onclick="s22CloseHint()">חזרה לשאלה</button>
       </div>
 
@@ -1619,11 +1632,15 @@
         <button class="btn-back-s3" type="button" onclick="goTo(21)">חזרה</button>
         <div class="s16-hint-continue-group">
           <button class="s16-hint-btn" type="button" id="s22-hint-btn" hidden onclick="s22ToggleHint()">
-            <svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M11 1C6.58 1 3 4.58 3 9C3 11.76 4.39 14.19 7 15.67L7.5 15.97V19C7.5 19.55 7.95 20 8.5 20H13.5C14.05 20 14.5 19.55 14.5 19V15.97L15 15.67C17.61 14.19 19 11.76 19 9C19 4.58 15.42 1 11 1Z" fill="#a51cff75"/>
-              <rect x="8" y="20.5" width="6" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="8.75" y="22.5" width="4.5" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="9.5" y="24.5" width="3" height="1.25" rx="0.625" fill="#a51cff75"/>
+            <svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M17.7926 3.61917C16.3677 2.23483 14.5058 1.54348 12.5489 1.67126C9.08003 1.89734 6.27294 4.77251 6.01804 8.35706C5.85655 10.6293 6.70359 12.8001 8.34383 14.3105C9.23044 15.128 9.74025 16.3207 9.74025 17.5822H11.2285H14.7734H16.2616C16.2616 16.3404 16.792 15.1264 17.7182 14.2516C19.17 12.882 20.0012 10.9308 20.0012 8.89933C20.0012 6.86787 19.1954 4.98058 17.791 3.61589L17.7926 3.61917ZM13.0001 6.40096C11.6702 6.40096 10.5857 7.52154 10.5857 8.90096C10.5857 9.32528 10.2516 9.67095 9.84157 9.67095C9.43151 9.67095 9.09745 9.32528 9.09745 8.90096C9.09745 6.67291 10.8485 4.86098 13.0001 4.86098C13.4134 4.86098 13.7474 5.20666 13.7474 5.63097C13.7474 6.05528 13.4134 6.40096 13.0001 6.40096Z" fill="#8300D9"/>
+              <path d="M9.73877 20.4807C9.73877 21.1852 9.99842 21.847 10.4781 22.3467L10.494 22.3631C10.9784 22.866 11.6244 23.1445 12.3115 23.1445H13.689C14.3777 23.1445 15.0252 22.8677 15.5113 22.3614C15.9957 21.8601 16.2633 21.1917 16.2633 20.484V18.8457H9.73877V20.4807ZM11.227 20.3857H14.7719V20.484C14.7719 20.7805 14.6611 21.0639 14.4568 21.2753C14.2542 21.4817 13.9755 21.6046 13.689 21.6046H12.3115C12.0281 21.6046 11.759 21.4899 11.5563 21.2867L11.5452 21.2736C11.3426 21.0672 11.227 20.7789 11.227 20.4823V20.3873V20.3857Z" fill="#8300D9"/>
+              <path d="M25.2557 8.13086H22.6069C22.1953 8.13086 21.8628 8.47653 21.8628 8.90085C21.8628 9.32516 22.1969 9.67084 22.6069 9.67084H25.2557C25.6673 9.67084 25.9998 9.32516 25.9998 8.90085C25.9998 8.47653 25.6657 8.13086 25.2557 8.13086Z" fill="#8300D9"/>
+              <path d="M4.1386 8.90085C4.1386 8.4749 3.80453 8.13086 3.39447 8.13086H0.744124C0.332481 8.13086 0 8.47653 0 8.90085C0 9.32516 0.334064 9.67084 0.744124 9.67084H3.39289C3.80453 9.67084 4.13701 9.32516 4.13701 8.90085H4.1386Z" fill="#8300D9"/>
+              <path d="M20.8703 3.96945C21.0175 3.96945 21.1663 3.92357 21.2961 3.83019L23.4668 2.25745C23.804 2.01335 23.8847 1.53333 23.6488 1.18438C23.4129 0.835427 22.9491 0.750237 22.6118 0.995978L20.4412 2.56872C20.104 2.81282 20.0232 3.29284 20.2591 3.64179C20.4032 3.85641 20.6344 3.97108 20.8703 3.97108V3.96945Z" fill="#8300D9"/>
+              <path d="M4.70362 13.9729L2.53299 15.5456C2.19576 15.7897 2.11502 16.2697 2.35092 16.6187C2.49499 16.8333 2.72615 16.948 2.96205 16.948C3.10929 16.948 3.25812 16.9021 3.38794 16.8087L5.55857 15.236C5.8958 14.9919 5.97654 14.5118 5.74064 14.1629C5.50474 13.8139 5.04085 13.7288 4.70362 13.9745V13.9729Z" fill="#8300D9"/>
+              <path d="M23.4668 15.5441L21.2962 13.9714C20.959 13.7273 20.4951 13.8125 20.2592 14.1598C20.0233 14.5087 20.1056 14.9887 20.4412 15.2328L22.6119 16.8056C22.7417 16.9006 22.8905 16.9448 23.0378 16.9448C23.2721 16.9448 23.5032 16.8302 23.6489 16.6156C23.8848 16.2666 23.8025 15.7866 23.4668 15.5425V15.5441Z" fill="#8300D9"/>
+              <path d="M5.55862 2.56951L3.388 0.996766C3.05077 0.752663 2.58688 0.837853 2.35097 1.18517C2.11507 1.53412 2.1974 2.01413 2.53304 2.25824L4.70367 3.83098C4.8335 3.926 4.98232 3.97023 5.12956 3.97023C5.36388 3.97023 5.59504 3.85555 5.74069 3.64094C5.9766 3.29199 5.89427 2.81197 5.55862 2.56787V2.56951Z" fill="#8300D9"/>
             </svg>
             אפשר רמז?
           </button>
@@ -1644,32 +1661,17 @@
         </button>
       </div>
 
-      <!-- Nav dots — Q1-Q4 done, Q5 active -->
+      <!-- Nav dots -->
       <div class="s18-nav" dir="rtl">
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--done"></div>
-          <div class="s18-nav-label s18-nav-label--on">1</div>
-        </div>
-        <div class="s18-nav-line s18-nav-line--done"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--done"></div>
-          <div class="s18-nav-label s18-nav-label--on">2</div>
-        </div>
-        <div class="s18-nav-line s18-nav-line--done"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--done"></div>
-          <div class="s18-nav-label s18-nav-label--on">3</div>
-        </div>
-        <div class="s18-nav-line s18-nav-line--done"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--done"></div>
-          <div class="s18-nav-label s18-nav-label--on">4</div>
-        </div>
-        <div class="s18-nav-line s18-nav-line--done"></div>
-        <div class="s18-nav-item">
-          <div class="s18-nav-icon s18-nav-icon--active"></div>
-          <div class="s18-nav-label s18-nav-label--on">5</div>
-        </div>
+        <div class="s18-nav-item"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 1</div></div>
+        <div class="s18-nav-line"></div>
+        <div class="s18-nav-item"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 2</div></div>
+        <div class="s18-nav-line"></div>
+        <div class="s18-nav-item"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 3</div></div>
+        <div class="s18-nav-line"></div>
+        <div class="s18-nav-item"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 4</div></div>
+        <div class="s18-nav-line"></div>
+        <div class="s18-nav-item"><div class="s18-nav-icon"></div><div class="s18-nav-label">שאלה 5</div></div>
       </div>
 
       <!-- Question — no image, single column -->
@@ -1729,11 +1731,15 @@
         <button class="btn-back-s3" type="button" onclick="goTo(22)">חזרה</button>
         <div class="s16-hint-continue-group">
           <button class="s16-hint-btn" type="button" id="s23-hint-btn" hidden onclick="s23ToggleHint()">
-            <svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M11 1C6.58 1 3 4.58 3 9C3 11.76 4.39 14.19 7 15.67L7.5 15.97V19C7.5 19.55 7.95 20 8.5 20H13.5C14.05 20 14.5 19.55 14.5 19V15.97L15 15.67C17.61 14.19 19 11.76 19 9C19 4.58 15.42 1 11 1Z" fill="#a51cff75"/>
-              <rect x="8" y="20.5" width="6" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="8.75" y="22.5" width="4.5" height="1.5" rx="0.75" fill="#a51cff75"/>
-              <rect x="9.5" y="24.5" width="3" height="1.25" rx="0.625" fill="#a51cff75"/>
+            <svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M17.7926 3.61917C16.3677 2.23483 14.5058 1.54348 12.5489 1.67126C9.08003 1.89734 6.27294 4.77251 6.01804 8.35706C5.85655 10.6293 6.70359 12.8001 8.34383 14.3105C9.23044 15.128 9.74025 16.3207 9.74025 17.5822H11.2285H14.7734H16.2616C16.2616 16.3404 16.792 15.1264 17.7182 14.2516C19.17 12.882 20.0012 10.9308 20.0012 8.89933C20.0012 6.86787 19.1954 4.98058 17.791 3.61589L17.7926 3.61917ZM13.0001 6.40096C11.6702 6.40096 10.5857 7.52154 10.5857 8.90096C10.5857 9.32528 10.2516 9.67095 9.84157 9.67095C9.43151 9.67095 9.09745 9.32528 9.09745 8.90096C9.09745 6.67291 10.8485 4.86098 13.0001 4.86098C13.4134 4.86098 13.7474 5.20666 13.7474 5.63097C13.7474 6.05528 13.4134 6.40096 13.0001 6.40096Z" fill="#8300D9"/>
+              <path d="M9.73877 20.4807C9.73877 21.1852 9.99842 21.847 10.4781 22.3467L10.494 22.3631C10.9784 22.866 11.6244 23.1445 12.3115 23.1445H13.689C14.3777 23.1445 15.0252 22.8677 15.5113 22.3614C15.9957 21.8601 16.2633 21.1917 16.2633 20.484V18.8457H9.73877V20.4807ZM11.227 20.3857H14.7719V20.484C14.7719 20.7805 14.6611 21.0639 14.4568 21.2753C14.2542 21.4817 13.9755 21.6046 13.689 21.6046H12.3115C12.0281 21.6046 11.759 21.4899 11.5563 21.2867L11.5452 21.2736C11.3426 21.0672 11.227 20.7789 11.227 20.4823V20.3873V20.3857Z" fill="#8300D9"/>
+              <path d="M25.2557 8.13086H22.6069C22.1953 8.13086 21.8628 8.47653 21.8628 8.90085C21.8628 9.32516 22.1969 9.67084 22.6069 9.67084H25.2557C25.6673 9.67084 25.9998 9.32516 25.9998 8.90085C25.9998 8.47653 25.6657 8.13086 25.2557 8.13086Z" fill="#8300D9"/>
+              <path d="M4.1386 8.90085C4.1386 8.4749 3.80453 8.13086 3.39447 8.13086H0.744124C0.332481 8.13086 0 8.47653 0 8.90085C0 9.32516 0.334064 9.67084 0.744124 9.67084H3.39289C3.80453 9.67084 4.13701 9.32516 4.13701 8.90085H4.1386Z" fill="#8300D9"/>
+              <path d="M20.8703 3.96945C21.0175 3.96945 21.1663 3.92357 21.2961 3.83019L23.4668 2.25745C23.804 2.01335 23.8847 1.53333 23.6488 1.18438C23.4129 0.835427 22.9491 0.750237 22.6118 0.995978L20.4412 2.56872C20.104 2.81282 20.0232 3.29284 20.2591 3.64179C20.4032 3.85641 20.6344 3.97108 20.8703 3.97108V3.96945Z" fill="#8300D9"/>
+              <path d="M4.70362 13.9729L2.53299 15.5456C2.19576 15.7897 2.11502 16.2697 2.35092 16.6187C2.49499 16.8333 2.72615 16.948 2.96205 16.948C3.10929 16.948 3.25812 16.9021 3.38794 16.8087L5.55857 15.236C5.8958 14.9919 5.97654 14.5118 5.74064 14.1629C5.50474 13.8139 5.04085 13.7288 4.70362 13.9745V13.9729Z" fill="#8300D9"/>
+              <path d="M23.4668 15.5441L21.2962 13.9714C20.959 13.7273 20.4951 13.8125 20.2592 14.1598C20.0233 14.5087 20.1056 14.9887 20.4412 15.2328L22.6119 16.8056C22.7417 16.9006 22.8905 16.9448 23.0378 16.9448C23.2721 16.9448 23.5032 16.8302 23.6489 16.6156C23.8848 16.2666 23.8025 15.7866 23.4668 15.5425V15.5441Z" fill="#8300D9"/>
+              <path d="M5.55862 2.56951L3.388 0.996766C3.05077 0.752663 2.58688 0.837853 2.35097 1.18517C2.11507 1.53412 2.1974 2.01413 2.53304 2.25824L4.70367 3.83098C4.8335 3.926 4.98232 3.97023 5.12956 3.97023C5.36388 3.97023 5.59504 3.85555 5.74069 3.64094C5.9766 3.29199 5.89427 2.81197 5.55862 2.56787V2.56951Z" fill="#8300D9"/>
             </svg>
             אפשר רמז?
           </button>
@@ -1756,27 +1762,33 @@
       <div class="report-modal-box">
         <button class="report-close-btn" onclick="tryCloseReportModal()" aria-label="סגור">&#10005;</button>
         <h2 class="report-modal-title" id="report-modal-title">דיווח על בעיה</h2>
-        <p class="report-modal-body">משהו לא ברור או לא עובד כמו שצריך? ספרו לנו מה קרה כדי שנטפל.</p>
+        <p class="report-modal-body">משהו לא ברור או לא עובד כמו שצריך?<br>ספרו לנו מה קרה כדי שנטפל.</p>
 
         <div class="report-field">
-          <label class="report-label" for="report-type">מה סוג הבעיה <span class="required-star">*</span></label>
-          <select class="report-select" id="report-type">
-            <option value="" disabled selected>בחרו סוג בעיה</option>
-            <option value="technical">תקלה טכנית או שמשהו לא עובד</option>
-            <option value="unclear">משהו לא ברור לי</option>
-            <option value="other">אחר</option>
-          </select>
+          <label class="report-label" for="report-type"><span class="required-star">*</span> מה סוג הבעיה</label>
+                    <div class="report-custom-select" id="report-type-wrapper">
+            <button class="report-select-btn is-placeholder" type="button" aria-haspopup="listbox" aria-expanded="false">
+              <span class="report-select-value">בחרו סוג בעיה</span>
+            </button>
+            <ul class="report-select-list" role="listbox" hidden>
+              <li class="report-select-option" data-value="technical" role="option">תקלה טכנית או שמשהו לא עובד</li>
+              <li class="report-select-option" data-value="unclear" role="option">משהו לא ברור לי</li>
+              <li class="report-select-option" data-value="other" role="option">אחר</li>
+            </ul>
+            <input type="hidden" id="report-type" value="">
+          </div>
+          <span class="report-field-error" id="report-type-error" hidden>בחרו את סוג הבעיה</span>
         </div>
 
         <div class="report-field">
-          <label class="report-label" for="report-text">מה קרה? <span class="required-star">*</span></label>
-          <textarea class="report-textarea" id="report-text" maxlength="250" rows="4" placeholder="תארו את הבעיה..."></textarea>
+          <label class="report-label" for="report-text"><span class="required-star">*</span> מה קרה?</label>
+          <textarea class="report-textarea" id="report-text" maxlength="250" rows="4" placeholder="פרטו מה קרה כדי שנוכל להבין את הבעיה"></textarea>
           <span class="report-char-count" id="report-char-count">0 / 250</span>
         </div>
 
         <div class="report-actions">
-          <button class="report-submit-btn" onclick="submitReport()">שליחה</button>
           <button class="report-cancel-btn" onclick="tryCloseReportModal()">ביטול</button>
+          <button class="report-submit-btn" onclick="submitReport()" disabled>שליחת דיווח</button>
         </div>
       </div>
     </div>
@@ -1801,7 +1813,7 @@
     </div>
 
 
-  </div>
-  <script src="script.js"></script>
+  </main>
+  <script src="script.js?v=2"></script>
 </body>
 </html>

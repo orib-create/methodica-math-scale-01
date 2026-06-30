@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 const TOTAL_SCREENS = 18;
 let currentScreen = 0;
@@ -43,6 +43,7 @@ let ddqChecked     = false;
 let ddqAttempts    = 0;
 let ddqDragActive  = null;
 let ddqDropHandled = false;
+let ddqKeySelected = null;
 
 /* ── Viewport scaling ── */
 function scaleApp() {
@@ -60,13 +61,59 @@ function scaleApp() {
 window.addEventListener('resize', scaleApp);
 scaleApp();
 
+/* ── Nav bar helper ── */
+function updateNavBar(navEl, currentQ, results, screens) {
+  if (!navEl) return;
+  var items = navEl.querySelectorAll('.s18-nav-item');
+  var lines = navEl.querySelectorAll('.s18-nav-line');
+  items.forEach(function(item, i) {
+    var icon  = item.querySelector('.s18-nav-icon');
+    var label = item.querySelector('.s18-nav-label');
+    icon.className = 's18-nav-icon';
+    item.onclick = null;
+    item.style.cursor = '';
+    var result = results[i];
+    if (i + 1 === currentQ) {
+      icon.classList.add('s18-nav-icon--active');
+      label.className = 's18-nav-label s18-nav-label--on';
+    } else if (result === 'correct') {
+      icon.classList.add('s18-nav-icon--done');
+      label.className = 's18-nav-label s18-nav-label--on';
+      if (screens && screens[i] != null) {
+        (function(sc) { item.onclick = function() { goTo(sc); }; })(screens[i]);
+        item.style.cursor = 'pointer';
+      }
+    } else if (result === 'wrong') {
+      icon.classList.add('s18-nav-icon--wrong');
+      label.className = 's18-nav-label s18-nav-label--on';
+      if (screens && screens[i] != null) {
+        (function(sc) { item.onclick = function() { goTo(sc); }; })(screens[i]);
+        item.style.cursor = 'pointer';
+      }
+    } else {
+      icon.classList.add('s18-nav-icon--off');
+      label.className = 's18-nav-label s18-nav-label--off';
+    }
+  });
+  lines.forEach(function(line, i) {
+    var r = results[i];
+    if (r === 'correct' || r === 'wrong') {
+      line.classList.add('s18-nav-line--done');
+    } else {
+      line.classList.remove('s18-nav-line--done');
+    }
+  });
+}
+
 /* ── Navigation ── */
 function goTo(n) {
   if (n < 0 || n >= TOTAL_SCREENS) return;
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelector(`[data-screen="${n}"]`).classList.add('active');
+  const nextScreen = document.querySelector(`[data-screen="${n}"]`);
+  nextScreen.classList.add('active');
   currentScreen = n;
   resetScreenState(n);
+  nextScreen.focus();
 }
 
 function resetScreenState(n) {
@@ -103,6 +150,11 @@ var s38Correct  = false;
 var S38_CORRECT = 0;
 
 function s38Enter() {
+  updateNavBar(
+    document.querySelector('#s2 .s18-nav'), 2,
+    [s37Solved ? (s37Correct ? 'correct' : 'wrong') : null, null, null],
+    [1, 2, 4]
+  );
   s38Selected = null;
   s38Attempts = 0;
   s38Solved   = false;
@@ -160,7 +212,7 @@ function s38Submit() {
 
   var checkSvg    = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var xSvg        = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var explanation = 'הזום הכולל שיובל הגדיל הוא 6 (2 · 3). כשהגדלנו את התמונה פי 6, הקטנו את היחס פי 6 (50 = 6 ÷ 300), ולכן קנה המידה החדש הוא 50 : 1';
+  var explanation = 'יובל הגדיל את התמונה פי 2 ואז הגדיל את התמונה החדשה פי 3. ​\nלכן, שתי הלחיצות על כפתור הזום הגדילו את התמונה פי 6, ומכאן שקנה המידה לאחר ההגדלה הוא 50 : 1 (50 = 6 ÷ 300). ​';
 
   fb.classList.remove('s5-fb--correct', 's5-fb--incorrect');
 
@@ -170,7 +222,7 @@ function s38Submit() {
     opts[s38Selected].classList.remove('is-selected');
     opts[s38Selected].classList.add('is-correct');
     opts.forEach(function(o) { o.disabled = true; });
-    fbBold.textContent  = 'נכון מאוד!';
+    fbBold.textContent  = 'נכון מאוד!​';
     fbReg.innerHTML     = explanation;
     fbIcon.innerHTML    = checkSvg;
     fb.classList.add('s5-fb--correct');
@@ -195,7 +247,7 @@ function s38Submit() {
       if (i === S38_CORRECT) o.classList.add('is-correct');
       else if (i === s38Selected) o.classList.add('is-incorrect');
     });
-    fbBold.textContent  = 'זו טעות – בואו נבין למה:';
+    fbBold.textContent  = 'זו טעות – בואו נבין למה:​';
     fbReg.innerHTML     = explanation;
     fbIcon.innerHTML    = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -214,6 +266,11 @@ var s37Correct  = false;
 var S37_CORRECT = 2;
 
 function s37Enter() {
+  updateNavBar(
+    document.querySelector('#s1 .s18-nav'), 1,
+    [null, null, null],
+    [1, 2, 4]
+  );
   s37Selected = null;
   s37Attempts = 0;
   s37Solved   = false;
@@ -271,7 +328,7 @@ function s37Submit() {
 
   var checkSvg    = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var xSvg        = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var explanation = 'גובה המגדל במציאות הוא 828.8 מטרים, שהם 82,880 ס"מ. נחלק את הגובה ב-3,000, ונקבל שרטוט באורך של קצת יותר מ-27.6 ס"מ, שנכנס בשלמותו בתוך 29.7 הסנטימטרים של הדף.';
+  var explanation = 'גובה המגדל במציאות הוא 828.8 מטרים, שהם 82,880 ס"מ. נחלק את הגובה ב-3,000, ונקבל שרטוט באורך של קצת יותר מ-27.6 ס"מ, ש"נכנס" בשלמותו בתוך 29.7 הסנטימטרים של הדף. ​';
 
   fb.classList.remove('s5-fb--correct', 's5-fb--incorrect');
 
@@ -281,7 +338,7 @@ function s37Submit() {
     opts[s37Selected].classList.remove('is-selected');
     opts[s37Selected].classList.add('is-correct');
     opts.forEach(function(o) { o.disabled = true; });
-    fbBold.textContent  = 'יופי של תשובה!';
+    fbBold.textContent  = 'יופי של תשובה! ​';
     fbReg.innerHTML     = explanation;
     fbIcon.innerHTML    = checkSvg;
     fb.classList.add('s5-fb--correct');
@@ -306,7 +363,7 @@ function s37Submit() {
       if (i === S37_CORRECT) o.classList.add('is-correct');
       else if (i === s37Selected) o.classList.add('is-incorrect');
     });
-    fbBold.textContent  = 'זו טעות, לא נורא – בואו נלמד ממנה:';
+    fbBold.textContent  = 'זו טעות, לא נורא – בואו נלמד ממנה:​';
     fbReg.innerHTML     = explanation;
     fbIcon.innerHTML    = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -329,6 +386,11 @@ function s36Enter() {
 
 
 function s39Enter() {
+  updateNavBar(
+    document.querySelector('#s3 .s18-nav'), 2,
+    [s37Solved ? (s37Correct ? 'correct' : 'wrong') : null, null, null],
+    [1, 2, 4]
+  );
   if (ddqDone) return;
   Object.keys(ddqPlacement).forEach(function(k) { ddqPlacement[k] = 'source'; });
   ddqDragActive  = null;
@@ -388,11 +450,15 @@ function ddqRender() {
       var card = document.createElement('div');
       card.className = 'ddq-placed-card ddq-num-chip';
       card.textContent = placedId.replace('drag-', '');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', 'מספר ' + placedId.replace('drag-', '') + ', לחץ להחזרה למגש');
       if (!ddqChecked) {
         card.draggable = true;
         (function(id) {
           card.addEventListener('dragstart', function(ev) { ddqPlacedDragStart(ev, id); });
           card.addEventListener('dragend',   function(ev) { ddqDragEnd(ev); });
+          card.addEventListener('keydown',   function(ev) { ddqChipKeyDown(ev, id); });
         })(placedId);
       } else {
         card.classList.add('locked');
@@ -441,6 +507,54 @@ function ddqDragEnd(event) {
   }
   ddqDragActive  = null;
   ddqDropHandled = false;
+}
+
+function ddqAnnounce(msg) {
+  var el = document.getElementById('ddq-announcer');
+  if (el) { el.textContent = ''; setTimeout(function(){ el.textContent = msg; }, 50); }
+}
+
+function ddqUpdateKeyState() {
+  Object.keys(ddqPlacement).forEach(function(dragId) {
+    var chip = document.getElementById(dragId);
+    if (chip) chip.setAttribute('aria-pressed', ddqKeySelected === dragId ? 'true' : 'false');
+  });
+}
+
+function ddqChipKeyDown(event, dragId) {
+  if (event.key !== ' ' && event.key !== 'Enter') return;
+  event.preventDefault();
+  if (ddqChecked) return;
+  if (ddqKeySelected === dragId) {
+    ddqKeySelected = null;
+    ddqUpdateKeyState();
+    ddqAnnounce('הבחירה בוטלה');
+    return;
+  }
+  if (ddqPlacement[dragId] !== 'source') {
+    ddqPlacement[dragId] = 'source';
+    ddqRender();
+  }
+  ddqKeySelected = dragId;
+  ddqUpdateKeyState();
+  ddqAnnounce('בחרת מספר ' + dragId.replace('drag-', '') + '. עכשיו לחץ על יעד להנחה.');
+}
+
+function ddqTargetKeyDown(event, targetId) {
+  if (event.key !== ' ' && event.key !== 'Enter') return;
+  event.preventDefault();
+  if (!ddqKeySelected || ddqChecked) return;
+  var dragId = ddqKeySelected;
+  Object.keys(ddqPlacement).forEach(function(id) {
+    if (ddqPlacement[id] === targetId) ddqPlacement[id] = 'source';
+  });
+  ddqPlacement[dragId] = targetId;
+  ddqKeySelected = null;
+  ddqRender();
+  ddqUpdateKeyState();
+  var targetEl = document.getElementById(targetId);
+  var label = targetEl ? targetEl.getAttribute('aria-label') : targetId;
+  ddqAnnounce('הנחת ' + dragId.replace('drag-', '') + ' ב' + label);
 }
 
 function ddqDragOver(event, targetId) {
@@ -513,8 +627,8 @@ function ddqCheck() {
       var t = document.getElementById(tId);
       if (t) t.classList.add('s39-correct');
     });
-    fbBold.textContent = 'נכון מאוד!';
-    fbReg.textContent  = 'נמיר את המידות במציאות לסנטימטרים ונקבל אורך 1,200 ס"מ וגובה 600 ס"מ. אצל יובל (קנה מידה 1:50) נחלק את המידות ב-50 ונקבל: אורך 24 ס"מ, גובה 12 ס"מ. אצל ליאור (קנה מידה 1:20) נחלק את המידות ב-20 ונקבל: אורך 60 ס"מ, גובה 30 ס"מ.';
+    fbBold.textContent = 'נכון מאוד!​';
+    fbReg.textContent  = 'נמיר את המידות במציאות לסנטימטרים ונקבל אורך 1,200 ס"מ וגובה 600 ס"מ. ​\nבתמונה של יובל (קנה מידה 1:50) נחלק את המידות ב-50 ונקבל: אורך 24 ס"מ, גובה 12 ס"מ.​\nבתמונה של ליאור (קנה מידה 1:20) נחלק את המידות ב-20 ונקבל: אורך 60 ס"מ, גובה 30 ס"מ.​';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden = false;
@@ -562,8 +676,8 @@ function ddqCheck() {
       t.appendChild(badge);
     });
 
-    fbBold.textContent = 'לא מדויק, בואו נבין למה:';
-    fbReg.textContent  = 'נמיר את המידות במציאות לסנטימטרים ונקבל אורך 1,200 ס"מ וגובה 600 ס"מ. אצל יובל (קנה מידה 1:50) נחלק את המידות ב-50 ונקבל: אורך 24 ס"מ, גובה 12 ס"מ. אצל ליאור (קנה מידה 1:20) נחלק את המידות ב-20 ונקבל: אורך 60 ס"מ, גובה 30 ס"מ.';
+    fbBold.textContent = 'לא מדויק, בואו נבין למה:​';
+    fbReg.textContent  = 'נמיר את המידות במציאות לסנטימטרים ונקבל אורך 1,200 ס"מ וגובה 600 ס"מ. ​\nבתמונה של יובל (קנה מידה 1:50) נחלק את המידות ב-50 ונקבל: אורך 24 ס"מ, גובה 12 ס"מ.​\nבתמונה של ליאור (קנה מידה 1:20) נחלק את המידות ב-20 ונקבל: אורך 60 ס"מ, גובה 30 ס"מ.​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
     fb.hidden = false;
@@ -601,6 +715,15 @@ var s40Attempts = 0;
 var s40Done     = false;
 
 function s40Enter() {
+  updateNavBar(
+    document.querySelector('#s4 .s18-nav'), 3,
+    [
+      s37Solved ? (s37Correct ? 'correct' : 'wrong') : null,
+      s38Solved ? (s38Correct ? 'correct' : 'wrong') : null,
+      null
+    ],
+    [1, 2, 4]
+  );
   if (s40Done) return;
   s40Attempts = 0;
   var input = document.getElementById('s40-answer-input');
@@ -650,8 +773,8 @@ function s40Check() {
   if (correct) {
     s40Done = true;
     if (input) input.disabled = true;
-    fbBold.textContent = 'נכון מאוד!';
-    fbReg.innerHTML    = 'קנה המידה הוא 1:200, לכן 12 ס״מ בתמונה מייצגים 24 מטרים במציאות. העמדה צריכה להיות ברבע הדרך, ולכן נחשב 1/4 מ־24 מטרים ונקבל 6 מטרים.';
+    fbBold.textContent = 'נכון מאוד!​';
+    fbReg.innerHTML    = 'קנה המידה הוא 1:200, לכן 12 ס״מ בתמונה מייצגים  2,400 ס"מ שהם 24 מטרים במציאות. העמדה צריכה להיות ברבע הדרך, ולכן נחשב <sup>1</sup>/<sub>4</sub> מ-24 מטרים, ונקבל 6 מטרים.​';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden = false;
@@ -672,8 +795,8 @@ function s40Check() {
   } else {
     s40Done = true;
     if (input) input.disabled = true;
-    fbBold.textContent = 'לא מדויק, בואו נבין למה:';
-    fbReg.innerHTML    = 'קנה המידה הוא 1:200, לכן 12 ס״מ בתמונה מייצגים 24 מטרים במציאות. העמדה צריכה להיות ברבע הדרך, ולכן נחשב 1/4 מ־24 מטרים ונקבל 6 מטרים.';
+    fbBold.textContent = 'לא מדויק, בואו נבין למה:​';
+    fbReg.innerHTML    = 'קנה המידה הוא 1:200, לכן 12 ס״מ בתמונה מייצגים  2,400 ס"מ שהם 24 מטרים במציאות. העמדה צריכה להיות ברבע הדרך, ולכן נחשב <sup>1</sup>/<sub>4</sub> מ-24 מטרים ונקבל 6 מטרים.​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
     fb.hidden = false;
@@ -704,6 +827,15 @@ var S41_CORRECT  = 3;
 var s41RulerDrag = null;
 
 function s41Enter() {
+  updateNavBar(
+    document.querySelector('#s5 .s18-nav'), 3,
+    [
+      s37Solved ? (s37Correct ? 'correct' : 'wrong') : null,
+      s38Solved ? (s38Correct ? 'correct' : 'wrong') : null,
+      null
+    ],
+    [1, 2, 4]
+  );
   if (s41Solved) return;
   s41Selected  = null;
   s41Attempts  = 0;
@@ -779,8 +911,8 @@ function s41Submit() {
     opts[s41Selected].classList.remove('is-selected');
     opts[s41Selected].classList.add('is-correct');
     opts.forEach(function(o) { o.disabled = true; });
-    fbBold.textContent = 'יופי!';
-    fbReg.innerHTML    = 'תחילה עלינו למצוא את אורך הצלע במציאות – 8 מטרים. אחר-כך, נחשב את שטח הריבוע: 64 מ”ר = 8 · 8';
+    fbBold.textContent = 'יופי!​';
+    fbReg.innerHTML    = 'אורך צלע המתחם בתמונה הוא 8 ס”מ, וקנה המידה הוא 200 : 1.​\nלכן, אורך צלע המתחם במציאות הוא 1,600 ס”מ שהם 16 מטרים. ​\nכעת, נחשב את שטח הריבוע:  256 מ”ר =  16 · 16​';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden = false;
@@ -806,8 +938,8 @@ function s41Submit() {
       else if (i === s41Selected) o.classList.add('is-incorrect');
       o.disabled = true;
     });
-    fbBold.textContent = 'לא מדויק, בואו נבין למה:';
-    fbReg.innerHTML    = 'תחילה עלינו למצוא את אורך הצלע במציאות – 8 מטרים. אחר-כך, נחשב את שטח הריבוע: 64 מ”ר = 8 · 8';
+    fbBold.textContent = 'לא מדויק, בואו נבין למה:​';
+    fbReg.innerHTML    = 'אורך צלע המתחם בתמונה הוא 8 ס”מ, וקנה המידה הוא 200 : 1.​\nלכן, אורך צלע המתחם במציאות הוא 1,600 ס”מ שהם 16 מטרים. ​\nכעת, נחשב את שטח הריבוע:  256 מ”ר =  16 · 16​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
     fb.hidden = false;
@@ -862,6 +994,15 @@ var s42Attempts = 0;
 var s42Done     = false;
 
 function s42Enter() {
+  updateNavBar(
+    document.querySelector('#s6 .s18-nav'), 3,
+    [
+      s37Solved ? (s37Correct ? 'correct' : 'wrong') : null,
+      s38Solved ? (s38Correct ? 'correct' : 'wrong') : null,
+      null
+    ],
+    [1, 2, 4]
+  );
   if (s42Done) return;
   s42Attempts = 0;
   var input = document.getElementById('s42-answer-input');
@@ -1014,8 +1155,8 @@ function s45Check() {
     s45Done = true;
     finalAssessmentScore.correct++;
     if (input) input.disabled = true;
-    fbBold.textContent = 'תשובה יפה!';
-    fbReg.innerHTML    = 'המרחק במציאות הוא 2 ק״מ, שהם 2,000 מטרים, שהם 200,000 ס״מ, ואורך המסלול על המסך הוא 8 ס״מ.<br>לכן, קנה המידה הוא 200,000 : 8.<br>נחלק ב-8, ונקבל קנה מידה מצומצם של 25,000 : 1.';
+    fbBold.textContent = 'תשובה יפה!​';
+    fbReg.innerHTML    = 'המרחק במציאות הוא 2 ק"מ, שהם 2,000 מטרים, שהם 200,000 ס"מ, ואורך המסלול על המסך הוא 8 ס"מ. ​<br>לכן, היחס בין אורך המסלול במפה לאורך המסלול במציאות הוא 200,000 : 8.​<br>נצמצם ב-8, ונקבל שקנה המידה הוא 25,000 : 1.​';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden = false;
@@ -1034,8 +1175,8 @@ function s45Check() {
   } else {
     s45Done = true;
     if (input) input.disabled = true;
-    fbBold.textContent = 'זו טעות, אבל זה בסדר גמור, כך בדיוק לומדים!';
-    fbReg.innerHTML    = 'המרחק במציאות הוא 2 ק״מ, שהם 2,000 מטרים, שהם 200,000 ס״מ, ואורך המסלול על המסך הוא 8 ס״מ.<br>לכן, קנה המידה הוא 200,000 : 8.<br>נחלק ב-8, ונקבל קנה מידה מצומצם של 25,000 : 1.';
+    fbBold.textContent = 'זו טעות, אבל זה בסדר גמור, כך בדיוק לומדים!​';
+    fbReg.innerHTML    = 'המרחק במציאות הוא 2 ק"מ, שהם 2,000 מטרים, שהם 200,000 ס"מ, ואורך המסלול על המסך הוא 8 ס"מ. ​<br>לכן, היחס בין אורך המסלול במפה לאורך המסלול במציאות הוא 200,000 : 8.​<br>נצמצם ב-8, ונקבל שקנה המידה הוא 25,000 : 1.​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
     fb.hidden = false;
@@ -1043,6 +1184,16 @@ function s45Check() {
     btn.textContent = 'שנמשיך?';
     btn.onclick     = function() { goTo(10); };
   }
+}
+
+function s14ToggleHelp() {
+  var tooltip = document.getElementById('s14-help-tooltip');
+  if (tooltip) tooltip.classList.toggle('visible');
+}
+
+function s45ToggleHelp() {
+  var tooltip = document.getElementById('s45-help-tooltip');
+  if (tooltip) tooltip.classList.toggle('visible');
 }
 
 function s45ToggleHint() {
@@ -1133,8 +1284,8 @@ function s47Check() {
     s47Solved = true;
     finalAssessmentScore.correct++;
     checkboxes.forEach(function(cb) { cb.disabled = true; });
-    fbBold.textContent = 'כל הכבוד!';
-    fbReg.innerHTML    = '3 גלילי כבל של 350 מ׳ הם 1,050 מ׳, שזה יותר מ-1 ק״מ (1,000 מ׳). בנוסף, בחישוב קנה המידה: 1,000 מ׳ לחלק ל-250 מ׳ (שזה הייצוג של 1 ס״מ במציאות) נותן 4 ס״מ.';
+    fbBold.textContent = 'מצוין!​';
+    fbReg.innerHTML    = 'אורך הכבלים הכולל הוא 1,050 מטרים. מרחק הפריסה הנדרש הוא 1 ק"מ (שהם 1,000 מטרים), ולכן האפשרות הראשונה נכונה.​<br>קנה המידה הוא 25,000 : 1. כלומר, כל 1 ס"מ במפה מייצג 250 מטרים במציאות.​<br>המרחק בין האוהל לאגם הוא 1 ק"מ, שהם 1,000 מטרים. ​<br>אם 250 מטרים במציאות הם 1 ס"מ במפה, ​<br>1,000 מטרים במציאות הם 4 ס"מ במפה.​';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden = false;
@@ -1167,8 +1318,8 @@ function s47Check() {
       }
       cb.disabled = true;
     });
-    fbBold.textContent = 'זו טעות:';
-    fbReg.innerHTML    = '3 גלילי כבל של 350 מ׳ הם 1,050 מ׳ - זה מספיק לכיסוי המרחק של 1,000 מ׳. לגבי המפה: 1,000 מ׳ לחלק ל-250 מ׳ לכל ס״מ הם 4 ס״מ.';
+    fbBold.textContent = 'זה לא מדויק. נסביר:​';
+    fbReg.innerHTML    = 'אורך הכבלים הכולל הוא 1,050 מטרים. מרחק הפריסה הנדרש הוא 1 ק"מ (שהם 1,000 מטרים), ולכן האפשרות הראשונה נכונה.​<br>קנה המידה הוא 25,000 : 1. כלומר, כל 1 ס"מ במפה מייצג 250 מטרים במציאות.​<br>המרחק בין האוהל לאגם הוא 1 ק"מ, שהם 1,000 מטרים. ​<br>אם 250 מטרים במציאות הם 1 ס"מ במפה, ​<br>1,000 מטרים במציאות הם 4 ס"מ במפה.​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
     fb.hidden = false;
@@ -1270,8 +1421,8 @@ function s49Submit() {
     opts[s49Selected].classList.remove('is-selected');
     opts[s49Selected].classList.add('is-correct');
     opts.forEach(function(o) { o.disabled = true; });
-    fbBold.textContent = 'זה נכון מאוד!';
-    fbReg.innerHTML    = 'זום עובד הפוך מהאינטואיציה: ככל שמגדילים את התמונה, כמות המציאות שנכנסת בכל סנטימטר קטנה. לכן, אם התמונה גדלה פי 4, קנה המידה מוקטן פי 4.';
+    fbBold.textContent = 'זה נכון מאוד!​';
+    fbReg.innerHTML    = 'זום הגדלה עובד הפוך מהאינטואיציה: ​<br>אם התמונה גדלה פי 4, המספר בקנה המידה המייצג את המציאות קטן פי 4. ​<br> במקום קנה מידה של 25,000 : 1 נקבל קנה מידה של 6,250 : 1 (6,250 = 4 : 25,000)';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden = false;
@@ -1297,8 +1448,8 @@ function s49Submit() {
       else if (i === s49Selected) o.classList.add('is-incorrect');
       o.disabled = true;
     });
-    fbBold.textContent = 'זה לא מדויק. נסביר:';
-    fbReg.innerHTML    = 'זום עובד הפוך מהאינטואיציה: ככל שמגדילים את התמונה, כמות המציאות שנכנסת בכל סנטימטר קטנה. לכן, אם התמונה גדלה פי 4, קנה המידה מוקטן פי 4.';
+    fbBold.textContent = 'זה לא מדויק. נסביר:​';
+    fbReg.innerHTML    = 'זום הגדלה עובד הפוך מהאינטואיציה: ​<br>אם התמונה גדלה פי 4, המספר בקנה המידה המייצג את המציאות קטן פי 4. ​<br> במקום קנה מידה של 25,000 : 1 נקבל קנה מידה של 6,250 : 1 (6,250 = 4 : 25,000)​​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
     fb.hidden = false;
@@ -1390,8 +1541,8 @@ function s51Submit() {
     opts[s51Selected].classList.remove('is-selected');
     opts[s51Selected].classList.add('is-correct');
     opts.forEach(function(o) { o.disabled = true; });
-    fbBold.textContent = 'בדיוק!';
-    fbReg.innerHTML    = 'רחפן א: 1 ס״מ כפול 6,250 = 62.5 מטרים.<br>רחפן ב: 2 ס״מ כפול 2,000 = 40 מטרים.<br>השטח של קרחת היער שצילם רחפן א עולה על 50 מטרים, ולכן היא זו שמתאימה להנחתה.';
+    fbBold.textContent = 'בדיוק!​';
+    fbReg.innerHTML    = 'רחפן א: ס"מ אחד בצילום מייצג 6,250 ס"מ במציאות, שהם 62.5 מטרים. ​<br>רחפן ב: ס"מ אחד בצילום מייצג 2,000 ס"מ במציאות, ולכן ​<br>   2 ס"מ בצילום מייצגים 4,000 ס"מ במציאות, שהם 40 מטרים. ​<br>האורך של קרחת היער שצילם רחפן א גדול מ-50  מטרים, ולכן היא זו שמתאימה להנחתה.​';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden = false;
@@ -1417,8 +1568,8 @@ function s51Submit() {
       else if (i === s51Selected) o.classList.add('is-incorrect');
       o.disabled = true;
     });
-    fbBold.textContent = 'זה לא מדויק. בואו נראה למה:';
-    fbReg.innerHTML    = 'רחפן א: 1 ס״מ כפול 6,250 = 62.5 מטרים.<br>רחפן ב: 2 ס״מ כפול 2,000 = 40 מטרים.<br>השטח של קרחת היער שצילם רחפן א עולה על 50 מטרים, ולכן היא זו שמתאימה להנחתה.';
+    fbBold.textContent = 'זה לא מדויק. בואו נראה למה:​';
+    fbReg.innerHTML    = 'רחפן א: ס"מ אחד בצילום מייצג 6,250 ס"מ במציאות, שהם 62.5 מטרים. ​<br>רחפן ב: ס"מ אחד בצילום מייצג 2,000 ס"מ במציאות, ולכן​<br>2 ס"מ בצילום מייצגים 4,000 ס"מ במציאות, שהם 40 מטרים. ​<br>האורך של קרחת היער שצילם רחפן א גדול מ-50  מטרים, ולכן היא זו שמתאימה להנחתה.​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
     fb.hidden = false;
@@ -1474,7 +1625,7 @@ function getQuizScore() {
   return count;
 }
 
-// â‰¥4 נכון â†’ תרגול כיתה (מסך 24) | <4 â†’ תרגול בסיסי (מסך 25)
+// â‰¥4 נכון â†' תרגול כיתה (מסך 24) | <4 â†' תרגול בסיסי (מסך 25)
 function routeAfterQuiz() {
   goTo(getQuizScore() >= 4 ? 24 : 25);
 }
@@ -1543,11 +1694,8 @@ document.addEventListener('DOMContentLoaded', function () {
 //  REPORT MODAL
 // ============================================================
 function openReportModal() {
+  resetReportForm();
   document.getElementById('report-modal').removeAttribute('hidden');
-  setTimeout(function() {
-    var el = document.getElementById('report-type');
-    if (el) el.focus();
-  }, 40);
 }
 
 function tryCloseReportModal() {
@@ -1588,10 +1736,117 @@ function submitReport() {
   forceCloseReportModal();
 }
 
+function reportCheckSubmit() {
+  var typeVal = document.getElementById('report-type').value;
+  var textVal = document.getElementById('report-text').value.trim();
+  var btn = document.querySelector('.report-submit-btn');
+  if (btn) btn.disabled = !(typeVal && textVal);
+}
+
+/* Custom select for report-type */
+(function() {
+  var LABELS = {
+    'technical': 'תקלה טכנית או שמשהו לא עובד',
+    'unclear':   'משהו לא ברור לי',
+    'other':     'אחר'
+  };
+  var PLACEHOLDER = 'בחרו סוג בעיה';
+  var wrapper = document.getElementById('report-type-wrapper');
+  if (!wrapper) return;
+  var btn        = wrapper.querySelector('.report-select-btn');
+  var list       = wrapper.querySelector('.report-select-list');
+  var hidden     = document.getElementById('report-type');
+  var valSpan    = wrapper.querySelector('.report-select-value');
+  var errEl      = document.getElementById('report-type-error');
+  var wasOpened  = false;
+  var pickingOpt = false;
+
+  function showError() {
+    btn.classList.add('has-error');
+    if (errEl) errEl.style.display = 'block';
+  }
+  function clearError() {
+    btn.classList.remove('has-error');
+    if (errEl) errEl.style.display = 'none';
+  }
+  function closeList() {
+    list.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  btn.addEventListener('click', function() {
+    var opening = list.hidden;
+    list.hidden = !opening;
+    btn.setAttribute('aria-expanded', String(opening));
+    if (opening) {
+      wasOpened = true;
+    } else {
+      if (!hidden.value) showError();
+    }
+  });
+
+  list.addEventListener('mousedown', function() { pickingOpt = true; });
+  list.addEventListener('mouseup',   function() { pickingOpt = false; });
+
+  btn.addEventListener('blur', function() {
+    if (!pickingOpt && wasOpened && !hidden.value) showError();
+  });
+
+  wrapper.querySelectorAll('.report-select-option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      hidden.value = opt.getAttribute('data-value');
+      valSpan.textContent = LABELS[hidden.value] || PLACEHOLDER;
+      btn.classList.remove('is-placeholder');
+      clearError();
+      wasOpened = false;
+      closeList();
+      wrapper.querySelectorAll('.report-select-option').forEach(function(o) { o.classList.remove('is-selected'); });
+      opt.classList.add('is-selected');
+      hidden.dispatchEvent(new Event('change'));
+    });
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!wrapper.contains(e.target)) {
+      if (wasOpened && !hidden.value) showError();
+      closeList();
+    }
+  });
+
+  wrapper._resetSelect = function() {
+    wasOpened = false;
+    hidden.value = '';
+    valSpan.textContent = PLACEHOLDER;
+    btn.classList.add('is-placeholder');
+    btn.classList.remove('has-error');
+    btn.setAttribute('aria-expanded', 'false');
+    if (errEl) errEl.style.display = 'none';
+    closeList();
+    wrapper.querySelectorAll('.report-select-option').forEach(function(o) { o.classList.remove('is-selected'); });
+  };
+})();
 function resetReportForm() {
-  document.getElementById('report-type').value = '';
-  document.getElementById('report-text').value = '';
+  var wrapper = document.getElementById('report-type-wrapper');
+  if (wrapper && wrapper._resetSelect) wrapper._resetSelect();
+  var ta = document.getElementById('report-text');
+  var taErr = document.getElementById('report-text-error');
+  if (ta)    { ta.value = ''; ta.classList.remove('has-error'); }
+  if (taErr) taErr.hidden = true;
   document.getElementById('report-char-count').textContent = '0 / 250';
+  reportCheckSubmit();
+}
+
+function reportTextBlur() {
+  var ta    = document.getElementById('report-text');
+  var taErr = document.getElementById('report-text-error');
+  if (!ta || !taErr) return;
+  if (!ta.value.trim()) {
+    ta.classList.add('has-error');
+    taErr.style.display = 'block';
+  } else {
+    ta.classList.remove('has-error');
+    taErr.style.display = 'none';
+  }
 }
 
 // Character counter for report textarea
@@ -1600,15 +1855,129 @@ var reportCounter  = document.getElementById('report-char-count');
 if (reportTextarea && reportCounter) {
   reportTextarea.addEventListener('input', function() {
     reportCounter.textContent = reportTextarea.value.length + ' / 250';
+    reportCheckSubmit();
   });
 }
 
-// Escape key closes report modals
+var reportSelect = document.getElementById('report-type');
+if (reportSelect) {
+  reportSelect.addEventListener('change', function() {
+    reportCheckSubmit();
+    var field = document.querySelector('.report-field');
+    var star = field ? field.querySelector('.required-star') : null;
+    if (star) star.classList.toggle('is-error', !reportSelect.value);
+  });
+}
+
+if (reportTextarea) {
+  reportTextarea.addEventListener('blur', function() {
+    var star = reportTextarea.closest('.report-field').querySelector('.required-star');
+    if (star) star.classList.toggle('is-error', !reportTextarea.value.trim());
+  });
+  reportTextarea.addEventListener('input', function() {
+    if (reportTextarea.value.trim()) {
+      var star = reportTextarea.closest('.report-field').querySelector('.required-star');
+      if (star) star.classList.remove('is-error');
+    }
+  });
+}
+
+// Escape key closes report modals / cancels D&D keyboard selection
 document.addEventListener('keydown', function(event) {
   if (event.key !== 'Escape') return;
+  if (ddqKeySelected) {
+    ddqKeySelected = null;
+    ddqUpdateKeyState();
+    ddqAnnounce('הבחירה בוטלה');
+    return;
+  }
   var confirmModal = document.getElementById('report-confirm-modal');
   var reportModal  = document.getElementById('report-modal');
   if (!confirmModal.hasAttribute('hidden')) { forceCloseReportModal(); return; }
   if (!reportModal.hasAttribute('hidden'))  { tryCloseReportModal();   return; }
 });
 
+
+/* ── Draggable inline feedback elements ── */
+(function () {
+  function liftFeedback(el) {
+    if (el.dataset.lifted) return;
+    el.dataset.lifted = '1';
+    var w    = el.offsetWidth;
+    var rect = el.getBoundingClientRect();
+    el.style.width    = w + 'px';
+    el.style.position = 'fixed';
+    el.style.left     = rect.left  + 'px';
+    el.style.top      = rect.top   + 'px';
+    el.style.bottom   = 'auto';
+    el.style.height   = 'auto';
+    el.style.zIndex   = '9999';
+    el.style.margin   = '0';
+  }
+
+  function attachDrag(el) {
+    if (el.dataset.dragAttached) return;
+    el.dataset.dragAttached = '1';
+    el.addEventListener('mousedown', function (e) {
+      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+      e.preventDefault();
+      if (!el.dataset.lifted) liftFeedback(el);
+      var startX   = e.clientX;
+      var startY   = e.clientY;
+      var baseLeft = parseFloat(el.style.left)  || 0;
+      var baseTop  = parseFloat(el.style.top)   || 0;
+      el.style.cursor = 'grabbing';
+      function onMove(e) {
+        el.style.left = (baseLeft + e.clientX - startX) + 'px';
+        el.style.top  = (baseTop  + e.clientY - startY) + 'px';
+      }
+      function onUp() {
+        el.style.cursor = 'grab';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup',   onUp);
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup',   onUp);
+    });
+  }
+
+  function initAll() {
+    document.querySelectorAll('.s5-inline-feedback').forEach(attachDrag);
+  }
+
+  function resetFeedbacks() {
+    document.querySelectorAll('.s5-inline-feedback[data-lifted]').forEach(function (el) {
+      el.removeAttribute('data-lifted');
+      el.style.position = '';
+      el.style.left     = '';
+      el.style.top      = '';
+      el.style.width    = '';
+      el.style.zIndex   = '';
+      el.style.margin   = '';
+      el.style.cursor   = '';
+      el.style.height   = '';
+      el.style.bottom   = '';
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initAll();
+    var _orig = window.goTo;
+    if (typeof _orig === 'function') {
+      window.goTo = function (n) {
+        resetFeedbacks();
+        _orig(n);
+        setTimeout(initAll, 150);
+      };
+    }
+  });
+})();
+
+// Accessibility: aria-live on feedback regions + tabindex on screens for focus routing
+document.querySelectorAll('.s5-inline-feedback').forEach(function(el) {
+  el.setAttribute('role', 'status');
+  el.setAttribute('aria-live', 'polite');
+});
+document.querySelectorAll('section.screen').forEach(function(s) {
+  s.setAttribute('tabindex', '-1');
+});

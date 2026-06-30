@@ -39,9 +39,11 @@ scaleApp();
 function goTo(n) {
   if (n < 0 || n >= TOTAL_SCREENS) return;
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelector(`[data-screen="${n}"]`).classList.add('active');
+  const nextScreen = document.querySelector(`[data-screen="${n}"]`);
+  nextScreen.classList.add('active');
   currentScreen = n;
   resetScreenState(n);
+  nextScreen.focus();
 }
 
 function resetScreenState(n) {
@@ -65,7 +67,9 @@ function resetScreenState(n) {
       ? './assets/images/Character1_roller.png'
       : './assets/images/Character2_roller.png';
     document.getElementById('s1-char-img-1').src = src1;
+    document.getElementById('s1-char-img-1').alt = 'דמות עם משקפת';
     document.getElementById('s1-char-img-2').src = src2;
+    document.getElementById('s1-char-img-2').alt = 'דמות עם סרגל';
     setScale(1000);
 
     const inner = document.querySelector('.hook-card-inner');
@@ -118,20 +122,22 @@ function resetScreenState(n) {
     document.getElementById('s2-char-a').src = isChar1
       ? './assets/images/Character1_popcorn.png'
       : './assets/images/Character2_popcorn.png';
+    document.getElementById('s2-char-a').alt = 'דמות עם פופקורן';
     document.getElementById('s2-char-b').src = isChar1
       ? './assets/images/Character1_cards.png'
       : './assets/images/Character2_cards.png';
+    document.getElementById('s2-char-b').alt = 'דמות עם קלפים';
   }
 
   if (n === 3) { frcEnter(); }
   if (n === 4) { s4Enter(); }
-  if (n === 5) { s5Enter(); }
   if (n === 6) {
     var s6Img = document.getElementById('s6-char-img');
     if (s6Img) {
       s6Img.src = window.lomdaState.selectedCharacter === 'text'
         ? './assets/images/Character1_holdhands.png'
         : './assets/images/Character2_holdhands.png';
+      s6Img.alt = 'דמויות מחזיקות ידיים';
     }
   }
   if (n === 7) { s7Enter(); }
@@ -140,7 +146,7 @@ function resetScreenState(n) {
   if (n === 10) { s10Enter(); }
   if (n === 11) { s11Enter(); }
   if (n === 12) { s12Enter(); }
-  if (n === 13) { s13Enter(); }
+
   if (n === 14) { s14Enter(); }
   if (n === 15) {
     var s15Img = document.getElementById('s15-char-img');
@@ -148,6 +154,7 @@ function resetScreenState(n) {
       s15Img.src = window.lomdaState.selectedCharacter === 'text'
         ? './assets/images/Character1_workout.png'
         : './assets/images/Character2_workout.png';
+      s15Img.alt = 'דמות מתאמנת';
     }
   }
   if (n === 17) {
@@ -156,6 +163,7 @@ function resetScreenState(n) {
       s17Img.src = window.lomdaState.selectedCharacter === 'text'
         ? './assets/images/Character1.png'
         : './assets/images/Character2.png';
+      s17Img.alt = 'דמות מלווה';
     }
   }
   if (n === 16) { s16Enter(); }
@@ -219,7 +227,11 @@ function frcFlip(cardEl) {
 function frcCheckUnlock() {
   if (frcRevealed.every(Boolean)) {
     frcDone = true;
-    document.getElementById('s3-continue').disabled = false;
+    var sqSection = document.getElementById('s3-sq-section');
+    if (sqSection) {
+      sqSection.classList.remove('sq-locked');
+      sqEnter(3);
+    }
   }
 }
 
@@ -233,11 +245,33 @@ function frcEnter() {
       card.setAttribute('aria-expanded', 'false');
     }
   });
-  document.getElementById('s3-continue').disabled = !frcDone;
+  var sqSection = document.getElementById('s3-sq-section');
+  if (sqSection) sqSection.classList.toggle('sq-locked', !frcDone);
+  sqScreen = 3; sqRestoreUI();
+  document.getElementById('s3-continue').disabled = !(frcDone && sqSubmitted && sqQ2Submitted);
+
+  var charImg3 = document.getElementById('s3-char-img');
+  if (charImg3) {
+    charImg3.src = window.lomdaState.selectedCharacter === 'text'
+      ? './assets/images/Character1_roller.png'
+      : './assets/images/Character2_roller.png';
+    charImg3.alt = 'דמות מלווה';
+  }
+  var s3body = document.getElementById('s3-body');
+  var charWidget3 = document.getElementById('s3-char-widget');
+  if (s3body && charWidget3) {
+    charWidget3.classList.add('hidden');
+    s3body.onscroll = function() {
+      var infoSec = document.querySelector('[data-screen="3"] .s5-info-section');
+      if (!infoSec) return;
+      var infoVisible = infoSec.offsetTop < s3body.scrollTop + s3body.clientHeight - 40;
+      charWidget3.classList.toggle('hidden', !infoVisible);
+    };
+  }
 }
 
 function advanceFromS3() {
-  goTo(5);
+  goTo(6);
 }
 
 /* ── Screen 1: scale widget ── */
@@ -254,16 +288,44 @@ function setScale(ratio) {
 function s4Enter() {
   clearInterval(s4Timer);
   s4Playing = false;
-  document.getElementById('s4-placeholder').hidden = false;
-  document.getElementById('s4-playing').hidden = true;
-  document.getElementById('s4-progress-bar').style.width = '0%';
-  document.getElementById('s4-continue').disabled = !s4VideoEnded;
+  var video = document.getElementById('s4-video');
+  if (video) { video.pause(); video.currentTime = 0; }
+  var playBtn = document.getElementById('s4-play-btn');
+  if (playBtn) playBtn.style.display = '';
+
+  var sqSection = document.getElementById('s4-sq-section');
+  if (sqSection) sqSection.classList.toggle('sq-locked', !s4VideoEnded);
+  sqScreen = 4; sqRestoreUI();
+  document.getElementById('s4-continue').disabled = !(s4VideoEnded && sqSubmitted && sqQ2Submitted);
 
   var charImg = document.getElementById('s4-char-img');
   if (charImg) {
     charImg.src = window.lomdaState.selectedCharacter === 'text'
       ? './assets/images/Character1_popcorn.png'
       : './assets/images/Character2_popcorn.png';
+    charImg.alt = 'דמות עם פופקורן';
+  }
+  var charImgRoller = document.getElementById('s4-char-img-roller');
+  if (charImgRoller) {
+    charImgRoller.src = window.lomdaState.selectedCharacter === 'text'
+      ? './assets/images/Character1_roller.png'
+      : './assets/images/Character2_roller.png';
+    charImgRoller.alt = 'דמות עם סרגל';
+  }
+
+  var s4body = document.getElementById('s4-body');
+  var charWidget = document.getElementById('s4-char-widget');
+  var charWidgetRoller = document.getElementById('s4-char-widget-roller');
+  if (s4body && charWidget) {
+    charWidget.classList.remove('hidden');
+    if (charWidgetRoller) charWidgetRoller.classList.add('hidden');
+    s4body.onscroll = function() {
+      var infoSec = document.querySelector('[data-screen="4"] .s5-info-section');
+      if (!infoSec) return;
+      var infoVisible = infoSec.offsetTop < s4body.scrollTop + s4body.clientHeight - 40;
+      charWidget.classList.toggle('hidden', infoVisible);
+      if (charWidgetRoller) charWidgetRoller.classList.toggle('hidden', !infoVisible);
+    };
   }
 }
 
@@ -271,26 +333,23 @@ function s4Start() {
   if (s4Playing) return;
   s4Playing = true;
 
-  document.getElementById('s4-placeholder').hidden = true;
-  document.getElementById('s4-playing').hidden = false;
-  document.getElementById('s4-continue').disabled = true;
+  var playBtn = document.getElementById('s4-play-btn');
+  if (playBtn) playBtn.style.display = 'none';
 
-  const bar = document.getElementById('s4-progress-bar');
-  bar.style.width = '0%';
+  var video = document.getElementById('s4-video');
+  if (!video) return;
 
-  const DURATION_MS = 6000;
-  const start = Date.now();
+  video.play();
 
-  s4Timer = setInterval(function () {
-    const pct = Math.min(100, ((Date.now() - start) / DURATION_MS) * 100);
-    bar.style.width = pct + '%';
-    if (pct >= 100) {
-      clearInterval(s4Timer);
-      s4Playing = false;
-      s4VideoEnded = true;
-      document.getElementById('s4-continue').disabled = false;
+  video.addEventListener('ended', function () {
+    s4Playing = false;
+    s4VideoEnded = true;
+    var sqSection = document.getElementById('s4-sq-section');
+    if (sqSection) {
+      sqSection.classList.remove('sq-locked');
+      sqEnter(4);
     }
-  }, 80);
+  }, { once: true });
 }
 
 function s4Back() {
@@ -301,7 +360,7 @@ function s4Back() {
 
 function s4Advance() {
   if (!s4VideoEnded) return;
-  goTo(5);
+  goTo(6);
 }
 
 /* ── Screen 5: SingleChoiceQuestion ── */
@@ -353,6 +412,7 @@ function s5Enter() {
     charImg.src = window.lomdaState.selectedCharacter === 'text'
       ? './assets/images/Character1.png'
       : './assets/images/Character2.png';
+    charImg.alt = 'דמות מלווה';
   }
 
   // Reset check and continue buttons
@@ -441,7 +501,7 @@ function s5Submit() {
 
   // Show feedback toast above bottom bar
   document.getElementById('s5-fb-bold').textContent = correct ? 'צדקת!' : 'זו טעות';
-  document.getElementById('s5-fb-regular').textContent = 'המספר 100 אשר בצד ימין של קנה המידה מייצג את האורך במציאות.';
+  document.getElementById('s5-fb-regular').textContent = 'המספר 100 שבצד ימין של קנה המידה מייצג את האורך במציאות. ​';
   var icon = document.getElementById('s5-fb-icon');
   if (correct) {
     icon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#609E12"/><path d="M9 16.5L13.5 21L23 11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -529,6 +589,227 @@ function s5Q2Submit() {
   s5CheckBothDone();
 }
 
+/* ── Screens 3/4: embedded questions ── */
+let sqScreen = 3;
+let sqSelected = null;
+let sqSubmitted = false;
+const SQ_CORRECT = 0;
+let sqQ2Selections = [null, null, null, null];
+let sqQ2Submitted = false;
+const SQ_Q2_CORRECT = ['3,000', '1,700', '320', '700,000'];
+
+function sqEnter(screenNum) {
+  sqScreen = screenNum;
+  sqRestoreUI();
+}
+
+function sqRestoreUI() {
+  var p = 's' + sqScreen + 'q-';
+  var q1correct = (sqSelected === SQ_CORRECT);
+
+  // Q1 options
+  document.querySelectorAll('[data-screen="' + sqScreen + '"] .s5-opt').forEach(function(opt, i) {
+    opt.classList.remove('is-selected', 'is-correct', 'is-incorrect');
+    opt.disabled = sqSubmitted;
+    if (sqSubmitted && i === sqSelected) {
+      opt.classList.add(q1correct ? 'is-correct' : 'is-incorrect');
+    } else if (!sqSubmitted && i === sqSelected) {
+      opt.classList.add('is-selected');
+    }
+  });
+
+  // Q1 check button
+  var checkBtn = document.getElementById(p + 'check');
+  if (checkBtn) checkBtn.disabled = sqSubmitted || sqSelected === null;
+
+  // Q1 feedback
+  var feedback = document.getElementById(p + 'inline-feedback');
+  if (feedback) {
+    feedback.classList.remove('s5-fb--correct', 's5-fb--incorrect');
+    if (sqSubmitted) {
+      feedback.classList.add(q1correct ? 's5-fb--correct' : 's5-fb--incorrect');
+      document.getElementById(p + 'fb-bold').textContent = q1correct ? 'צדקת!' : 'זו טעות';
+      document.getElementById(p + 'fb-regular').textContent = 'המספר 100 שבצד ימין של קנה המידה מייצג את האורך במציאות. ​';
+      var icon = document.getElementById(p + 'fb-icon');
+      if (icon) icon.innerHTML = q1correct
+        ? '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#609E12"/><path d="M9 16.5L13.5 21L23 11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        : '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      feedback.hidden = false;
+    } else {
+      feedback.hidden = true;
+      var fbBold = document.getElementById(p + 'fb-bold');
+      if (fbBold) fbBold.textContent = '';
+      var fbReg = document.getElementById(p + 'fb-regular');
+      if (fbReg) fbReg.textContent = '';
+      var fbIcon = document.getElementById(p + 'fb-icon');
+      if (fbIcon) fbIcon.innerHTML = '';
+    }
+  }
+
+  // Q2 dropdowns
+  document.querySelectorAll('[data-screen="' + sqScreen + '"] .sq-dropdown').forEach(function(d) {
+    var row = parseInt(d.dataset.row);
+    d.classList.remove('is-open', 'is-correct', 'is-incorrect');
+    var panel = document.getElementById(p + 'dd-panel-' + row);
+    if (panel) panel.hidden = true;
+    var valEl = document.getElementById(p + 'dd-val-' + row);
+    var iconEl = document.getElementById(p + 'dd-icon-' + row);
+    if (sqQ2Submitted) {
+      var rowCorrect = (sqQ2Selections[row] === SQ_Q2_CORRECT[row]);
+      if (valEl) valEl.textContent = SQ_Q2_CORRECT[row];
+      d.classList.add(rowCorrect ? 'is-correct' : 'is-incorrect');
+      if (iconEl) iconEl.innerHTML = rowCorrect
+        ? '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#609E12"/><path d="M4.5 8.25L6.75 10.5L11.5 5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        : '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#B20010"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    } else if (sqQ2Selections[row] !== null) {
+      if (valEl) valEl.textContent = sqQ2Selections[row];
+      if (iconEl) iconEl.innerHTML = '';
+    } else {
+      if (valEl) valEl.textContent = '-';
+      if (iconEl) iconEl.innerHTML = '';
+    }
+  });
+
+  // Q2 check button
+  var q2Check = document.getElementById(p + 'q2-check');
+  if (q2Check) q2Check.disabled = sqQ2Submitted || !sqQ2Selections.every(function(v) { return v !== null; });
+
+  // Q2 feedback
+  var q2feedback = document.getElementById(p + 'q2-inline-feedback');
+  if (q2feedback) {
+    q2feedback.classList.remove('s5-fb--correct', 's5-fb--incorrect');
+    if (sqQ2Submitted) {
+      var allCorrect = sqQ2Selections.every(function(val, i) { return val === SQ_Q2_CORRECT[i]; });
+      q2feedback.classList.add(allCorrect ? 's5-fb--correct' : 's5-fb--incorrect');
+      var q2Bold = document.getElementById(p + 'q2-fb-bold');
+      if (q2Bold) q2Bold.textContent = allCorrect ? 'צדקת!' : 'זו טעות';
+      var q2Reg = document.getElementById(p + 'q2-fb-regular');
+      if (q2Reg) q2Reg.textContent = 'התשובות הנכונות מוצגות כעת.';
+      var q2icon = document.getElementById(p + 'q2-fb-icon');
+      if (q2icon) q2icon.innerHTML = allCorrect
+        ? '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#609E12"/><path d="M9 16.5L13.5 21L23 11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        : '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      q2feedback.hidden = false;
+    } else {
+      q2feedback.hidden = true;
+      var q2Bold2 = document.getElementById(p + 'q2-fb-bold');
+      if (q2Bold2) q2Bold2.textContent = '';
+      var q2Reg2 = document.getElementById(p + 'q2-fb-regular');
+      if (q2Reg2) q2Reg2.textContent = '';
+      var q2Icon2 = document.getElementById(p + 'q2-fb-icon');
+      if (q2Icon2) q2Icon2.innerHTML = '';
+    }
+  }
+
+  // Continue button
+  var activityDone = (sqScreen === 3) ? frcDone : s4VideoEnded;
+  document.getElementById('s' + sqScreen + '-continue').disabled = !(activityDone && sqSubmitted && sqQ2Submitted);
+}
+
+function sqSelect(idx) {
+  if (sqSubmitted) return;
+  if (sqSelected === idx) return;
+  sqSelected = idx;
+  var p = 's' + sqScreen + 'q-';
+  document.querySelectorAll('[data-screen="' + sqScreen + '"] .s5-opt').forEach(function(opt, i) {
+    opt.classList.toggle('is-selected', i === idx);
+  });
+  var checkBtn = document.getElementById(p + 'check');
+  if (checkBtn) checkBtn.disabled = false;
+}
+
+function sqSubmit() {
+  if (sqSelected === null || sqSubmitted) return;
+  sqSubmitted = true;
+  var p = 's' + sqScreen + 'q-';
+  var correct = (sqSelected === SQ_CORRECT);
+  var opts = document.querySelectorAll('[data-screen="' + sqScreen + '"] .s5-opt');
+  opts[sqSelected].classList.remove('is-selected');
+  opts[sqSelected].classList.add(correct ? 'is-correct' : 'is-incorrect');
+  opts.forEach(function(opt) { opt.disabled = true; });
+  var checkBtn = document.getElementById(p + 'check');
+  if (checkBtn) checkBtn.disabled = true;
+  document.getElementById(p + 'fb-bold').textContent = correct ? 'צדקת!' : 'זו טעות';
+  document.getElementById(p + 'fb-regular').textContent = 'המספר 100 שבצד ימין של קנה המידה מייצג את האורך במציאות. ​';
+  var icon = document.getElementById(p + 'fb-icon');
+  if (correct) {
+    icon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#609E12"/><path d="M9 16.5L13.5 21L23 11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  } else {
+    icon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+  var feedback = document.getElementById(p + 'inline-feedback');
+  feedback.classList.add(correct ? 's5-fb--correct' : 's5-fb--incorrect');
+  feedback.hidden = false;
+  sqCheckBothDone();
+}
+
+function sqCheckBothDone() {
+  if (sqSubmitted && sqQ2Submitted) {
+    document.getElementById('s' + sqScreen + '-continue').disabled = false;
+  }
+}
+
+function sqQ2Toggle(rowIdx) {
+  if (sqQ2Submitted) return;
+  var p = 's' + sqScreen + 'q-';
+  var dd = document.querySelector('[data-screen="' + sqScreen + '"] .sq-dropdown[data-row="' + rowIdx + '"]');
+  var isOpen = dd.classList.contains('is-open');
+  document.querySelectorAll('[data-screen="' + sqScreen + '"] .sq-dropdown').forEach(function(d) {
+    d.classList.remove('is-open');
+    document.getElementById(p + 'dd-panel-' + d.dataset.row).hidden = true;
+  });
+  if (!isOpen) {
+    dd.classList.add('is-open');
+    document.getElementById(p + 'dd-panel-' + rowIdx).hidden = false;
+  }
+}
+
+function sqQ2Select(rowIdx, value) {
+  sqQ2Selections[rowIdx] = value;
+  var p = 's' + sqScreen + 'q-';
+  document.getElementById(p + 'dd-val-' + rowIdx).textContent = value;
+  var dd = document.querySelector('[data-screen="' + sqScreen + '"] .sq-dropdown[data-row="' + rowIdx + '"]');
+  dd.classList.remove('is-open');
+  document.getElementById(p + 'dd-panel-' + rowIdx).hidden = true;
+  if (sqQ2Selections.every(function(v) { return v !== null; })) {
+    document.getElementById(p + 'q2-check').disabled = false;
+  }
+}
+
+function sqQ2Submit() {
+  if (sqQ2Submitted) return;
+  sqQ2Submitted = true;
+  var p = 's' + sqScreen + 'q-';
+  document.getElementById(p + 'q2-check').disabled = true;
+  var allCorrect = true;
+  sqQ2Selections.forEach(function(val, i) {
+    var dd = document.querySelector('[data-screen="' + sqScreen + '"] .sq-dropdown[data-row="' + i + '"]');
+    var correct = (val === SQ_Q2_CORRECT[i]);
+    if (!correct) allCorrect = false;
+    dd.classList.add(correct ? 'is-correct' : 'is-incorrect');
+    var valEl = document.getElementById(p + 'dd-val-' + i);
+    if (valEl) valEl.textContent = SQ_Q2_CORRECT[i];
+    var iconEl = document.getElementById(p + 'dd-icon-' + i);
+    if (iconEl) {
+      iconEl.innerHTML = correct
+        ? '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#609E12"/><path d="M4.5 8.25L6.75 10.5L11.5 5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        : '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#B20010"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+  });
+  document.getElementById(p + 'q2-fb-bold').textContent = allCorrect ? 'צדקת!' : 'זו טעות';
+  document.getElementById(p + 'q2-fb-regular').textContent = 'התשובות הנכונות מוצגות כעת.';
+  var q2icon = document.getElementById(p + 'q2-fb-icon');
+  if (q2icon) {
+    q2icon.innerHTML = allCorrect
+      ? '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#609E12"/><path d="M9 16.5L13.5 21L23 11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+  var feedback = document.getElementById(p + 'q2-inline-feedback');
+  feedback.classList.add(allCorrect ? 's5-fb--correct' : 's5-fb--incorrect');
+  feedback.hidden = false;
+  sqCheckBothDone();
+}
+
 /* ── Screen 16: שאלת חימום (duplicate of screen 5) ── */
 let s16Selected = null;
 let s16Submitted = false;
@@ -558,8 +839,9 @@ function s16Enter() {
   var charImg = document.getElementById('s16-char-img');
   if (charImg) {
     charImg.src = window.lomdaState.selectedCharacter === 'text'
-      ? './assets/images/Character1.png'
-      : './assets/images/Character2.png';
+      ? './assets/images/Character1_workout.png'
+      : './assets/images/Character2_workout.png';
+    charImg.alt = 'דמות מלווה';
   }
 
   var contBtn = document.getElementById('s16-continue');
@@ -574,7 +856,8 @@ function s16Select(idx) {
   document.querySelectorAll('[data-screen="16"] .s5-opt').forEach(function (opt, i) {
     opt.classList.toggle('is-selected', i === idx);
   });
-  s16Submit();
+  var contBtn = document.getElementById('s16-continue');
+  if (contBtn) contBtn.disabled = false;
 }
 
 function s16ToggleHint() {
@@ -585,6 +868,68 @@ function s16ToggleHint() {
 function s16CloseHint() {
   var popup = document.getElementById('s16-hint-popup');
   if (popup) popup.hidden = true;
+}
+
+/* ── Quiz nav state (screens 18–22) ── */
+var s18QuizResults = { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null };
+var s18QScreens    = [18, 19, 21, 22, 23];
+
+function s18UpdateNav(currentQ, navScreenId) {
+  var screenId = navScreenId || ('s' + s18QScreens[currentQ - 1]);
+  var nav = document.querySelector('#' + screenId + ' .s18-nav');
+  if (!nav) return;
+
+  var items = nav.querySelectorAll('.s18-nav-item');
+  var lines = nav.querySelectorAll('.s18-nav-line');
+
+  // Q2 is compound (screens 19+20): dots 2+3 show combined result
+  var q2a = s18QuizResults[2], q2b = s18QuizResults[3];
+  var q2Combined = (q2a !== null && q2b !== null)
+    ? ((q2a === 'correct' && q2b === 'correct') ? 'correct' : 'wrong')
+    : null;
+
+  items.forEach(function (item, i) {
+    var q      = i + 1;
+    var result = (q === 2) ? q2Combined
+               : (q === 3) ? s18QuizResults[4]
+               : (q === 4) ? s18QuizResults[5]
+               : (q === 5) ? s18QuizResults[6]
+               : s18QuizResults[q];
+    var navDest = s18QScreens[i];
+    var icon   = item.querySelector('.s18-nav-icon');
+    var label  = item.querySelector('.s18-nav-label');
+
+    icon.className   = 's18-nav-icon';
+    item.onclick     = null;
+    item.style.cursor = '';
+
+    if (q === currentQ) {
+      icon.classList.add('s18-nav-icon--active');
+      label.className = 's18-nav-label s18-nav-label--on';
+    } else if (result === 'correct') {
+      icon.classList.add('s18-nav-icon--done');
+      label.className = 's18-nav-label s18-nav-label--on';
+      item.style.cursor = 'pointer';
+      (function (sc) { item.onclick = function () { goTo(sc); }; })(navDest);
+    } else if (result === 'wrong') {
+      icon.classList.add('s18-nav-icon--wrong');
+      label.className = 's18-nav-label s18-nav-label--on';
+      item.style.cursor = 'pointer';
+      (function (sc) { item.onclick = function () { goTo(sc); }; })(navDest);
+    } else {
+      icon.classList.add('s18-nav-icon--off');
+      label.className = 's18-nav-label s18-nav-label--off';
+    }
+
+    if (i < 4) {
+      var line = lines[i];
+      if (result === 'correct' || result === 'wrong') {
+        line.classList.add('s18-nav-line--done');
+      } else {
+        line.classList.remove('s18-nav-line--done');
+      }
+    }
+  });
 }
 
 /* ── Screen 18 ── */
@@ -637,14 +982,16 @@ function s18Enter() {
   s18Attempts = 0;
   s18Solved = false;
   s18Correct = false;
+  s18UpdateNav(1);
   var ruler = document.getElementById('s18-ruler');
-  if (ruler) { ruler.style.left = '37.6946px'; ruler.style.top = '171.957px'; }
+  if (ruler) { ruler.style.left = '250px'; ruler.style.top = '175px'; }
   s18InitRuler();
   var charImg = document.getElementById('s18-char-img');
   if (charImg) {
     charImg.src = window.lomdaState.selectedCharacter === 'text'
       ? './assets/images/Character1.png'
       : './assets/images/Character2.png';
+    charImg.alt = 'דמות מלווה';
   }
   var input = document.getElementById('s18-answer-input');
   if (input) { input.value = ''; input.disabled = false; }
@@ -693,16 +1040,20 @@ function s18Submit() {
   var fbIcon    = document.getElementById('s18-fb-icon');
   var continueBtn = document.getElementById('s18-continue');
 
-  var explanation = '1.4 מטרים שווים ל-140 ס"מ, ולכן קנה המידה הוא 140 : 7.<br>' +
-                    'כדי להגיע לקנה מידה מצומצם, נחלק את שני המספרים ב-7, ונקבל 20 : 1.';
+  var explanationCorrect = 'לפי קנה המידה הנתון, אורך הנעל במציאות גדול פי 6 מאורך הנעל בתמונה. ​<br>' +
+                    'ראינו שאורך הנעל בתמונה הוא 4 ס"מ, נכפול אותו ב-6 ונקבל:​<br>' +
+                    ' 24 ס"מ = 6 · 4​<br>' +
+                    'מכאן שאורך הנעל במציאות הוא 24 ס"מ.​';
+  var explanationWrong = explanationCorrect;
 
   feedback.classList.remove('s5-fb--correct', 's5-fb--incorrect');
 
   if (correct) {
     s18Solved = true;
     s18Correct = true;
-    fbBold.textContent = 'יפה מאוד!';
-    fbRegular.innerHTML = explanation;
+    s18QuizResults[1] = 'correct';
+    fbBold.textContent = 'יפה מאוד!​';
+    fbRegular.innerHTML = explanationCorrect;
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--correct');
     feedback.hidden = false;
@@ -719,8 +1070,9 @@ function s18Submit() {
     continueBtn.disabled = true;
   } else {
     s18Solved = true;
-    fbBold.textContent = 'זו טעות, בואו נדייק';
-    fbRegular.innerHTML = explanation;
+    s18QuizResults[1] = 'wrong';
+    fbBold.textContent = 'זו טעות, בואו נדייק​';
+    fbRegular.innerHTML = explanationWrong;
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--incorrect');
     feedback.hidden = false;
@@ -747,6 +1099,7 @@ function s19Enter() {
   s19Attempts = 0;
   s19Solved = false;
   s19Correct = false;
+  s18UpdateNav(2);
   var input = document.getElementById('s19-answer-input');
   if (input) { input.value = ''; input.disabled = false; }
   var continueBtn = document.getElementById('s19-continue');
@@ -783,8 +1136,8 @@ function s19Submit() {
   if (s19Solved) { goTo(20); return; }
 
   var input = document.getElementById('s19-answer-input');
-  var answer = input ? input.value : '';
-  var correct = checkRatio(answer, 1, 20);
+  var answer = input ? input.value.trim() : '';
+  var correct = (answer === '20');
 
   s19Attempts++;
 
@@ -794,17 +1147,19 @@ function s19Submit() {
   var fbIcon      = document.getElementById('s19-fb-icon');
   var continueBtn = document.getElementById('s19-continue');
 
-  var explanation = '1.4 מטרים שווים ל-140 ס"מ,<br>' +
-                    'ולכן קנה המידה הוא 140 : 7.<br>' +
-                    'כדי להגיע לקנה מידה מצומצם, נחלק את שני המספרים ב-7, ונקבל 20 : 1.';
+  var explanationCorrect = '1.4 מטרים שווים ל-140 ס"מ,​ ולכן היחס בין האורכים הוא 140 : 7.​<br>' +
+                    'נצמצם את היחס ב-7 ​ונקבל שקנה המידה הוא 20 : 1.​';
+  var explanationWrong = '1.4 מטרים שווים ל-140 ס"מ,​ ולכן קנה המידה הוא 140 : 7.​<br>' +
+                    'כדי להגיע לקנה מידה מצומצם, נחלק את שני המספרים ב-7, ונקבל 20 : 1.​';
 
   feedback.classList.remove('s5-fb--correct', 's5-fb--incorrect');
 
   if (correct) {
     s19Solved = true;
     s19Correct = true;
-    fbBold.textContent = 'יפה מאוד!';
-    fbRegular.innerHTML = explanation;
+    s18QuizResults[2] = 'correct';
+    fbBold.textContent = 'יפה מאוד!​';
+    fbRegular.innerHTML = explanationCorrect;
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--correct');
     feedback.hidden = false;
@@ -821,8 +1176,9 @@ function s19Submit() {
     continueBtn.disabled = true;
   } else {
     s19Solved = true;
-    fbBold.textContent = 'זו טעות, בואו נדייק';
-    fbRegular.innerHTML = explanation;
+    s18QuizResults[2] = 'wrong';
+    fbBold.textContent = 'זו טעות, בואו נדייק​';
+    fbRegular.innerHTML = explanationWrong;
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--incorrect');
     feedback.hidden = false;
@@ -831,18 +1187,168 @@ function s19Submit() {
   }
 }
 
+/* ── Screen 20 ── */
+var s20Selected = null;
+var s20Attempts = 0;
+var s20Solved = false;
+var s20Correct = false;
+var S20_CORRECT = 1;
+
+function s20Enter() {
+  s20Selected = null;
+  s20Attempts = 0;
+  s20Solved = false;
+  s20Correct = false;
+  document.querySelectorAll('[data-screen="20"] .s5-opt').forEach(function(opt) {
+    opt.classList.remove('is-selected', 'is-correct', 'is-incorrect');
+    opt.disabled = false;
+  });
+  var continueBtn = document.getElementById('s20-continue');
+  if (continueBtn) continueBtn.disabled = true;
+  var hintBtn = document.getElementById('s20-hint-btn');
+  if (hintBtn) hintBtn.hidden = true;
+  var hintPopup = document.getElementById('s20-hint-popup');
+  if (hintPopup) hintPopup.hidden = true;
+  var feedback = document.getElementById('s20-feedback');
+  if (feedback) { feedback.hidden = true; feedback.classList.remove('s5-fb--correct', 's5-fb--incorrect'); }
+  s18UpdateNav(2, 's20');
+}
+
+function s20Select(idx) {
+  if (s20Solved) return;
+  s20Selected = idx;
+  document.querySelectorAll('[data-screen="20"] .s5-opt').forEach(function(opt, i) {
+    opt.classList.toggle('is-selected', i === idx);
+  });
+  var continueBtn = document.getElementById('s20-continue');
+  if (continueBtn) continueBtn.disabled = false;
+}
+
+function s20ToggleHint() { var p = document.getElementById('s20-hint-popup'); if (p) p.hidden = false; }
+function s20CloseHint()  { var p = document.getElementById('s20-hint-popup'); if (p) p.hidden = true; }
+
+function s20Submit() {
+  if (s20Solved) { goTo(21); return; }
+  if (s20Selected === null) return;
+  var correct = (s20Selected === S20_CORRECT);
+  s20Attempts++;
+  var feedback    = document.getElementById('s20-feedback');
+  var fbBold      = document.getElementById('s20-fb-bold');
+  var fbRegular   = document.getElementById('s20-fb-regular');
+  var fbIcon      = document.getElementById('s20-fb-icon');
+  var continueBtn = document.getElementById('s20-continue');
+  var explanationCorrect = 'נמיר את מידות השטיח במציאות לסנטימטרים: 180 ס"מ ו-240 ס"מ. ​<br>' +
+    'מכיוון שקנה המידה הוא 20 : 1 (הקטנה פי 20 של מידות השטיח בתרשים), נחלק כל מידה ב-20 ונקבל שרוחב השטיח בתרשים הוא 9 ס"מ ואורכו 12 ס"מ.​';
+  var explanationWrong = explanationCorrect;
+  feedback.classList.remove('s5-fb--correct', 's5-fb--incorrect');
+  var opts = document.querySelectorAll('[data-screen="20"] .s5-opt');
+  if (correct) {
+    s20Solved = true; s20Correct = true; s18QuizResults[3] = 'correct';
+    opts.forEach(function(o,i){ o.disabled=true; o.classList.toggle('is-correct', i===S20_CORRECT); });
+    fbBold.textContent = 'יפה!​'; fbRegular.innerHTML = explanationCorrect;
+    fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    feedback.classList.add('s5-fb--correct'); feedback.hidden = false; continueBtn.disabled = false;
+  } else if (s20Attempts === 1) {
+    opts.forEach(function(o) { o.classList.remove('is-selected'); });
+    s20Selected = null;
+    continueBtn.disabled = true;
+    document.getElementById('s20-hint-btn').hidden = false;
+    fbBold.textContent = 'זה לא מדוייק, ננסה שוב?'; fbRegular.innerHTML = '';
+    fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    feedback.classList.add('s5-fb--incorrect'); feedback.hidden = false;
+  } else {
+    s20Solved = true; s18QuizResults[3] = 'wrong';
+    opts.forEach(function(o,i){ o.disabled=true; o.classList.toggle('is-correct',i===S20_CORRECT); o.classList.toggle('is-incorrect',i===s20Selected&&i!==S20_CORRECT); });
+    fbBold.textContent = 'זו טעות, בואו נדייק​'; fbRegular.innerHTML = explanationWrong;
+    fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    feedback.classList.add('s5-fb--incorrect'); feedback.hidden = false;
+    continueBtn.disabled = false;
+  }
+}
+
+/* ── Screen 21 ── */
+var s21Attempts = 0;
+var s21Solved = false;
+var s21Correct = false;
+
+function s21Enter() {
+  s21Attempts = 0; s21Solved = false; s21Correct = false;
+  var charImg = document.getElementById('s21-char-img');
+  if (charImg) {
+    charImg.src = window.lomdaState && window.lomdaState.selectedCharacter === 'text'
+      ? './assets/images/Character1.png'
+      : './assets/images/Character2.png';
+    charImg.alt = 'דמות מלווה';
+  }
+  var input = document.getElementById('s21-answer-input');
+  if (input) { input.value = ''; input.disabled = false; }
+  var continueBtn = document.getElementById('s21-continue');
+  if (continueBtn) continueBtn.disabled = true;
+  var hintBtn = document.getElementById('s21-hint-btn');
+  if (hintBtn) hintBtn.hidden = true;
+  var hintPopup = document.getElementById('s21-hint-popup');
+  if (hintPopup) hintPopup.hidden = true;
+  var feedback = document.getElementById('s21-feedback');
+  if (feedback) { feedback.hidden = true; feedback.classList.remove('s5-fb--correct', 's5-fb--incorrect'); }
+  s18UpdateNav(3, 's21');
+}
+
+function s21CheckInput() {
+  if (s21Solved) return;
+  var input = document.getElementById('s21-answer-input');
+  var continueBtn = document.getElementById('s21-continue');
+  if (continueBtn) continueBtn.disabled = !(input && input.value.trim().length > 0);
+}
+
+function s21ToggleHint() { var p = document.getElementById('s21-hint-popup'); if (p) p.hidden = false; }
+function s21CloseHint()  { var p = document.getElementById('s21-hint-popup'); if (p) p.hidden = true; }
+
+function s21Submit() {
+  if (s21Solved) { goTo(22); return; }
+  var input = document.getElementById('s21-answer-input');
+  var answer = input ? input.value : '';
+  var correct = checkRatio(answer, 1, 25000);
+  s21Attempts++;
+  var feedback    = document.getElementById('s21-feedback');
+  var fbBold      = document.getElementById('s21-fb-bold');
+  var fbRegular   = document.getElementById('s21-fb-regular');
+  var fbIcon      = document.getElementById('s21-fb-icon');
+  var continueBtn = document.getElementById('s21-continue');
+  var explanation = '2 ק"מ הם 200,000 ס"מ.<br>' +
+                    'מכאן שהיחס בין אורך כל קטע במפה לבין אורך כל קטע במציאות הוא 200,000 : 8.<br>' +
+                    'נצמצם ב-8, ונקבל את קנה המידה: 25,000 : 1';
+  feedback.classList.remove('s5-fb--correct', 's5-fb--incorrect');
+  if (correct) {
+    s21Solved = true; s21Correct = true; s18QuizResults[4] = 'correct';
+    fbBold.textContent = 'יפה מאוד!'; fbRegular.innerHTML = explanation;
+    fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    feedback.classList.add('s5-fb--correct'); feedback.hidden = false; input.disabled = true; continueBtn.disabled = false;
+  } else if (s21Attempts === 1) {
+    fbBold.textContent = 'זה לא מדוייק, ננסה שוב?'; fbRegular.innerHTML = '';
+    fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    feedback.classList.add('s5-fb--incorrect'); feedback.hidden = false;
+    document.getElementById('s21-hint-btn').hidden = false; input.value = ''; continueBtn.disabled = true;
+  } else {
+    s21Solved = true; s18QuizResults[4] = 'wrong';
+    fbBold.textContent = 'זו טעות, בואו נדייק'; fbRegular.innerHTML = explanation;
+    fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    feedback.classList.add('s5-fb--incorrect'); feedback.hidden = false; input.disabled = true; continueBtn.disabled = false;
+  }
+}
+
 /* ── Screen 22 ── */
 var s22Selected = null;
 var s22Attempts = 0;
 var s22Solved = false;
 var s22Correct = false;
-var S22_CORRECT = 3;
+var S22_CORRECT = 1;
 
 function s22Enter() {
   s22Selected = null;
   s22Attempts = 0;
   s22Solved = false;
   s22Correct = false;
+  s18UpdateNav(4, 's22');
   document.querySelectorAll('[data-screen="22"] .s5-opt').forEach(function(opt) {
     opt.classList.remove('is-selected', 'is-correct', 'is-incorrect');
     opt.disabled = false;
@@ -901,9 +1407,9 @@ function s22Submit() {
   var fbIcon      = document.getElementById('s22-fb-icon');
   var continueBtn = document.getElementById('s22-continue');
 
-  var explanation = 'קילומטר אחד שווה ל-100,000 סנטימטרים. כלומר - 7,000 ק"מ הם 700,000,000 ס"מ.<br>' +
-                    'נצמצם את המרחק במציאות ב-100,000,000 ונקבל:<br>' +
-                    '7 = 100,000,000 ÷ 700,000,000';
+  var explanationCorrect = 'לפי קנה המידה כל ס"מ על המפה מייצג 100,000,000 ס"מ במציאות. ​<br>' +
+                    'נתון שהמרחק על המפה הוא 7 ס"מ, ולכן המרחק במציאות הוא 700,000,000 ס"מ, שהם 7,000 ק"מ.​';
+  var explanationWrong = explanationCorrect;
 
   feedback.classList.remove('s5-fb--correct', 's5-fb--incorrect');
   var opts = document.querySelectorAll('[data-screen="22"] .s5-opt');
@@ -911,11 +1417,12 @@ function s22Submit() {
   if (correct) {
     s22Solved = true;
     s22Correct = true;
+    s18QuizResults[5] = 'correct';
     opts[s22Selected].classList.remove('is-selected');
     opts[s22Selected].classList.add('is-correct');
     opts.forEach(function(o) { o.disabled = true; });
-    fbBold.textContent = 'יפה!';
-    fbRegular.innerHTML = explanation;
+    fbBold.textContent = 'יפה!​';
+    fbRegular.innerHTML = explanationCorrect;
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--correct');
     feedback.hidden = false;
@@ -932,14 +1439,15 @@ function s22Submit() {
     continueBtn.disabled = true;
   } else {
     s22Solved = true;
+    s18QuizResults[5] = 'wrong';
     opts.forEach(function(o, i) {
       o.disabled = true;
       o.classList.remove('is-selected');
       if (i === S22_CORRECT) o.classList.add('is-correct');
       else if (i === s22Selected) o.classList.add('is-incorrect');
     });
-    fbBold.textContent = 'זו טעות, בואו נדייק';
-    fbRegular.innerHTML = explanation;
+    fbBold.textContent = 'זו טעות, בואו נדייק​';
+    fbRegular.innerHTML = explanationWrong;
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--incorrect');
     feedback.hidden = false;
@@ -947,213 +1455,6 @@ function s22Submit() {
   }
 }
 
-/* ── Screen 21 ── */
-var s21Attempts = 0;
-var s21Solved = false;
-var s21Correct = false;
-
-function s21Enter() {
-  s21Attempts = 0;
-  s21Solved = false;
-  s21Correct = false;
-  var charImg = document.getElementById('s21-char-img');
-  if (charImg) {
-    charImg.src = window.lomdaState.selectedCharacter === 'text'
-      ? './assets/images/Character1.png'
-      : './assets/images/Character2.png';
-  }
-  var input = document.getElementById('s21-answer-input');
-  if (input) { input.value = ''; input.disabled = false; }
-  var continueBtn = document.getElementById('s21-continue');
-  if (continueBtn) continueBtn.disabled = true;
-  var hintBtn = document.getElementById('s21-hint-btn');
-  if (hintBtn) hintBtn.hidden = true;
-  var hintPopup = document.getElementById('s21-hint-popup');
-  if (hintPopup) hintPopup.hidden = true;
-  var feedback = document.getElementById('s21-feedback');
-  if (feedback) {
-    feedback.hidden = true;
-    feedback.classList.remove('s5-fb--correct', 's5-fb--incorrect');
-  }
-}
-
-function s21CheckInput() {
-  if (s21Solved) return;
-  var input = document.getElementById('s21-answer-input');
-  var continueBtn = document.getElementById('s21-continue');
-  if (continueBtn) continueBtn.disabled = !(input && input.value.trim().length > 0);
-}
-
-function s21ToggleHint() {
-  var popup = document.getElementById('s21-hint-popup');
-  if (popup) popup.hidden = false;
-}
-
-function s21CloseHint() {
-  var popup = document.getElementById('s21-hint-popup');
-  if (popup) popup.hidden = true;
-}
-
-function s21Submit() {
-  if (s21Solved) { goTo(22); return; }
-
-  var input = document.getElementById('s21-answer-input');
-  var answer = input ? input.value : '';
-  var correct = checkRatio(answer, 1, 25000);
-
-  s21Attempts++;
-
-  var feedback    = document.getElementById('s21-feedback');
-  var fbBold      = document.getElementById('s21-fb-bold');
-  var fbRegular   = document.getElementById('s21-fb-regular');
-  var fbIcon      = document.getElementById('s21-fb-icon');
-  var continueBtn = document.getElementById('s21-continue');
-
-  var explanation = '2 ק"מ הם 200,000 ס"מ.<br>' +
-                    'מכאן שהיחס בין אורך כל קטע במפה לבין אורך כל קטע במציאות הוא 200,000 : 8.<br>' +
-                    'נצמצם ב-8, ונקבל את קנה המידה: 25,000 : 1';
-
-  feedback.classList.remove('s5-fb--correct', 's5-fb--incorrect');
-
-  if (correct) {
-    s21Solved = true;
-    s21Correct = true;
-    fbBold.textContent = 'מצוין!';
-    fbRegular.innerHTML = explanation;
-    fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    feedback.classList.add('s5-fb--correct');
-    feedback.hidden = false;
-    input.disabled = true;
-    continueBtn.disabled = false;
-  } else if (s21Attempts === 1) {
-    fbBold.textContent = 'זה לא מדוייק, ננסה שוב?';
-    fbRegular.innerHTML = '';
-    fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    feedback.classList.add('s5-fb--incorrect');
-    feedback.hidden = false;
-    document.getElementById('s21-hint-btn').hidden = false;
-    input.value = '';
-    continueBtn.disabled = true;
-  } else {
-    s21Solved = true;
-    fbBold.textContent = 'זו טעות, בואו נדייק';
-    fbRegular.innerHTML = explanation;
-    fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    feedback.classList.add('s5-fb--incorrect');
-    feedback.hidden = false;
-    input.disabled = true;
-    continueBtn.disabled = false;
-  }
-}
-
-/* ── Screen 20 ── */
-var s20Selected = null;
-var s20Attempts = 0;
-var s20Solved = false;
-var s20Correct = false;
-var S20_CORRECT = 1;
-
-function s20Enter() {
-  s20Selected = null;
-  s20Attempts = 0;
-  s20Solved = false;
-  s20Correct = false;
-  document.querySelectorAll('[data-screen="20"] .s5-opt').forEach(function(opt) {
-    opt.classList.remove('is-selected', 'is-correct', 'is-incorrect');
-    opt.disabled = false;
-  });
-  var continueBtn = document.getElementById('s20-continue');
-  if (continueBtn) continueBtn.disabled = true;
-  var hintBtn = document.getElementById('s20-hint-btn');
-  if (hintBtn) hintBtn.hidden = true;
-  var hintPopup = document.getElementById('s20-hint-popup');
-  if (hintPopup) hintPopup.hidden = true;
-  var feedback = document.getElementById('s20-feedback');
-  if (feedback) {
-    feedback.hidden = true;
-    feedback.classList.remove('s5-fb--correct', 's5-fb--incorrect');
-  }
-}
-
-function s20Select(idx) {
-  if (s20Solved) return;
-  if (s20Selected === idx) return;
-  s20Selected = idx;
-  document.querySelectorAll('[data-screen="20"] .s5-opt').forEach(function(opt, i) {
-    opt.classList.toggle('is-selected', i === idx);
-  });
-  var continueBtn = document.getElementById('s20-continue');
-  if (continueBtn) continueBtn.disabled = false;
-}
-
-function s20ToggleHint() {
-  var popup = document.getElementById('s20-hint-popup');
-  if (popup) popup.hidden = false;
-}
-
-function s20CloseHint() {
-  var popup = document.getElementById('s20-hint-popup');
-  if (popup) popup.hidden = true;
-}
-
-function s20Submit() {
-  if (s20Solved) { goTo(21); return; }
-  if (s20Selected === null) return;
-
-  var correct = (s20Selected === S20_CORRECT);
-  s20Attempts++;
-
-  var feedback    = document.getElementById('s20-feedback');
-  var fbBold      = document.getElementById('s20-fb-bold');
-  var fbRegular   = document.getElementById('s20-fb-regular');
-  var fbIcon      = document.getElementById('s20-fb-icon');
-  var continueBtn = document.getElementById('s20-continue');
-
-  var explanation = 'נמיר את מידות השטיח במציאות לסנטימטרים: 180 ס"מ ו-240 ס"מ.<br>' +
-                    'מכיוון שקנה המידה הוא 20 : 1 (הקטנה פי 20), נחלק כל מידה ב-20 ונקבל שרוחב השטיח בתרשים הוא 9 ס"מ ואורכו 12 ס"מ.';
-
-  feedback.classList.remove('s5-fb--correct', 's5-fb--incorrect');
-
-  var opts = document.querySelectorAll('[data-screen="20"] .s5-opt');
-
-  if (correct) {
-    s20Solved = true;
-    s20Correct = true;
-    opts[s20Selected].classList.remove('is-selected');
-    opts[s20Selected].classList.add('is-correct');
-    opts.forEach(function(o) { o.disabled = true; });
-    fbBold.textContent = 'יפה!';
-    fbRegular.innerHTML = explanation;
-    fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    feedback.classList.add('s5-fb--correct');
-    feedback.hidden = false;
-    continueBtn.disabled = false;
-  } else if (s20Attempts === 1) {
-    opts[s20Selected].classList.remove('is-selected');
-    fbBold.textContent = 'זה לא מדוייק, ננסה שוב?';
-    fbRegular.innerHTML = '';
-    fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    feedback.classList.add('s5-fb--incorrect');
-    feedback.hidden = false;
-    document.getElementById('s20-hint-btn').hidden = false;
-    s20Selected = null;
-    continueBtn.disabled = true;
-  } else {
-    s20Solved = true;
-    opts.forEach(function(o, i) {
-      o.disabled = true;
-      o.classList.remove('is-selected');
-      if (i === S20_CORRECT) o.classList.add('is-correct');
-      else if (i === s20Selected) o.classList.add('is-incorrect');
-    });
-    fbBold.textContent = 'זו טעות, בואו נדייק';
-    fbRegular.innerHTML = explanation;
-    fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    feedback.classList.add('s5-fb--incorrect');
-    feedback.hidden = false;
-    continueBtn.disabled = false;
-  }
-}
 
 function s16Submit() {
   if (s16Selected === null || s16Submitted) return;
@@ -1166,7 +1467,7 @@ function s16Submit() {
   opts.forEach(function (opt) { opt.disabled = true; });
 
   document.getElementById('s16-fb-bold').textContent = correct ? 'נכון!' : 'זו טעות, אבל חשוב שניסית!';
-  document.getElementById('s16-fb-regular').innerHTML = 'קנה מידה נקרא משמאל לימין: המספר השמאלי מייצג את הגודל בסרטוט, והמספר הימני מייצג את הגודל במציאות.';
+  document.getElementById('s16-fb-regular').innerHTML = 'קנה מידה נקרא משמאל לימין:​ המספר השמאלי מייצג את הגודל בסרטוט, והמספר הימני מייצג את הגודל המתאים במציאות. ​';
 
   var icon = document.getElementById('s16-fb-icon');
   if (correct) {
@@ -1179,7 +1480,12 @@ function s16Submit() {
   feedback.classList.add(correct ? 's5-fb--correct' : 's5-fb--incorrect');
   feedback.hidden = false;
 
-  s16CheckBothDone();
+  var contBtn = document.getElementById('s16-continue');
+  if (contBtn) {
+    contBtn.textContent = 'להמשיך';
+    contBtn.disabled = false;
+    contBtn.onclick = function() { goTo(17); };
+  }
 }
 
 function s16CheckBothDone() {
@@ -1232,7 +1538,7 @@ function s16Q2Submit() {
   });
 
   document.getElementById('s16-q2-fb-bold').textContent = allCorrect ? 'נכון!' : 'זו טעות, אבל חשוב שניסיתם!';
-  document.getElementById('s16-q2-fb-regular').innerHTML = 'קנה מידה נקרא משמאל לימין:<br>המספר השמאלי מייצג את הגודל בסרטוט, והמספר הימני מייצג את הגודל במציאות.';
+  document.getElementById('s16-q2-fb-regular').innerHTML = 'קנה מידה נקרא משמאל לימין:​ המספר השמאלי מייצג את הגודל בסרטוט, והמספר הימני מייצג את הגודל המתאים במציאות. ​';
 
   var q2icon = document.getElementById('s16-q2-fb-icon');
   if (q2icon) {
@@ -1258,8 +1564,9 @@ function s7Enter() {
   var charImg = document.getElementById('s7-char-img');
   if (charImg) {
     charImg.src = window.lomdaState.selectedCharacter === 'text'
-      ? './assets/images/Character1_roller.png'
-      : './assets/images/Character2_roller.png';
+      ? './assets/images/Character1.png'
+      : './assets/images/Character2.png';
+    charImg.alt = 'דמות מלווה';
   }
 
   var cont = document.getElementById('s7-continue');
@@ -1353,6 +1660,7 @@ function s12Enter() {
     charImg.src = window.lomdaState.selectedCharacter === 'text'
       ? './assets/images/Character1.png'
       : './assets/images/Character2.png';
+    charImg.alt = 'דמות מלווה';
   }
 }
 
@@ -1402,11 +1710,63 @@ var s23Solved = false;
 var s23Correct = false;
 var S23_CORRECT = 2;
 
+function s23UpdateNav() {
+  var nav = document.querySelector('#s23 .s18-nav');
+  if (!nav) return;
+  var items = nav.querySelectorAll('.s18-nav-item');
+  var lines = nav.querySelectorAll('.s18-nav-line');
+
+  // Q2 is compound (screens 19+20): dots 2+3 show combined result
+  var q2a = s18QuizResults[2], q2b = s18QuizResults[3];
+  var q2Combined = (q2a !== null && q2b !== null)
+    ? ((q2a === 'correct' && q2b === 'correct') ? 'correct' : 'wrong')
+    : null;
+
+  items.forEach(function(item, i) {
+    var icon  = item.querySelector('.s18-nav-icon');
+    var label = item.querySelector('.s18-nav-label');
+    icon.className = 's18-nav-icon';
+    item.onclick = null;
+    item.style.cursor = '';
+    if (i === 4) {
+      icon.classList.add('s18-nav-icon--active');
+      label.className = 's18-nav-label s18-nav-label--on';
+    } else {
+      var result = (i === 1 || i === 2) ? q2Combined : s18QuizResults[i + 1];
+      // dot 3 (i=2, Q2b) navigates back to screen 19 (Q2a = סעיף א)
+      var navDest = (i === 2) ? 19 : s18QScreens[i];
+      if (result === 'correct') {
+        icon.classList.add('s18-nav-icon--done');
+        label.className = 's18-nav-label s18-nav-label--on';
+        item.style.cursor = 'pointer';
+        (function(sc) { item.onclick = function() { goTo(sc); }; })(navDest);
+      } else if (result === 'wrong') {
+        icon.classList.add('s18-nav-icon--wrong');
+        label.className = 's18-nav-label s18-nav-label--on';
+        item.style.cursor = 'pointer';
+        (function(sc) { item.onclick = function() { goTo(sc); }; })(navDest);
+      } else {
+        icon.classList.add('s18-nav-icon--off');
+        label.className = 's18-nav-label s18-nav-label--off';
+      }
+    }
+  });
+  lines.forEach(function(line, i) {
+    var result = (i === 1 || i === 2) ? q2Combined : s18QuizResults[i + 1];
+    if (result === 'correct' || result === 'wrong') {
+      line.classList.add('s18-nav-line--done');
+    } else {
+      line.classList.remove('s18-nav-line--done');
+    }
+  });
+}
+
 function s23Enter() {
   s23Selected = null;
   s23Attempts = 0;
   s23Solved = false;
   s23Correct = false;
+  s18UpdateNav(5, 's23');
   document.querySelectorAll('[data-screen="23"] .s5-opt').forEach(function(opt) {
     opt.classList.remove('is-selected', 'is-correct', 'is-incorrect');
     opt.disabled = false;
@@ -1458,9 +1818,8 @@ function s23Submit() {
   var fbIcon      = document.getElementById('s23-fb-icon');
   var continueBtn = document.getElementById('s23-continue');
 
-  var explanation = 'קנה מידה מתאר את היחס בין האורך במפה לאורך במציאות. המסלול במציאות זהה.<br>' +
-                    'אם קנה המידה היה זהה, גם אורך המסלול בשתי המפות היה צריך להיות זהה.<br>' +
-                    'לכן נסיק שקני המידה שונים.';
+  var explanation = 'קנה מידה מייצג את היחס בין האורך במפה לאורך המתאים במציאות. ​<br>' +
+                    'המסלול במציאות זהה. אם קנה המידה היה זהה, גם אורך המסלול בשתי המפות היה צריך להיות זהה. לכן נסיק שקני המידה שונים.  ​';
   var checkIcon = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var xIcon     = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
@@ -1470,6 +1829,7 @@ function s23Submit() {
   if (correct) {
     s23Solved = true;
     s23Correct = true;
+    s18QuizResults[6] = 'correct';
     opts[s23Selected].classList.remove('is-selected');
     opts[s23Selected].classList.add('is-correct');
     opts.forEach(function(o) { o.disabled = true; });
@@ -1491,14 +1851,15 @@ function s23Submit() {
     continueBtn.disabled = true;
   } else {
     s23Solved = true;
+    s18QuizResults[6] = 'wrong';
     opts.forEach(function(o, i) {
       o.disabled = true;
       o.classList.remove('is-selected');
       if (i === S23_CORRECT) o.classList.add('is-correct');
       else if (i === s23Selected) o.classList.add('is-incorrect');
     });
-    fbBold.textContent = 'זו טעות, לא נורא – בואו נלמד ממנה:';
-    fbRegular.innerHTML = 'קנה מידה מתאר את היחס בין האורך במפה לאורך במציאות.<br>המסלול במציאות זהה. אם קנה המידה היה זהה, גם אורך המסלול בשתי המפות היה צריך להיות זהה. לכן נסיק שקני המידה שונים.';
+    fbBold.textContent = 'זו טעות, לא נורא – בואו נלמד ממנה:​';
+    fbRegular.innerHTML = explanation;
     fbIcon.innerHTML = xIcon;
     feedback.classList.add('s5-fb--incorrect', 's23-fb--final');
     feedback.hidden = false;
@@ -1628,11 +1989,8 @@ document.addEventListener('DOMContentLoaded', function () {
 //  REPORT MODAL
 // ============================================================
 function openReportModal() {
+  resetReportForm();
   document.getElementById('report-modal').removeAttribute('hidden');
-  setTimeout(function() {
-    var el = document.getElementById('report-type');
-    if (el) el.focus();
-  }, 40);
 }
 
 function tryCloseReportModal() {
@@ -1673,10 +2031,101 @@ function submitReport() {
   forceCloseReportModal();
 }
 
+function reportCheckSubmit() {
+  var typeVal = document.getElementById('report-type').value;
+  var textVal = document.getElementById('report-text').value.trim();
+  var btn = document.querySelector('.report-submit-btn');
+  if (btn) btn.disabled = !(typeVal && textVal);
+}
+
+/* Custom select for report-type */
+(function() {
+  var LABELS = {
+    'technical': 'תקלה טכנית או שמשהו לא עובד',
+    'unclear':   'משהו לא ברור לי',
+    'other':     'אחר'
+  };
+  var PLACEHOLDER = 'בחרו סוג בעיה';
+  var wrapper = document.getElementById('report-type-wrapper');
+  if (!wrapper) return;
+  var btn        = wrapper.querySelector('.report-select-btn');
+  var list       = wrapper.querySelector('.report-select-list');
+  var hidden     = document.getElementById('report-type');
+  var valSpan    = wrapper.querySelector('.report-select-value');
+  var errEl      = document.getElementById('report-type-error');
+  var wasOpened  = false;
+  var pickingOpt = false;
+
+  function showError() {
+    btn.classList.add('has-error');
+    if (errEl) errEl.style.display = 'block';
+  }
+  function clearError() {
+    btn.classList.remove('has-error');
+    if (errEl) errEl.style.display = 'none';
+  }
+  function closeList() {
+    list.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  btn.addEventListener('click', function() {
+    var opening = list.hidden;
+    list.hidden = !opening;
+    btn.setAttribute('aria-expanded', String(opening));
+    if (opening) {
+      wasOpened = true;
+    } else {
+      if (!hidden.value) showError();
+    }
+  });
+
+  list.addEventListener('mousedown', function() { pickingOpt = true; });
+  list.addEventListener('mouseup',   function() { pickingOpt = false; });
+
+  btn.addEventListener('blur', function() {
+    if (!pickingOpt && wasOpened && !hidden.value) showError();
+  });
+
+  wrapper.querySelectorAll('.report-select-option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      hidden.value = opt.getAttribute('data-value');
+      valSpan.textContent = LABELS[hidden.value] || PLACEHOLDER;
+      btn.classList.remove('is-placeholder');
+      clearError();
+      wasOpened = false;
+      closeList();
+      wrapper.querySelectorAll('.report-select-option').forEach(function(o) { o.classList.remove('is-selected'); });
+      opt.classList.add('is-selected');
+      hidden.dispatchEvent(new Event('change'));
+    });
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!wrapper.contains(e.target)) {
+      if (wasOpened && !hidden.value) showError();
+      closeList();
+    }
+  });
+
+  wrapper._resetSelect = function() {
+    wasOpened = false;
+    hidden.value = '';
+    valSpan.textContent = PLACEHOLDER;
+    btn.classList.add('is-placeholder');
+    btn.classList.remove('has-error');
+    btn.setAttribute('aria-expanded', 'false');
+    if (errEl) errEl.style.display = 'none';
+    closeList();
+    wrapper.querySelectorAll('.report-select-option').forEach(function(o) { o.classList.remove('is-selected'); });
+  };
+})();
 function resetReportForm() {
-  document.getElementById('report-type').value = '';
+  var wrapper = document.getElementById('report-type-wrapper');
+  if (wrapper && wrapper._resetSelect) wrapper._resetSelect();
   document.getElementById('report-text').value = '';
   document.getElementById('report-char-count').textContent = '0 / 250';
+  reportCheckSubmit();
 }
 
 // Character counter for report textarea
@@ -1685,6 +2134,30 @@ var reportCounter  = document.getElementById('report-char-count');
 if (reportTextarea && reportCounter) {
   reportTextarea.addEventListener('input', function() {
     reportCounter.textContent = reportTextarea.value.length + ' / 250';
+    reportCheckSubmit();
+  });
+}
+
+var reportSelect = document.getElementById('report-type');
+if (reportSelect) {
+  reportSelect.addEventListener('change', function() {
+    reportCheckSubmit();
+    var field = document.querySelector('.report-field');
+    var star = field ? field.querySelector('.required-star') : null;
+    if (star) star.classList.toggle('is-error', !reportSelect.value);
+  });
+}
+
+if (reportTextarea) {
+  reportTextarea.addEventListener('blur', function() {
+    var star = reportTextarea.closest('.report-field').querySelector('.required-star');
+    if (star) star.classList.toggle('is-error', !reportTextarea.value.trim());
+  });
+  reportTextarea.addEventListener('input', function() {
+    if (reportTextarea.value.trim()) {
+      var star = reportTextarea.closest('.report-field').querySelector('.required-star');
+      if (star) star.classList.remove('is-error');
+    }
   });
 }
 
@@ -1695,4 +2168,95 @@ document.addEventListener('keydown', function(event) {
   var reportModal  = document.getElementById('report-modal');
   if (!confirmModal.hasAttribute('hidden')) { forceCloseReportModal(); return; }
   if (!reportModal.hasAttribute('hidden'))  { tryCloseReportModal();   return; }
+});
+
+/* ── Draggable inline feedback elements ── */
+(function () {
+  function liftFeedback(el) {
+    if (el.dataset.lifted) return;
+    el.dataset.lifted = '1';
+    var w    = el.offsetWidth;
+    var rect = el.getBoundingClientRect();
+    el.style.width    = w + 'px';
+    el.style.position = 'fixed';
+    el.style.left     = rect.left  + 'px';
+    el.style.top      = rect.top   + 'px';
+    el.style.bottom   = 'auto';
+    el.style.height   = 'auto';
+    el.style.zIndex   = '9999';
+    el.style.margin   = '0';
+  }
+
+  function attachDrag(el) {
+    if (el.dataset.dragAttached) return;
+    el.dataset.dragAttached = '1';
+
+    el.addEventListener('mousedown', function (e) {
+      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+      e.preventDefault();
+
+      /* אם עדיין לא שולף — שלוף עכשיו */
+      if (!el.dataset.lifted) liftFeedback(el);
+
+      var startX   = e.clientX;
+      var startY   = e.clientY;
+      var baseLeft = parseFloat(el.style.left)  || 0;
+      var baseTop  = parseFloat(el.style.top)   || 0;
+
+      el.style.cursor = 'grabbing';
+
+      function onMove(e) {
+        el.style.left = (baseLeft + e.clientX - startX) + 'px';
+        el.style.top  = (baseTop  + e.clientY - startY) + 'px';
+      }
+      function onUp() {
+        el.style.cursor = 'grab';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup',   onUp);
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup',   onUp);
+    });
+  }
+
+  function initAll() {
+    document.querySelectorAll('.s5-inline-feedback').forEach(attachDrag);
+  }
+
+  /* איפוס כשעוברים עמוד */
+  function resetFeedbacks() {
+    document.querySelectorAll('.s5-inline-feedback[data-lifted]').forEach(function (el) {
+      el.removeAttribute('data-lifted');
+      el.style.position = '';
+      el.style.left     = '';
+      el.style.top      = '';
+      el.style.width    = '';
+      el.style.zIndex   = '';
+      el.style.margin   = '';
+      el.style.cursor   = '';
+      el.style.height   = '';
+      el.style.bottom   = '';
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initAll();
+    var _orig = window.goTo;
+    if (typeof _orig === 'function') {
+      window.goTo = function (n) {
+        resetFeedbacks();
+        _orig(n);
+        setTimeout(initAll, 150);
+      };
+    }
+  });
+})();
+
+// Accessibility: aria-live on feedback regions + tabindex on screens for focus routing
+document.querySelectorAll('.s5-inline-feedback').forEach(function(el) {
+  el.setAttribute('role', 'status');
+  el.setAttribute('aria-live', 'polite');
+});
+document.querySelectorAll('section.screen').forEach(function(s) {
+  s.setAttribute('tabindex', '-1');
 });

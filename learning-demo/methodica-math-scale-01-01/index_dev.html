@@ -53,7 +53,7 @@
   <script>
     'use strict';
 
-    var SCREEN_NAMES = ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','s12','s13','s14','s15','s16','s17','s18','s19','s20','s21','s22','s23'];
+    var SCREEN_NAMES = ['s0','s1','s2','s3','s4','s6','s7','s8','s9','s10','s11','s12','s14','s15','s16','s17','s18','s19','s20','s21','s22','s23'];
 
     var frame      = document.getElementById('lomdah-frame');
     var inputEl    = document.getElementById('dev-screen-input');
@@ -62,12 +62,11 @@
     var btnPrev    = document.getElementById('btn-prev');
     var btnNext    = document.getElementById('btn-next');
     var devCurrent = 0;
-    var TOTAL      = 24;
+    var TOTAL      = SCREEN_NAMES.length;
 
     // Receive messages from script.js (iframe)
     window.addEventListener('message', function(e) {
       if (e.data && e.data.type === 'DEV_READY') {
-        TOTAL = e.data.total || TOTAL;
         totalLabel.textContent = '/ ' + (TOTAL - 1);
         inputEl.max = TOTAL - 1;
         updateButtons();
@@ -86,10 +85,12 @@
 
     function devGoTo(n) {
       n = Math.max(0, Math.min(TOTAL - 1, n));
-      frame.contentWindow.postMessage({ type: 'DEV_GOTO', screen: n }, '*');
+      var screenName = SCREEN_NAMES[n] || ('s' + n);
+      var screenNum = parseInt(screenName.replace('s', ''), 10);
+      frame.contentWindow.postMessage({ type: 'DEV_GOTO', screen: screenNum }, '*');
       devCurrent = n;
       inputEl.value = n;
-      nameLabel.textContent = SCREEN_NAMES[n] || ('s' + n);
+      nameLabel.textContent = screenName;
       updateButtons();
     }
 
