@@ -1,5 +1,12 @@
 ﻿'use strict';
 
+function announce(msg) {
+  var el = document.getElementById('a11y-announcer');
+  if (!el || !msg) return;
+  el.textContent = '';
+  setTimeout(function () { el.textContent = msg; }, 50);
+}
+
 const TOTAL_SCREENS = 24;
 let currentScreen = 0;
 window.lomdaState = { selectedCharacter: null, selectedDesign: null };
@@ -15,6 +22,28 @@ let frcDone = false;
 let s4VideoEnded = false;
 let s4Playing = false;
 let s4Timer = null;
+
+var s4Cues = [
+  { s: 0.07,  e: 7.39,  t: 'קנה מידה הוא היחס בין אורך של עצם בשרטוט\nבמפה, בתרשים בדגם או באיור לבין אורכו' },
+  { s: 7.39,  e: 8.75,  t: 'המתאים במציאות.' },
+  { s: 9.19,  e: 15.55, t: 'המספר הימני ביחס מייצג את האורך במציאות,\nוהמספר השמאלי ביחס מייצג את האורך המתאים' },
+  { s: 15.55, e: 17.15, t: 'בתמונה או בשרטוט.' },
+  { s: 17.63, e: 20.43, t: 'למשל, שקנה המידה הוא 10 : 1.' },
+  { s: 20.63, e: 24.15, t: 'כל 1 ס"מ בתמונה מייצג 10 סנטימטרים.' },
+  { s: 24.15, e: 27.51, t: 'במציאות שקנה המידה הוא 100 : 1.' },
+  { s: 27.83, e: 31.99, t: 'כל 1 ס"מ בתמונה מייצג 100 סנטימטרים\nבמציאות.' },
+  { s: 31.99, e: 34.47, t: 'וכשקנה המידה הוא 1000 : 1.' },
+  { s: 34.83, e: 38.99, t: 'כל 1 ס"מ בתמונה מייצג 1,000 ס"מ במציאות.' }
+];
+
+function s4UpdateCaption() {
+  var video = document.getElementById('s4-video');
+  var el = document.getElementById('s4-caption');
+  if (!video || !el) return;
+  var t = video.currentTime;
+  var active = s4Cues.find(function(c) { return t >= c.s && t < c.e; });
+  el.textContent = active ? active.t : '';
+}
 
 let s7Timer = null;
 let s8Timer = null;
@@ -44,6 +73,8 @@ function goTo(n) {
   currentScreen = n;
   resetScreenState(n);
   nextScreen.focus();
+  var heading = nextScreen.querySelector('h1, h2');
+  if (heading) announce(heading.textContent.trim());
 }
 
 function resetScreenState(n) {
@@ -339,11 +370,14 @@ function s4Start() {
   var video = document.getElementById('s4-video');
   if (!video) return;
 
+  video.addEventListener('timeupdate', s4UpdateCaption);
   video.play();
 
   video.addEventListener('ended', function () {
     s4Playing = false;
     s4VideoEnded = true;
+    var capEl = document.getElementById('s4-caption');
+    if (capEl) capEl.textContent = '';
     var sqSection = document.getElementById('s4-sq-section');
     if (sqSection) {
       sqSection.classList.remove('sq-locked');
@@ -862,7 +896,7 @@ function s16Select(idx) {
 
 function s16ToggleHint() {
   var popup = document.getElementById('s16-hint-popup');
-  if (popup) popup.hidden = false;
+  if (popup) { popup.hidden = false; announce('רמז נפתח'); }
 }
 
 function s16CloseHint() {
@@ -1017,7 +1051,7 @@ function s18CheckInput() {
 
 function s18ToggleHint() {
   var popup = document.getElementById('s18-hint-popup');
-  if (popup) popup.hidden = false;
+  if (popup) { popup.hidden = false; announce('רמז נפתח'); }
 }
 
 function s18CloseHint() {
@@ -1059,12 +1093,14 @@ function s18Submit() {
     feedback.hidden = false;
     input.disabled = true;
     continueBtn.disabled = false;
+    announce('יפה מאוד!');
   } else if (s18Attempts === 1) {
     fbBold.textContent = 'זה לא מדוייק, ננסה שוב?';
     fbRegular.innerHTML = '';
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--incorrect');
     feedback.hidden = false;
+    announce('זה לא מדוייק, ננסה שוב?');
     document.getElementById('s18-hint-btn').hidden = false;
     input.value = '';
     continueBtn.disabled = true;
@@ -1078,6 +1114,7 @@ function s18Submit() {
     feedback.hidden = false;
     input.disabled = true;
     continueBtn.disabled = false;
+    announce('זו טעות, בואו נדייק');
   }
 }
 
@@ -1124,7 +1161,7 @@ function s19CheckInput() {
 
 function s19ToggleHint() {
   var popup = document.getElementById('s19-hint-popup');
-  if (popup) popup.hidden = false;
+  if (popup) { popup.hidden = false; announce('רמז נפתח'); }
 }
 
 function s19CloseHint() {
@@ -1165,6 +1202,7 @@ function s19Submit() {
     feedback.hidden = false;
     input.disabled = true;
     continueBtn.disabled = false;
+    announce('יפה מאוד!');
   } else if (s19Attempts === 1) {
     fbBold.textContent = 'זה לא מדוייק, ננסה שוב?';
     fbRegular.innerHTML = '';
@@ -1174,6 +1212,7 @@ function s19Submit() {
     document.getElementById('s19-hint-btn').hidden = false;
     input.value = '';
     continueBtn.disabled = true;
+    announce('זה לא מדוייק, ננסה שוב?');
   } else {
     s19Solved = true;
     s18QuizResults[2] = 'wrong';
@@ -1184,6 +1223,7 @@ function s19Submit() {
     feedback.hidden = false;
     input.disabled = true;
     continueBtn.disabled = false;
+    announce('זו טעות, בואו נדייק');
   }
 }
 
@@ -1224,8 +1264,8 @@ function s20Select(idx) {
   if (continueBtn) continueBtn.disabled = false;
 }
 
-function s20ToggleHint() { var p = document.getElementById('s20-hint-popup'); if (p) p.hidden = false; }
-function s20CloseHint()  { var p = document.getElementById('s20-hint-popup'); if (p) p.hidden = true; }
+function s20ToggleHint() { var p = document.getElementById('s20-hint-popup'); if (p) { p.hidden = false; announce('רמז נפתח'); } }
+function s20CloseHint()  { var p = document.getElementById('s20-hint-popup'); if (p) { p.hidden = true; announce('רמז נסגר'); } }
 
 function s20Submit() {
   if (s20Solved) { goTo(21); return; }
@@ -1248,6 +1288,7 @@ function s20Submit() {
     fbBold.textContent = 'יפה!​'; fbRegular.innerHTML = explanationCorrect;
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--correct'); feedback.hidden = false; continueBtn.disabled = false;
+    announce('יפה!');
   } else if (s20Attempts === 1) {
     opts.forEach(function(o) { o.classList.remove('is-selected'); });
     s20Selected = null;
@@ -1256,6 +1297,7 @@ function s20Submit() {
     fbBold.textContent = 'זה לא מדוייק, ננסה שוב?'; fbRegular.innerHTML = '';
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--incorrect'); feedback.hidden = false;
+    announce('זה לא מדוייק, ננסה שוב?');
   } else {
     s20Solved = true; s18QuizResults[3] = 'wrong';
     opts.forEach(function(o,i){ o.disabled=true; o.classList.toggle('is-correct',i===S20_CORRECT); o.classList.toggle('is-incorrect',i===s20Selected&&i!==S20_CORRECT); });
@@ -1263,6 +1305,7 @@ function s20Submit() {
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--incorrect'); feedback.hidden = false;
     continueBtn.disabled = false;
+    announce('זו טעות, בואו נדייק');
   }
 }
 
@@ -1300,8 +1343,8 @@ function s21CheckInput() {
   if (continueBtn) continueBtn.disabled = !(input && input.value.trim().length > 0);
 }
 
-function s21ToggleHint() { var p = document.getElementById('s21-hint-popup'); if (p) p.hidden = false; }
-function s21CloseHint()  { var p = document.getElementById('s21-hint-popup'); if (p) p.hidden = true; }
+function s21ToggleHint() { var p = document.getElementById('s21-hint-popup'); if (p) { p.hidden = false; announce('רמז נפתח'); } }
+function s21CloseHint()  { var p = document.getElementById('s21-hint-popup'); if (p) { p.hidden = true; announce('רמז נסגר'); } }
 
 function s21Submit() {
   if (s21Solved) { goTo(22); return; }
@@ -1323,16 +1366,19 @@ function s21Submit() {
     fbBold.textContent = 'יפה מאוד!'; fbRegular.innerHTML = explanation;
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--correct'); feedback.hidden = false; input.disabled = true; continueBtn.disabled = false;
+    announce('יפה מאוד!');
   } else if (s21Attempts === 1) {
     fbBold.textContent = 'זה לא מדוייק, ננסה שוב?'; fbRegular.innerHTML = '';
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--incorrect'); feedback.hidden = false;
     document.getElementById('s21-hint-btn').hidden = false; input.value = ''; continueBtn.disabled = true;
+    announce('זה לא מדוייק, ננסה שוב?');
   } else {
     s21Solved = true; s18QuizResults[4] = 'wrong';
     fbBold.textContent = 'זו טעות, בואו נדייק'; fbRegular.innerHTML = explanation;
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--incorrect'); feedback.hidden = false; input.disabled = true; continueBtn.disabled = false;
+    announce('זו טעות, בואו נדייק');
   }
 }
 
@@ -1386,7 +1432,7 @@ function s22ToggleHelp() {
 
 function s22ToggleHint() {
   var popup = document.getElementById('s22-hint-popup');
-  if (popup) popup.hidden = false;
+  if (popup) { popup.hidden = false; announce('רמז נפתח'); }
 }
 
 function s22CloseHint() {
@@ -1427,6 +1473,7 @@ function s22Submit() {
     feedback.classList.add('s5-fb--correct');
     feedback.hidden = false;
     continueBtn.disabled = false;
+    announce('יפה!');
   } else if (s22Attempts === 1) {
     opts[s22Selected].classList.remove('is-selected');
     fbBold.textContent = 'זה לא מדוייק, ננסה שוב?';
@@ -1437,6 +1484,7 @@ function s22Submit() {
     document.getElementById('s22-hint-btn').hidden = false;
     s22Selected = null;
     continueBtn.disabled = true;
+    announce('זה לא מדוייק, ננסה שוב?');
   } else {
     s22Solved = true;
     s18QuizResults[5] = 'wrong';
@@ -1452,6 +1500,7 @@ function s22Submit() {
     feedback.classList.add('s5-fb--incorrect');
     feedback.hidden = false;
     continueBtn.disabled = false;
+    announce('זו טעות, בואו נדייק');
   }
 }
 
@@ -1466,8 +1515,10 @@ function s16Submit() {
   opts[s16Selected].classList.add(correct ? 'is-correct' : 'is-incorrect');
   opts.forEach(function (opt) { opt.disabled = true; });
 
-  document.getElementById('s16-fb-bold').textContent = correct ? 'נכון!' : 'זו טעות, אבל חשוב שניסית!';
+  var s16FbBoldText = correct ? 'נכון!' : 'זו טעות, אבל חשוב שניסית!';
+  document.getElementById('s16-fb-bold').textContent = s16FbBoldText;
   document.getElementById('s16-fb-regular').innerHTML = 'קנה מידה נקרא משמאל לימין:​ המספר השמאלי מייצג את הגודל בסרטוט, והמספר הימני מייצג את הגודל המתאים במציאות. ​';
+  announce(s16FbBoldText);
 
   var icon = document.getElementById('s16-fb-icon');
   if (correct) {
@@ -1596,6 +1647,7 @@ function s8Answer(answer) {
   if (mark) {
     requestAnimationFrame(function () { mark.classList.add('s8-mark-visible'); });
   }
+  announce('התשובה הנכונה סומנה');
 
   var cont = document.getElementById('s8-continue');
   if (cont) cont.disabled = false;
@@ -1619,6 +1671,7 @@ function s9Answer(answer) {
   if (mark) {
     requestAnimationFrame(function () { mark.classList.add('s8-mark-visible'); });
   }
+  announce('התשובה הנכונה סומנה');
 
   var cont = document.getElementById('s9-continue');
   if (cont) cont.disabled = false;
@@ -1642,6 +1695,7 @@ function s10Answer(answer) {
   var btn1000 = document.getElementById('s10-btn-1000');
   var btn100  = document.getElementById('s10-btn-100');
   if (btn1000) btn1000.disabled = true;
+  announce('התשובה הנכונה סומנה');
   if (btn100)  btn100.disabled  = true;
 
   var mark = document.getElementById('s10-correct-mark');
@@ -1687,6 +1741,7 @@ function s13Answer(answer) {
   var btnDiv  = document.getElementById('s13-btn-divide');
   var btnMult = document.getElementById('s13-btn-multiply');
   if (btnDiv)  btnDiv.disabled  = true;
+  announce('התשובה הנכונה סומנה');
   if (btnMult) btnMult.disabled = true;
 
   var mark = document.getElementById('s13-correct-mark');
@@ -1797,7 +1852,7 @@ function s23Select(idx) {
 
 function s23ToggleHint() {
   var popup = document.getElementById('s23-hint-popup');
-  if (popup) popup.hidden = false;
+  if (popup) { popup.hidden = false; announce('רמז נפתח'); }
 }
 
 function s23CloseHint() {
@@ -1839,6 +1894,7 @@ function s23Submit() {
     feedback.classList.add('s5-fb--correct', 's23-fb--final');
     feedback.hidden = false;
     continueBtn.disabled = false;
+    announce('טוב מאוד!');
   } else if (s23Attempts === 1) {
     opts[s23Selected].classList.remove('is-selected');
     fbBold.textContent = 'זה לא מדוייק, ננסה שוב?';
@@ -1849,6 +1905,7 @@ function s23Submit() {
     document.getElementById('s23-hint-btn').hidden = false;
     s23Selected = null;
     continueBtn.disabled = true;
+    announce('זה לא מדוייק, ננסה שוב?');
   } else {
     s23Solved = true;
     s18QuizResults[6] = 'wrong';
@@ -1864,6 +1921,7 @@ function s23Submit() {
     feedback.classList.add('s5-fb--incorrect', 's23-fb--final');
     feedback.hidden = false;
     continueBtn.disabled = false;
+    announce('זו טעות, לא נורא – בואו נלמד ממנה');
   }
 }
 

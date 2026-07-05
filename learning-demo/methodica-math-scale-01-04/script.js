@@ -1,5 +1,12 @@
 'use strict';
 
+function announce(msg) {
+  var el = document.getElementById('a11y-announcer');
+  if (!el || !msg) return;
+  el.textContent = '';
+  setTimeout(function () { el.textContent = msg; }, 50);
+}
+
 const TOTAL_SCREENS = 18;
 let currentScreen = 0;
 window.lomdaState = { selectedCharacter: null, selectedDesign: null };
@@ -114,6 +121,8 @@ function goTo(n) {
   currentScreen = n;
   resetScreenState(n);
   nextScreen.focus();
+  var heading = nextScreen.querySelector('h1, h2');
+  if (heading) announce(heading.textContent.trim());
 }
 
 function resetScreenState(n) {
@@ -187,12 +196,12 @@ function s38Select(idx) {
 
 function s38ToggleHint() {
   var popup = document.getElementById('s38-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
 }
 
 function s38CloseHint() {
   var popup = document.getElementById('s38-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 function s38Submit() {
@@ -223,6 +232,7 @@ function s38Submit() {
     opts[s38Selected].classList.add('is-correct');
     opts.forEach(function(o) { o.disabled = true; });
     fbBold.textContent  = 'נכון מאוד!​';
+    announce('נכון מאוד!​');
     fbReg.innerHTML     = explanation;
     fbIcon.innerHTML    = checkSvg;
     fb.classList.add('s5-fb--correct');
@@ -232,6 +242,7 @@ function s38Submit() {
   } else if (s38Attempts === 1) {
     opts[s38Selected].classList.remove('is-selected');
     fbBold.textContent  = 'זה לא מדויק, ננסה שוב?';
+    announce('זה לא מדויק, ננסה שוב?');
     fbReg.textContent   = '';
     fbIcon.innerHTML    = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -248,6 +259,7 @@ function s38Submit() {
       else if (i === s38Selected) o.classList.add('is-incorrect');
     });
     fbBold.textContent  = 'זו טעות – בואו נבין למה:​';
+    announce('זו טעות – בואו נבין למה:​');
     fbReg.innerHTML     = explanation;
     fbIcon.innerHTML    = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -303,12 +315,12 @@ function s37Select(idx) {
 
 function s37ToggleHint() {
   var popup = document.getElementById('s37-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
 }
 
 function s37CloseHint() {
   var popup = document.getElementById('s37-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 function s37Submit() {
@@ -339,6 +351,7 @@ function s37Submit() {
     opts[s37Selected].classList.add('is-correct');
     opts.forEach(function(o) { o.disabled = true; });
     fbBold.textContent  = 'יופי של תשובה! ​';
+    announce('יופי של תשובה! ​');
     fbReg.innerHTML     = explanation;
     fbIcon.innerHTML    = checkSvg;
     fb.classList.add('s5-fb--correct');
@@ -348,6 +361,7 @@ function s37Submit() {
   } else if (s37Attempts === 1) {
     opts[s37Selected].classList.remove('is-selected');
     fbBold.textContent  = 'זה לא מדויק, ננסה שוב?';
+    announce('זה לא מדויק, ננסה שוב?');
     fbReg.textContent   = '';
     fbIcon.innerHTML    = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -364,6 +378,7 @@ function s37Submit() {
       else if (i === s37Selected) o.classList.add('is-incorrect');
     });
     fbBold.textContent  = 'זו טעות, לא נורא – בואו נלמד ממנה:​';
+    announce('זו טעות, לא נורא – בואו נלמד ממנה:​');
     fbReg.innerHTML     = explanation;
     fbIcon.innerHTML    = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -628,6 +643,7 @@ function ddqCheck() {
       if (t) t.classList.add('s39-correct');
     });
     fbBold.textContent = 'נכון מאוד!​';
+    announce('נכון מאוד!​');
     fbReg.textContent  = 'נמיר את המידות במציאות לסנטימטרים ונקבל אורך 1,200 ס"מ וגובה 600 ס"מ. ​\nבתמונה של יובל (קנה מידה 1:50) נחלק את המידות ב-50 ונקבל: אורך 24 ס"מ, גובה 12 ס"מ.​\nבתמונה של ליאור (קנה מידה 1:20) נחלק את המידות ב-20 ונקבל: אורך 60 ס"מ, גובה 30 ס"מ.​';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
@@ -641,6 +657,7 @@ function ddqCheck() {
     Object.keys(ddqPlacement).forEach(function(k) { ddqPlacement[k] = 'source'; });
     ddqRender();
     fbBold.textContent = 'לא מדויק, ננסה שוב?';
+    announce('לא מדויק, ננסה שוב?');
     fbReg.textContent  = '';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -677,6 +694,7 @@ function ddqCheck() {
     });
 
     fbBold.textContent = 'לא מדויק, בואו נבין למה:​';
+    announce('לא מדויק, בואו נבין למה:​');
     fbReg.textContent  = 'נמיר את המידות במציאות לסנטימטרים ונקבל אורך 1,200 ס"מ וגובה 600 ס"מ. ​\nבתמונה של יובל (קנה מידה 1:50) נחלק את המידות ב-50 ונקבל: אורך 24 ס"מ, גובה 12 ס"מ.​\nבתמונה של ליאור (קנה מידה 1:20) נחלק את המידות ב-20 ונקבל: אורך 60 ס"מ, גובה 30 ס"מ.​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -699,12 +717,12 @@ function ddqRevealCorrect() {
 
 function ddqToggleHint() {
   var popup = document.getElementById('s39-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
 }
 
 function ddqCloseHint() {
   var popup = document.getElementById('s39-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 /* ════════════════════════════════════════════
@@ -774,6 +792,7 @@ function s40Check() {
     s40Done = true;
     if (input) input.disabled = true;
     fbBold.textContent = 'נכון מאוד!​';
+    announce('נכון מאוד!​');
     fbReg.innerHTML    = 'קנה המידה הוא 1:200, לכן 12 ס״מ בתמונה מייצגים  2,400 ס"מ שהם 24 מטרים במציאות. העמדה צריכה להיות ברבע הדרך, ולכן נחשב <sup>1</sup>/<sub>4</sub> מ-24 מטרים, ונקבל 6 מטרים.​';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
@@ -784,6 +803,7 @@ function s40Check() {
 
   } else if (s40Attempts === 1) {
     fbBold.textContent = 'לא מדויק, ננסה שוב?';
+    announce('לא מדויק, ננסה שוב?');
     fbReg.textContent  = '';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -796,6 +816,7 @@ function s40Check() {
     s40Done = true;
     if (input) input.disabled = true;
     fbBold.textContent = 'לא מדויק, בואו נבין למה:​';
+    announce('לא מדויק, בואו נבין למה:​');
     fbReg.innerHTML    = 'קנה המידה הוא 1:200, לכן 12 ס״מ בתמונה מייצגים  2,400 ס"מ שהם 24 מטרים במציאות. העמדה צריכה להיות ברבע הדרך, ולכן נחשב <sup>1</sup>/<sub>4</sub> מ-24 מטרים ונקבל 6 מטרים.​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -808,12 +829,12 @@ function s40Check() {
 
 function s40ToggleHint() {
   var popup = document.getElementById('s40-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
 }
 
 function s40CloseHint() {
   var popup = document.getElementById('s40-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 /* ════════════════════════════════════════════
@@ -878,12 +899,12 @@ function s41Select(idx) {
 
 function s41ToggleHint() {
   var popup = document.getElementById('s41-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
 }
 
 function s41CloseHint() {
   var popup = document.getElementById('s41-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 function s41Submit() {
@@ -912,6 +933,7 @@ function s41Submit() {
     opts[s41Selected].classList.add('is-correct');
     opts.forEach(function(o) { o.disabled = true; });
     fbBold.textContent = 'יופי!​';
+    announce('יופי!​');
     fbReg.innerHTML    = 'אורך צלע המתחם בתמונה הוא 8 ס”מ, וקנה המידה הוא 200 : 1.​\nלכן, אורך צלע המתחם במציאות הוא 1,600 ס”מ שהם 16 מטרים. ​\nכעת, נחשב את שטח הריבוע:  256 מ”ר =  16 · 16​';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
@@ -922,6 +944,7 @@ function s41Submit() {
 
   } else if (s41Attempts === 1) {
     fbBold.textContent = 'זה לא מדויק, ננסה שוב?';
+    announce('זה לא מדויק, ננסה שוב?');
     fbReg.textContent  = '';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -939,6 +962,7 @@ function s41Submit() {
       o.disabled = true;
     });
     fbBold.textContent = 'לא מדויק, בואו נבין למה:​';
+    announce('לא מדויק, בואו נבין למה:​');
     fbReg.innerHTML    = 'אורך צלע המתחם בתמונה הוא 8 ס”מ, וקנה המידה הוא 200 : 1.​\nלכן, אורך צלע המתחם במציאות הוא 1,600 ס”מ שהם 16 מטרים. ​\nכעת, נחשב את שטח הריבוע:  256 מ”ר =  16 · 16​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -1053,6 +1077,7 @@ function s42Check() {
     s42Done = true;
     if (input) input.disabled = true;
     fbBold.textContent = 'טוב מאוד!';
+    announce('טוב מאוד!');
     fbReg.innerHTML    = 'כל עמדת VR מצריכה 4 מ״ר. נחלק את שטח המתחם (64 מ"ר) בשטח הדרוש לעמדה אחת: 16 = 4 ÷ 64, ונקבל שניתן להציב במתחם 16 עמדות.';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
@@ -1063,6 +1088,7 @@ function s42Check() {
 
   } else if (s42Attempts === 1) {
     fbBold.textContent = 'לא מדויק, ננסה שוב?';
+    announce('לא מדויק, ננסה שוב?');
     fbReg.textContent  = '';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -1075,6 +1101,7 @@ function s42Check() {
     s42Done = true;
     if (input) input.disabled = true;
     fbBold.textContent = 'זו טעות, לא נורא, בואו נלמד ממנה:';
+    announce('זו טעות, לא נורא, בואו נלמד ממנה:');
     fbReg.innerHTML    = 'כל עמדת VR מצריכה 4 מ״ר. נחלק את שטח המתחם (64 מ"ר) בשטח הדרוש לעמדה אחת: 16 = 4 ÷ 64, ונקבל שניתן להציב במתחם 16 עמדות.';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -1087,12 +1114,12 @@ function s42Check() {
 
 function s42ToggleHint() {
   var popup = document.getElementById('s42-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
 }
 
 function s42CloseHint() {
   var popup = document.getElementById('s42-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 /* ════════════════════════════════════════════
@@ -1156,6 +1183,7 @@ function s45Check() {
     finalAssessmentScore.correct++;
     if (input) input.disabled = true;
     fbBold.textContent = 'תשובה יפה!​';
+    announce('תשובה יפה!​');
     fbReg.innerHTML    = 'המרחק במציאות הוא 2 ק"מ, שהם 2,000 מטרים, שהם 200,000 ס"מ, ואורך המסלול על המסך הוא 8 ס"מ. ​<br>לכן, היחס בין אורך המסלול במפה לאורך המסלול במציאות הוא 200,000 : 8.​<br>נצמצם ב-8, ונקבל שקנה המידה הוא 25,000 : 1.​';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
@@ -1166,6 +1194,7 @@ function s45Check() {
 
   } else if (s45Attempts === 1) {
     fbBold.textContent = 'לא מדויק, ננסה שוב?';
+    announce('לא מדויק, ננסה שוב?');
     fbReg.textContent  = '';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -1176,6 +1205,7 @@ function s45Check() {
     s45Done = true;
     if (input) input.disabled = true;
     fbBold.textContent = 'זו טעות, אבל זה בסדר גמור, כך בדיוק לומדים!​';
+    announce('זו טעות, אבל זה בסדר גמור, כך בדיוק לומדים!​');
     fbReg.innerHTML    = 'המרחק במציאות הוא 2 ק"מ, שהם 2,000 מטרים, שהם 200,000 ס"מ, ואורך המסלול על המסך הוא 8 ס"מ. ​<br>לכן, היחס בין אורך המסלול במפה לאורך המסלול במציאות הוא 200,000 : 8.​<br>נצמצם ב-8, ונקבל שקנה המידה הוא 25,000 : 1.​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -1198,12 +1228,12 @@ function s45ToggleHelp() {
 
 function s45ToggleHint() {
   var popup = document.getElementById('s45-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
 }
 
 function s45CloseHint() {
   var popup = document.getElementById('s45-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 /* ════════════════════════════════════════════
@@ -1285,6 +1315,7 @@ function s47Check() {
     finalAssessmentScore.correct++;
     checkboxes.forEach(function(cb) { cb.disabled = true; });
     fbBold.textContent = 'מצוין!​';
+    announce('מצוין!​');
     fbReg.innerHTML    = 'אורך הכבלים הכולל הוא 1,050 מטרים. מרחק הפריסה הנדרש הוא 1 ק"מ (שהם 1,000 מטרים), ולכן האפשרות הראשונה נכונה.​<br>קנה המידה הוא 25,000 : 1. כלומר, כל 1 ס"מ במפה מייצג 250 מטרים במציאות.​<br>המרחק בין האוהל לאגם הוא 1 ק"מ, שהם 1,000 מטרים. ​<br>אם 250 מטרים במציאות הם 1 ס"מ במפה, ​<br>1,000 מטרים במציאות הם 4 ס"מ במפה.​';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
@@ -1295,6 +1326,7 @@ function s47Check() {
 
   } else if (s47Attempts === 1) {
     fbBold.textContent = 'זה לא מדויק, ננסה שוב?';
+    announce('זה לא מדויק, ננסה שוב?');
     fbReg.textContent  = '';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -1319,6 +1351,7 @@ function s47Check() {
       cb.disabled = true;
     });
     fbBold.textContent = 'זה לא מדויק. נסביר:​';
+    announce('זה לא מדויק. נסביר:​');
     fbReg.innerHTML    = 'אורך הכבלים הכולל הוא 1,050 מטרים. מרחק הפריסה הנדרש הוא 1 ק"מ (שהם 1,000 מטרים), ולכן האפשרות הראשונה נכונה.​<br>קנה המידה הוא 25,000 : 1. כלומר, כל 1 ס"מ במפה מייצג 250 מטרים במציאות.​<br>המרחק בין האוהל לאגם הוא 1 ק"מ, שהם 1,000 מטרים. ​<br>אם 250 מטרים במציאות הם 1 ס"מ במפה, ​<br>1,000 מטרים במציאות הם 4 ס"מ במפה.​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -1331,12 +1364,12 @@ function s47Check() {
 
 function s47ToggleHint() {
   var popup = document.getElementById('s47-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
 }
 
 function s47CloseHint() {
   var popup = document.getElementById('s47-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 /* ════════════════════════════════════════════
@@ -1387,12 +1420,12 @@ function s49Select(idx) {
 
 function s49ToggleHint() {
   var popup = document.getElementById('s49-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
 }
 
 function s49CloseHint() {
   var popup = document.getElementById('s49-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 function s49Submit() {
@@ -1422,6 +1455,7 @@ function s49Submit() {
     opts[s49Selected].classList.add('is-correct');
     opts.forEach(function(o) { o.disabled = true; });
     fbBold.textContent = 'זה נכון מאוד!​';
+    announce('זה נכון מאוד!​');
     fbReg.innerHTML    = 'זום הגדלה עובד הפוך מהאינטואיציה: ​<br>אם התמונה גדלה פי 4, המספר בקנה המידה המייצג את המציאות קטן פי 4. ​<br> במקום קנה מידה של 25,000 : 1 נקבל קנה מידה של 6,250 : 1 (6,250 = 4 : 25,000)';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
@@ -1432,6 +1466,7 @@ function s49Submit() {
 
   } else if (s49Attempts === 1) {
     fbBold.textContent = 'זה לא מדויק, ננסה שוב?';
+    announce('זה לא מדויק, ננסה שוב?');
     fbReg.textContent  = '';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -1449,6 +1484,7 @@ function s49Submit() {
       o.disabled = true;
     });
     fbBold.textContent = 'זה לא מדויק. נסביר:​';
+    announce('זה לא מדויק. נסביר:​');
     fbReg.innerHTML    = 'זום הגדלה עובד הפוך מהאינטואיציה: ​<br>אם התמונה גדלה פי 4, המספר בקנה המידה המייצג את המציאות קטן פי 4. ​<br> במקום קנה מידה של 25,000 : 1 נקבל קנה מידה של 6,250 : 1 (6,250 = 4 : 25,000)​​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -1507,12 +1543,12 @@ function s51Select(idx) {
 
 function s51ToggleHint() {
   var popup = document.getElementById('s51-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
 }
 
 function s51CloseHint() {
   var popup = document.getElementById('s51-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 function s51Submit() {
@@ -1542,6 +1578,7 @@ function s51Submit() {
     opts[s51Selected].classList.add('is-correct');
     opts.forEach(function(o) { o.disabled = true; });
     fbBold.textContent = 'בדיוק!​';
+    announce('בדיוק!​');
     fbReg.innerHTML    = 'רחפן א: ס"מ אחד בצילום מייצג 6,250 ס"מ במציאות, שהם 62.5 מטרים. ​<br>רחפן ב: ס"מ אחד בצילום מייצג 2,000 ס"מ במציאות, ולכן ​<br>   2 ס"מ בצילום מייצגים 4,000 ס"מ במציאות, שהם 40 מטרים. ​<br>האורך של קרחת היער שצילם רחפן א גדול מ-50  מטרים, ולכן היא זו שמתאימה להנחתה.​';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
@@ -1552,6 +1589,7 @@ function s51Submit() {
 
   } else if (s51Attempts === 1) {
     fbBold.textContent = 'זה לא מדויק, ננסה שוב?';
+    announce('זה לא מדויק, ננסה שוב?');
     fbReg.textContent  = '';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -1569,6 +1607,7 @@ function s51Submit() {
       o.disabled = true;
     });
     fbBold.textContent = 'זה לא מדויק. בואו נראה למה:​';
+    announce('זה לא מדויק. בואו נראה למה:​');
     fbReg.innerHTML    = 'רחפן א: ס"מ אחד בצילום מייצג 6,250 ס"מ במציאות, שהם 62.5 מטרים. ​<br>רחפן ב: ס"מ אחד בצילום מייצג 2,000 ס"מ במציאות, ולכן​<br>2 ס"מ בצילום מייצגים 4,000 ס"מ במציאות, שהם 40 מטרים. ​<br>האורך של קרחת היער שצילם רחפן א גדול מ-50  מטרים, ולכן היא זו שמתאימה להנחתה.​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');

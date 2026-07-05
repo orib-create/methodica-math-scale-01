@@ -530,7 +530,6 @@ body {
   border-width: 10px 9px 0 9px;
   border-style: solid;
   border-color: #A51CFF64 transparent transparent transparent;
-  filter: drop-shadow(0 2px 1px rgba(201,206,216,0.8));
 }
 
 #character-img {
@@ -3623,4 +3622,11 @@ body {
   border-radius: 10px;
   min-height: 90px;
   min-width: 90px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

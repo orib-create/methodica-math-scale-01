@@ -1,5 +1,12 @@
 ﻿'use strict';
 
+function announce(msg) {
+  var el = document.getElementById('a11y-announcer');
+  if (!el || !msg) return;
+  el.textContent = '';
+  setTimeout(function () { el.textContent = msg; }, 50);
+}
+
 const TOTAL_SCREENS = 9;
 let currentScreen = 0;
 window.lomdaState = { selectedCharacter: null, selectedDesign: null };
@@ -88,6 +95,8 @@ function goTo(n) {
   currentScreen = n;
   resetScreenState(n);
   nextScreen.focus();
+  var heading = nextScreen.querySelector('h1, h2');
+  if (heading) announce(heading.textContent.trim());
 }
 
 function resetScreenState(n) {
@@ -163,12 +172,12 @@ function s26ToggleDd(n) {
 
 function s26ToggleHint() {
   var popup = document.getElementById('s26-hint-popup');
-  if (popup) popup.hidden = false;
+  if (popup) { popup.hidden = false; announce('רמז נפתח'); }
 }
 
 function s26CloseHint() {
   var popup = document.getElementById('s26-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 function s26Pick(n, val, label) {
@@ -220,6 +229,7 @@ function s26Submit() {
     fb.classList.add('s5-fb--correct');
     fb.hidden     = false;
     cont.disabled = false;
+    announce('נהדר!​');
   } else {
     s26Attempts++;
     if (s26Attempts === 1) {
@@ -238,6 +248,7 @@ function s26Submit() {
       fbIcon.innerHTML   = xSvg;
       fb.classList.add('s5-fb--incorrect');
       fb.hidden = false;
+      announce('זה לא מדויק, ננסה שוב?');
     } else {
       s26Solved = true;
       var checkIco = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#609E12"/><path d="M4.5 8.25L6.75 10.5L11.5 5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -257,6 +268,7 @@ function s26Submit() {
         if (iconEl) iconEl.innerHTML = isOk ? checkIco : xIco;
       });
       fbBold.textContent = 'זו טעות, לא נורא – בואו נלמד ממנה:​';
+      announce('זו טעות, לא נורא – בואו נלמד ממנה:​');
       fbReg.innerHTML    = 'התרגיל הנכון מוצג כעת.​<br>' + explanation;
       fbIcon.innerHTML   = xSvg;
       fb.classList.add('s5-fb--incorrect');
@@ -377,6 +389,7 @@ function s27Submit() {
     fb.hidden     = false;
     cont.disabled = false;
     cont.onclick  = function() { goTo(3); };
+    announce('יופי!​');
   } else {
     s27Attempts++;
     if (s27Attempts === 1) {
@@ -395,6 +408,7 @@ function s27Submit() {
       fbIcon.innerHTML   = xSvg;
       fb.classList.add('s5-fb--incorrect');
       fb.hidden = false;
+      announce('זה לא מדויק, ננסה שוב?');
     } else {
       s27Solved = true;
       var checkIco27b = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#609E12"/><path d="M4.5 8.25L6.75 10.5L11.5 5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -412,6 +426,7 @@ function s27Submit() {
         if (iconEl) iconEl.innerHTML = isOk ? checkIco27b : xIco27b;
       });
       fbBold.textContent = 'זה לא נכון, אבל מכל טעות אפשר ללמוד:​';
+      announce('זה לא נכון, אבל מכל טעות אפשר ללמוד:​');
       fbReg.innerHTML    = explanation;
       fbIcon.innerHTML   = xSvg;
       fb.classList.add('s5-fb--incorrect');
@@ -424,12 +439,15 @@ function s27Submit() {
 
 function s27ToggleHint() {
   var popup = document.getElementById('s27-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) {
+    popup.hidden = !popup.hidden;
+    if (!popup.hidden) announce('רמז נפתח');
+  }
 }
 
 function s27CloseHint() {
   var popup = document.getElementById('s27-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 
@@ -485,12 +503,15 @@ function s28Select(idx) {
 
 function s28ToggleHint() {
   var popup = document.getElementById('s28-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) {
+    popup.hidden = !popup.hidden;
+    if (!popup.hidden) announce('רמז נפתח');
+  }
 }
 
 function s28CloseHint() {
   var popup = document.getElementById('s28-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 function s28Submit() {
@@ -531,6 +552,7 @@ function s28Submit() {
     fb.hidden     = false;
     cont.disabled = false;
     cont.onclick  = function() { goTo(4); };
+    announce('מעולה! ​');
   } else {
     s28Attempts++;
     if (s28Attempts === 1) {
@@ -545,6 +567,7 @@ function s28Submit() {
       fbIcon.innerHTML   = xSvg;
       fb.classList.add('s5-fb--incorrect');
       fb.hidden = false;
+      announce('זה לא מדויק, ננסה שוב?');
     } else {
       // second wrong — show all correct/incorrect, lock
       s28Solved = true;
@@ -554,6 +577,7 @@ function s28Submit() {
         opt.classList.add(S28_CORRECT.indexOf(i) >= 0 ? 'is-correct' : 'is-incorrect');
       });
       fbBold.textContent = 'זה לא נכון, אבל מכל טעות אפשר ללמוד:​';
+      announce('זה לא נכון, אבל מכל טעות אפשר ללמוד:​');
       fbReg.innerHTML    = explanation;
       fbIcon.innerHTML   = xSvg;
       fb.classList.add('s5-fb--incorrect');
@@ -602,12 +626,15 @@ function s29CheckInput() {
 
 function s29ToggleHint() {
   var popup = document.getElementById('s29-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) {
+    popup.hidden = !popup.hidden;
+    if (!popup.hidden) announce('רמז נפתח');
+  }
 }
 
 function s29CloseHint() {
   var popup = document.getElementById('s29-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 function s29Submit() {
@@ -644,6 +671,7 @@ function s29Submit() {
     fb.classList.add('s5-fb--correct');
     fb.hidden     = false;
     cont.disabled = false;
+    announce('מעולה! ​');
   } else if (s29Attempts === 1) {
     fbBold.textContent = 'זה לא מדויק, ננסה שוב?';
     fbReg.innerHTML    = '';
@@ -652,10 +680,12 @@ function s29Submit() {
     fb.hidden       = false;
     input.value     = '';
     cont.disabled   = true;
+    announce('זה לא מדויק, ננסה שוב?');
   } else {
     s29Solved = true;
     input.disabled  = true;
     fbBold.textContent = 'זה לא מדוייק, אבל כל הכבוד על הניסיון!​';
+    announce('זה לא מדוייק, אבל כל הכבוד על הניסיון!​');
     fbReg.innerHTML    = explanation;
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
@@ -734,12 +764,15 @@ function s30Pick(n, val, label) {
 
 function s30ToggleHint() {
   var popup = document.getElementById('s30-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) {
+    popup.hidden = !popup.hidden;
+    if (!popup.hidden) announce('רמז נפתח');
+  }
 }
 
 function s30CloseHint() {
   var popup = document.getElementById('s30-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 function s30Submit() {
@@ -785,6 +818,7 @@ function s30Submit() {
     fb.hidden     = false;
     cont.disabled = false;
     cont.onclick  = function() { routeAfterBasicPractice(); };
+    announce('מעולה! ​');
   } else {
     s30Attempts++;
     if (s30Attempts === 1) {
@@ -803,6 +837,7 @@ function s30Submit() {
       fbIcon.innerHTML   = xSvg;
       fb.classList.add('s5-fb--incorrect');
       fb.hidden = false;
+      announce('זה לא מדויק, ננסה שוב?');
     } else {
       s30Solved = true;
       var checkIco30b = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#609E12"/><path d="M4.5 8.25L6.75 10.5L11.5 5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -822,6 +857,7 @@ function s30Submit() {
         if (iconEl) iconEl.innerHTML = isOk ? checkIco30b : xIco30b;
       });
       fbBold.textContent = 'זה לא מדוייק, אבל בואו נלמד מזה:';
+      announce('זה לא מדוייק, אבל בואו נלמד מזה:');
       fbReg.innerHTML    = explanation;
       fbIcon.innerHTML   = xSvg;
       fb.classList.add('s5-fb--incorrect');
@@ -900,12 +936,15 @@ function s32CheckInput() {
 
 function s32ToggleHint() {
   var popup = document.getElementById('s32-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) {
+    popup.hidden = !popup.hidden;
+    if (!popup.hidden) announce('רמז נפתח');
+  }
 }
 
 function s32CloseHint() {
   var popup = document.getElementById('s32-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 function s32Submit() {
@@ -941,6 +980,7 @@ function s32Submit() {
     fb.hidden     = false;
     cont.disabled = false;
     cont.onclick  = function() { goTo(8); };
+    announce('כל הכבוד! ​');
   } else {
     s32Attempts++;
     if (s32Attempts < 2) {
@@ -954,11 +994,13 @@ function s32Submit() {
       if (hintBtn) hintBtn.hidden = false;
       document.getElementById('s32-answer-input').value = '';
       cont.disabled = true;
+      announce('זה לא מדויק, ננסה שוב?');
     } else {
       // Second wrong — explanation + lock
       s32Solved = true;
       document.getElementById('s32-answer-input').disabled = true;
       fbBold.textContent  = 'זו טעות, אבל יש לנו הזדמנות ללמוד:​';
+      announce('זו טעות, אבל יש לנו הזדמנות ללמוד:​');
       fbReg.innerHTML     = explanationWrong;
       fbIcon.innerHTML    = xSvg;
       fb.classList.remove('s5-fb--correct');
@@ -1015,12 +1057,15 @@ function s33Select(idx) {
 
 function s33ToggleHint() {
   var popup = document.getElementById('s33-hint-popup');
-  if (popup) popup.hidden = !popup.hidden;
+  if (popup) {
+    popup.hidden = !popup.hidden;
+    if (!popup.hidden) announce('רמז נפתח');
+  }
 }
 
 function s33CloseHint() {
   var popup = document.getElementById('s33-hint-popup');
-  if (popup) popup.hidden = true;
+  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
 
 function getAdvancedPracticeScore() {
@@ -1069,6 +1114,7 @@ function s33Submit() {
     fb.hidden     = false;
     cont.disabled = false;
     cont.onclick  = function() { routeAfterAdvancedPractice(); };
+    announce('יופי! ​');
   } else if (s33Attempts === 1) {
     opts[s33Selected].classList.remove('is-selected');
     fbBold.textContent  = 'זה לא מדויק, ננסה שוב?';
@@ -1079,6 +1125,7 @@ function s33Submit() {
     if (hintBtn) hintBtn.hidden = false;
     s33Selected = null;
     cont.disabled = true;
+    announce('זה לא מדויק, ננסה שוב?');
   } else {
     s33Solved = true;
     opts.forEach(function(o, i) {
@@ -1088,6 +1135,7 @@ function s33Submit() {
       else if (i === s33Selected) o.classList.add('is-incorrect');
     });
     fbBold.textContent  = 'זו טעות, לא נורא – בואו נלמד ממנה:​';
+    announce('זו טעות, לא נורא – בואו נלמד ממנה:​');
     fbReg.innerHTML     = explanation;
     fbIcon.innerHTML    = xSvg;
     fb.classList.add('s5-fb--incorrect');

@@ -1,5 +1,12 @@
 ﻿'use strict';
 
+function announce(msg) {
+  var el = document.getElementById('a11y-announcer');
+  if (!el || !msg) return;
+  el.textContent = '';
+  setTimeout(function () { el.textContent = msg; }, 50);
+}
+
 const TOTAL_SCREENS = 3;
 let currentScreen = 0;
 window.lomdaState = { selectedCharacter: null, selectedDesign: null };
@@ -44,6 +51,8 @@ function goTo(n) {
   currentScreen = n;
   resetScreenState(n);
   nextScreen.focus();
+  var heading = nextScreen.querySelector('h1, h2');
+  if (heading) announce(heading.textContent.trim());
 }
 
 function resetScreenState(n) {

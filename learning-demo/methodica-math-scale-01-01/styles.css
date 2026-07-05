@@ -524,7 +524,6 @@ body {
   border-width: 10px 9px 0 9px;
   border-style: solid;
   border-color: #A51CFF64 transparent transparent transparent;
-  filter: drop-shadow(0 2px 1px rgba(201,206,216,0.8));
 }
 
 #character-img {
@@ -920,6 +919,30 @@ body {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.s4-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 5%;
+  right: 5%;
+  z-index: 2;
+  text-align: center;
+  font-family: 'Assistant', sans-serif;
+  font-size: 20px;
+  color: #FFFFFF;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 6px;
+  padding: 6px 12px;
+  line-height: 1.5;
+  direction: rtl;
+  pointer-events: none;
+  white-space: pre-wrap;
+  display: none;
+}
+
+.s4-caption:not(:empty) {
+  display: block;
 }
 
 .s4-play-btn {
@@ -1529,7 +1552,7 @@ body {
   overflow: hidden;
   margin: 0 80px 0 auto;
   background: #ffffff;
-  border: 2px solid #A51CFF75;
+  border: 2px solid #7100B9;
   border-radius: 16px;
   padding: 24px;
   display: flex;
@@ -1646,34 +1669,51 @@ body {
 
 
 
-#s9-popup { height: 240px; }
+#s10 .s8-popup { height: 330px; }
+#s10-popup .s8-btn { width: 130px; }
 
-/* Popup — fixed height, aligned to top of layout */
+/* Popup — Hint Card design */
 .s8-popup {
   flex: 1;
-  height: 200px;
   align-self: flex-start;
   margin-top: 10px;
-  gap: 10px;
-  background: linear-gradient(to bottom, #F1D9FF, #ffffff);
-  border: 1.5px solid #A51CFF75;
-  border-radius: 16px;
-  padding: 28px 28px;
+  background: #7100B9;
+  border-radius: 48px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 16px;
   direction: rtl;
+  position: relative;
+}
+
+.s8-popup::before {
+  content: '';
+  position: absolute;
+  top: 25px;
+  right: -6px;
+  width: 57px;
+  height: 57px;
+  background: #7100B9;
+  border-radius: 3px;
+  transform: rotate(45deg);
+  z-index: -1;
 }
 
 .s8-popup-text {
   font-family: 'Assistant', sans-serif;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 400;
-  color: #303030;
+  color: #FFFFFF;
   text-align: right;
   line-height: 1.5;
   margin: 0;
+}
+
+.s8-popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .s8-popup-btns {
@@ -1687,7 +1727,7 @@ body {
 
 .s8-btn {
   font-family: 'Assistant', sans-serif;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 400;
   border-radius: 1000px;
   width: 110px;
@@ -1695,7 +1735,7 @@ body {
   cursor: pointer;
   background: #ffffff;
   color: #303030;
-  border: 1.5px solid #CE82FF;
+  border: 1.5px solid #7100B9;
   transition: opacity 0.15s;
 }
 
@@ -1725,8 +1765,8 @@ body {
   opacity: 1;
 }
 
-#s10 .s8-popup {
-  height: 230px;
+.s8-btn:has(.s8-mark-visible) {
+  font-weight: 700;
 }
 
 /* Screen 11 — answer reveal */
@@ -3717,4 +3757,11 @@ body {
 [data-screen="4"] .hook-card-inner {
   padding: 0;
   gap: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
