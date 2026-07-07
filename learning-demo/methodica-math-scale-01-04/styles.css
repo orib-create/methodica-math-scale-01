@@ -17,7 +17,6 @@
 }
 
 body {
-  background: #1a1a2e;
   overflow: hidden;
   font-family: 'Assistant', sans-serif;
 }
@@ -874,7 +873,6 @@ body {
   position: relative;
   width: 780px;
   height: 438px;
-  background: #1a1a2e;
   border-radius: 16px;
   overflow: hidden;
   display: flex;
