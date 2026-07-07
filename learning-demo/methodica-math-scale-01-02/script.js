@@ -13,6 +13,16 @@ window.lomdaState = { selectedCharacter: null, selectedDesign: null };
 const _savedChar = localStorage.getItem('lomdaCharacter');
 if (_savedChar) window.lomdaState.selectedCharacter = _savedChar;
 
+(function preloadCharacterImages() {
+  var char = window.lomdaState.selectedCharacter === 'video' ? 'Character2' : 'Character1';
+  var other = char === 'Character1' ? 'Character2' : 'Character1';
+  [char, other].forEach(function(c) {
+    ['', '_holdhands'].forEach(function(v) {
+      var img = new Image(); img.src = './assets/images/' + c + v + '.png';
+    });
+  });
+})();
+
 /* Final assessment tracking (screens 43-52) */
 let finalAssessmentScore = { correct: 0 };
 
@@ -228,6 +238,7 @@ function s26Submit() {
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden     = false;
+    cont.textContent = 'שנמשיך?';
     cont.disabled = false;
     announce('נהדר!​');
   } else {
@@ -273,6 +284,7 @@ function s26Submit() {
       fbIcon.innerHTML   = xSvg;
       fb.classList.add('s5-fb--incorrect');
       fb.hidden     = false;
+      cont.textContent = 'שנמשיך?';
       cont.disabled = false;
     }
   }
@@ -387,6 +399,7 @@ function s27Submit() {
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden     = false;
+    cont.textContent = 'שנמשיך?';
     cont.disabled = false;
     cont.onclick  = function() { goTo(3); };
     announce('יופי!​');
@@ -431,6 +444,7 @@ function s27Submit() {
       fbIcon.innerHTML   = xSvg;
       fb.classList.add('s5-fb--incorrect');
       fb.hidden     = false;
+      cont.textContent = 'שנמשיך?';
       cont.disabled = false;
       cont.onclick  = function() { goTo(3); };
     }
@@ -550,6 +564,7 @@ function s28Submit() {
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden     = false;
+    cont.textContent = 'שנמשיך?';
     cont.disabled = false;
     cont.onclick  = function() { goTo(4); };
     announce('מעולה! ​');
@@ -582,6 +597,7 @@ function s28Submit() {
       fbIcon.innerHTML   = xSvg;
       fb.classList.add('s5-fb--incorrect');
       fb.hidden     = false;
+      cont.textContent = 'שנמשיך?';
       cont.disabled = false;
       cont.onclick  = function() { goTo(4); };
     }
@@ -670,6 +686,7 @@ function s29Submit() {
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden     = false;
+    cont.textContent = 'שנמשיך?';
     cont.disabled = false;
     announce('מעולה! ​');
   } else if (s29Attempts === 1) {
@@ -690,6 +707,7 @@ function s29Submit() {
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
     fb.hidden     = false;
+    cont.textContent = 'שנמשיך?';
     cont.disabled = false;
   }
 }
@@ -816,6 +834,7 @@ function s30Submit() {
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden     = false;
+    cont.textContent = 'שנמשיך?';
     cont.disabled = false;
     cont.onclick  = function() { routeAfterBasicPractice(); };
     announce('מעולה! ​');
@@ -862,6 +881,7 @@ function s30Submit() {
       fbIcon.innerHTML   = xSvg;
       fb.classList.add('s5-fb--incorrect');
       fb.hidden     = false;
+      cont.textContent = 'שנמשיך?';
       cont.disabled = false;
       cont.onclick  = function() { routeAfterBasicPractice(); };
     }
@@ -879,18 +899,8 @@ function s31Enter() {
 }
 
 
-function getBasicPracticeScore() {
-  var count = 0;
-  if (s26Correct)                count++; // שאלה 1
-  if (s27Correct)                count++; // שאלה 2
-  if (s28Correct)                count++; // שאלה 3
-  if (s29Correct && s30Correct)  count++; // שאלה 4 (א+ב יחד)
-  return count;
-}
-
-// ≥3 נכון → מסך 6 (תרגילים קשים יותר) | <3 → ללא מעבר כרגע
 function routeAfterBasicPractice() {
-  if (getBasicPracticeScore() >= 3) { goTo(6); }
+  goTo(6);
 }
 
 /* ── Dev tool bridge (index_dev.html postMessage) ── */
@@ -964,7 +974,8 @@ function s32Submit() {
 
   var explanationCorrect = 'כדי לחשב, נמיר קודם את אורך המכונית במציאות לסנטימטרים: 4.5 · 100 = 450 ס"מ. ​<br>' +
                            'מכיוון שהדגם המודפס מוקטן פי 18 ​<br>' +
-                           '(קנה מידה 1:18), נחלק את האורך במציאות לפי קנה המידה: 18 ÷ 450 = 25 ס"מ.​';
+                           '(קנה מידה 1:18), נחלק את האורך במציאות לפי קנה המידה:<br>' +
+                           '18 ÷ 450 = 25 ס"מ.​';
   var explanationWrong = 'כדי לחשב, נמיר קודם את אורך המכונית במציאות לסנטימטרים: 4.5 · 100 = 450 ס"מ. ​<br>' +
                           'מכיוון שהדגם המודפס מוקטן פי 18 (קנה מידה 1:18), נחלק את האורך במציאות לפי קנה המידה:​<br>' +
                           ' 18 ÷ 450 = 25 ס"מ.';
@@ -978,6 +989,7 @@ function s32Submit() {
     fbIcon.innerHTML    = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden     = false;
+    cont.textContent = 'שנמשיך?';
     cont.disabled = false;
     cont.onclick  = function() { goTo(8); };
     announce('כל הכבוד! ​');
@@ -1006,6 +1018,7 @@ function s32Submit() {
       fb.classList.remove('s5-fb--correct');
       fb.classList.add('s5-fb--incorrect');
       fb.hidden     = false;
+      cont.textContent = 'שנמשיך?';
       cont.disabled = false;
       cont.onclick  = function() { goTo(8); };
     }
@@ -1112,6 +1125,7 @@ function s33Submit() {
     fbIcon.innerHTML    = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden     = false;
+    cont.textContent = 'שנמשיך?';
     cont.disabled = false;
     cont.onclick  = function() { routeAfterAdvancedPractice(); };
     announce('יופי! ​');
@@ -1140,6 +1154,7 @@ function s33Submit() {
     fbIcon.innerHTML    = xSvg;
     fb.classList.add('s5-fb--incorrect');
     fb.hidden     = false;
+    cont.textContent = 'שנמשיך?';
     cont.disabled = false;
     cont.onclick  = function() { routeAfterAdvancedPractice(); };
   }
@@ -1456,4 +1471,27 @@ document.querySelectorAll('.s5-inline-feedback').forEach(function(el) {
 });
 document.querySelectorAll('section.screen').forEach(function(s) {
   s.setAttribute('tabindex', '-1');
+});
+
+function openImgZoom(overlayId) {
+  var overlay = document.getElementById(overlayId);
+  if (!overlay) return;
+  var activeScreen = document.querySelector('.screen.active');
+  if (activeScreen && overlay.parentElement !== activeScreen) {
+    activeScreen.appendChild(overlay);
+  }
+  overlay.removeAttribute('hidden');
+}
+function closeImgZoom(overlayId) {
+  if (overlayId) {
+    var overlay = document.getElementById(overlayId);
+    if (overlay) overlay.setAttribute('hidden', '');
+  } else {
+    document.querySelectorAll('.img-zoom-overlay').forEach(function(el) {
+      el.setAttribute('hidden', '');
+    });
+  }
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeImgZoom();
 });

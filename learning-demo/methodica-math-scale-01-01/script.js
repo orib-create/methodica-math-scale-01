@@ -13,6 +13,16 @@ window.lomdaState = { selectedCharacter: null, selectedDesign: null };
 const _savedChar = localStorage.getItem('lomdaCharacter');
 if (_savedChar) window.lomdaState.selectedCharacter = _savedChar;
 
+(function preloadCharacterImages() {
+  var char = window.lomdaState.selectedCharacter === 'video' ? 'Character2' : 'Character1';
+  var other = char === 'Character1' ? 'Character2' : 'Character1';
+  [char, other].forEach(function(c) {
+    ['', '_binoculars', '_roller', '_popcorn', '_cards', '_holdhands', '_workout'].forEach(function(v) {
+      var img = new Image(); img.src = './assets/images/' + c + v + '.png';
+    });
+  });
+})();
+
 /* Final assessment tracking (screens 43-52) */
 let finalAssessmentScore = { correct: 0 };
 
@@ -21,28 +31,26 @@ let frcDone = false;
 
 let s4VideoEnded = false;
 let s4Playing = false;
-let s4Timer = null;
+let s4YTPlayer = null;
 
-var s4Cues = [
-  { s: 0.07,  e: 7.39,  t: 'קנה מידה הוא היחס בין אורך של עצם בשרטוט\nבמפה, בתרשים בדגם או באיור לבין אורכו' },
-  { s: 7.39,  e: 8.75,  t: 'המתאים במציאות.' },
-  { s: 9.19,  e: 15.55, t: 'המספר הימני ביחס מייצג את האורך במציאות,\nוהמספר השמאלי ביחס מייצג את האורך המתאים' },
-  { s: 15.55, e: 17.15, t: 'בתמונה או בשרטוט.' },
-  { s: 17.63, e: 20.43, t: 'למשל, שקנה המידה הוא 10 : 1.' },
-  { s: 20.63, e: 24.15, t: 'כל 1 ס"מ בתמונה מייצג 10 סנטימטרים.' },
-  { s: 24.15, e: 27.51, t: 'במציאות שקנה המידה הוא 100 : 1.' },
-  { s: 27.83, e: 31.99, t: 'כל 1 ס"מ בתמונה מייצג 100 סנטימטרים\nבמציאות.' },
-  { s: 31.99, e: 34.47, t: 'וכשקנה המידה הוא 1000 : 1.' },
-  { s: 34.83, e: 38.99, t: 'כל 1 ס"מ בתמונה מייצג 1,000 ס"מ במציאות.' }
-];
+window.onYouTubeIframeAPIReady = function () {
+  s4YTPlayer = new YT.Player('s4-yt-player', {
+    videoId: 'AllYTxb3ezk',
+    playerVars: { rel: 0, modestbranding: 1 },
+    events: { onStateChange: s4OnPlayerStateChange }
+  });
+};
 
-function s4UpdateCaption() {
-  var video = document.getElementById('s4-video');
-  var el = document.getElementById('s4-caption');
-  if (!video || !el) return;
-  var t = video.currentTime;
-  var active = s4Cues.find(function(c) { return t >= c.s && t < c.e; });
-  el.textContent = active ? active.t : '';
+function s4OnPlayerStateChange(e) {
+  if (e.data === YT.PlayerState.ENDED) {
+    s4Playing = false;
+    s4VideoEnded = true;
+    var sqSection = document.getElementById('s4-sq-section');
+    if (sqSection) {
+      sqSection.classList.remove('sq-locked');
+      sqEnter(4);
+    }
+  }
 }
 
 let s7Timer = null;
@@ -317,12 +325,15 @@ function setScale(ratio) {
 
 /* ── Screen 4: video player ── */
 function s4Enter() {
-  clearInterval(s4Timer);
   s4Playing = false;
-  var video = document.getElementById('s4-video');
-  if (video) { video.pause(); video.currentTime = 0; }
+  var cover = document.getElementById('s4-video-cover');
+  if (cover) cover.style.display = '';
   var playBtn = document.getElementById('s4-play-btn');
   if (playBtn) playBtn.style.display = '';
+  if (s4YTPlayer && typeof s4YTPlayer.pauseVideo === 'function') {
+    s4YTPlayer.pauseVideo();
+    s4YTPlayer.seekTo(0, true);
+  }
 
   var sqSection = document.getElementById('s4-sq-section');
   if (sqSection) sqSection.classList.toggle('sq-locked', !s4VideoEnded);
@@ -364,31 +375,19 @@ function s4Start() {
   if (s4Playing) return;
   s4Playing = true;
 
+  var cover = document.getElementById('s4-video-cover');
+  if (cover) cover.style.display = 'none';
   var playBtn = document.getElementById('s4-play-btn');
   if (playBtn) playBtn.style.display = 'none';
 
-  var video = document.getElementById('s4-video');
-  if (!video) return;
-
-  video.addEventListener('timeupdate', s4UpdateCaption);
-  video.play();
-
-  video.addEventListener('ended', function () {
-    s4Playing = false;
-    s4VideoEnded = true;
-    var capEl = document.getElementById('s4-caption');
-    if (capEl) capEl.textContent = '';
-    var sqSection = document.getElementById('s4-sq-section');
-    if (sqSection) {
-      sqSection.classList.remove('sq-locked');
-      sqEnter(4);
-    }
-  }, { once: true });
+  if (s4YTPlayer && typeof s4YTPlayer.playVideo === 'function') {
+    s4YTPlayer.playVideo();
+  }
 }
 
 function s4Back() {
-  clearInterval(s4Timer);
   s4Playing = false;
+  if (s4YTPlayer && typeof s4YTPlayer.pauseVideo === 'function') s4YTPlayer.pauseVideo();
   goTo(2);
 }
 
@@ -1092,6 +1091,7 @@ function s18Submit() {
     feedback.classList.add('s5-fb--correct');
     feedback.hidden = false;
     input.disabled = true;
+    continueBtn.textContent = 'שנמשיך?';
     continueBtn.disabled = false;
     announce('יפה מאוד!');
   } else if (s18Attempts === 1) {
@@ -1113,6 +1113,7 @@ function s18Submit() {
     feedback.classList.add('s5-fb--incorrect');
     feedback.hidden = false;
     input.disabled = true;
+    continueBtn.textContent = 'שנמשיך?';
     continueBtn.disabled = false;
     announce('זו טעות, בואו נדייק');
   }
@@ -1201,6 +1202,7 @@ function s19Submit() {
     feedback.classList.add('s5-fb--correct');
     feedback.hidden = false;
     input.disabled = true;
+    continueBtn.textContent = 'שנמשיך?';
     continueBtn.disabled = false;
     announce('יפה מאוד!');
   } else if (s19Attempts === 1) {
@@ -1222,6 +1224,7 @@ function s19Submit() {
     feedback.classList.add('s5-fb--incorrect');
     feedback.hidden = false;
     input.disabled = true;
+    continueBtn.textContent = 'שנמשיך?';
     continueBtn.disabled = false;
     announce('זו טעות, בואו נדייק');
   }
@@ -1287,7 +1290,7 @@ function s20Submit() {
     opts.forEach(function(o,i){ o.disabled=true; o.classList.toggle('is-correct', i===S20_CORRECT); });
     fbBold.textContent = 'יפה!​'; fbRegular.innerHTML = explanationCorrect;
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    feedback.classList.add('s5-fb--correct'); feedback.hidden = false; continueBtn.disabled = false;
+    feedback.classList.add('s5-fb--correct'); feedback.hidden = false; continueBtn.textContent = 'שנמשיך?'; continueBtn.disabled = false;
     announce('יפה!');
   } else if (s20Attempts === 1) {
     opts.forEach(function(o) { o.classList.remove('is-selected'); });
@@ -1304,6 +1307,7 @@ function s20Submit() {
     fbBold.textContent = 'זו טעות, בואו נדייק​'; fbRegular.innerHTML = explanationWrong;
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--incorrect'); feedback.hidden = false;
+    continueBtn.textContent = 'שנמשיך?';
     continueBtn.disabled = false;
     announce('זו טעות, בואו נדייק');
   }
@@ -1365,7 +1369,7 @@ function s21Submit() {
     s21Solved = true; s21Correct = true; s18QuizResults[4] = 'correct';
     fbBold.textContent = 'יפה מאוד!'; fbRegular.innerHTML = explanation;
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    feedback.classList.add('s5-fb--correct'); feedback.hidden = false; input.disabled = true; continueBtn.disabled = false;
+    feedback.classList.add('s5-fb--correct'); feedback.hidden = false; input.disabled = true; continueBtn.textContent = 'שנמשיך?'; continueBtn.disabled = false;
     announce('יפה מאוד!');
   } else if (s21Attempts === 1) {
     fbBold.textContent = 'זה לא מדוייק, ננסה שוב?'; fbRegular.innerHTML = '';
@@ -1377,7 +1381,7 @@ function s21Submit() {
     s21Solved = true; s18QuizResults[4] = 'wrong';
     fbBold.textContent = 'זו טעות, בואו נדייק'; fbRegular.innerHTML = explanation;
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    feedback.classList.add('s5-fb--incorrect'); feedback.hidden = false; input.disabled = true; continueBtn.disabled = false;
+    feedback.classList.add('s5-fb--incorrect'); feedback.hidden = false; input.disabled = true; continueBtn.textContent = 'שנמשיך?'; continueBtn.disabled = false;
     announce('זו טעות, בואו נדייק');
   }
 }
@@ -1472,6 +1476,7 @@ function s22Submit() {
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--correct');
     feedback.hidden = false;
+    continueBtn.textContent = 'שנמשיך?';
     continueBtn.disabled = false;
     announce('יפה!');
   } else if (s22Attempts === 1) {
@@ -1499,6 +1504,7 @@ function s22Submit() {
     fbIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     feedback.classList.add('s5-fb--incorrect');
     feedback.hidden = false;
+    continueBtn.textContent = 'שנמשיך?';
     continueBtn.disabled = false;
     announce('זו טעות, בואו נדייק');
   }
@@ -1533,7 +1539,7 @@ function s16Submit() {
 
   var contBtn = document.getElementById('s16-continue');
   if (contBtn) {
-    contBtn.textContent = 'להמשיך';
+    contBtn.textContent = 'שנמשיך?';
     contBtn.disabled = false;
     contBtn.onclick = function() { goTo(17); };
   }
@@ -1893,6 +1899,7 @@ function s23Submit() {
     fbIcon.innerHTML = checkIcon;
     feedback.classList.add('s5-fb--correct', 's23-fb--final');
     feedback.hidden = false;
+    continueBtn.textContent = 'שנמשיך?';
     continueBtn.disabled = false;
     announce('טוב מאוד!');
   } else if (s23Attempts === 1) {
@@ -1920,6 +1927,7 @@ function s23Submit() {
     fbIcon.innerHTML = xIcon;
     feedback.classList.add('s5-fb--incorrect', 's23-fb--final');
     feedback.hidden = false;
+    continueBtn.textContent = 'שנמשיך?';
     continueBtn.disabled = false;
     announce('זו טעות, לא נורא – בואו נלמד ממנה');
   }
@@ -2317,4 +2325,29 @@ document.querySelectorAll('.s5-inline-feedback').forEach(function(el) {
 });
 document.querySelectorAll('section.screen').forEach(function(s) {
   s.setAttribute('tabindex', '-1');
+});
+
+function openImgZoom(overlayId) {
+  var overlay = document.getElementById(overlayId);
+  if (!overlay) return;
+  var activeScreen = document.querySelector('.screen.active');
+  if (activeScreen && overlay.parentElement !== activeScreen) {
+    activeScreen.appendChild(overlay);
+  }
+  overlay.removeAttribute('hidden');
+}
+
+function closeImgZoom(overlayId) {
+  if (overlayId) {
+    var overlay = document.getElementById(overlayId);
+    if (overlay) overlay.setAttribute('hidden', '');
+  } else {
+    document.querySelectorAll('.img-zoom-overlay').forEach(function(el) {
+      el.setAttribute('hidden', '');
+    });
+  }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeImgZoom();
 });

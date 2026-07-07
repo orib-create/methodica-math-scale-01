@@ -13,6 +13,12 @@ window.lomdaState = { selectedCharacter: null, selectedDesign: null };
 const _savedChar = localStorage.getItem('lomdaCharacter');
 if (_savedChar) window.lomdaState.selectedCharacter = _savedChar;
 
+(function preloadCharacterImages() {
+  ['Character1', 'Character2'].forEach(function(c) {
+    var img = new Image(); img.src = './assets/images/' + c + '.png';
+  });
+})();
+
 /* Final assessment tracking (screens 43-52) */
 let finalAssessmentScore = { correct: 0 };
 
@@ -464,4 +470,27 @@ document.querySelectorAll('.s5-inline-feedback').forEach(function(el) {
 });
 document.querySelectorAll('section.screen').forEach(function(s) {
   s.setAttribute('tabindex', '-1');
+});
+
+function openImgZoom(overlayId) {
+  var overlay = document.getElementById(overlayId);
+  if (!overlay) return;
+  var activeScreen = document.querySelector('.screen.active');
+  if (activeScreen && overlay.parentElement !== activeScreen) {
+    activeScreen.appendChild(overlay);
+  }
+  overlay.removeAttribute('hidden');
+}
+function closeImgZoom(overlayId) {
+  if (overlayId) {
+    var overlay = document.getElementById(overlayId);
+    if (overlay) overlay.setAttribute('hidden', '');
+  } else {
+    document.querySelectorAll('.img-zoom-overlay').forEach(function(el) {
+      el.setAttribute('hidden', '');
+    });
+  }
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeImgZoom();
 });

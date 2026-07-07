@@ -1,4 +1,4 @@
-/* ── Local fonts ── */
+﻿/* â”€â”€ Local fonts â”€â”€ */
 @font-face { font-family: 'Assistant'; src: url('assets/fonts/Assistant-ExtraLight.ttf') format('truetype'); font-weight: 200; font-style: normal; }
 @font-face { font-family: 'Assistant'; src: url('assets/fonts/Assistant-Light.ttf') format('truetype'); font-weight: 300; font-style: normal; }
 @font-face { font-family: 'Assistant'; src: url('assets/fonts/Assistant-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
@@ -27,7 +27,7 @@ body {
    ============================================================ */
 #app {
   width: 1280px;
-  height: 710px;
+  height: 720px;
   position: absolute;
   transform-origin: top left;
   overflow: hidden;
@@ -40,7 +40,7 @@ body {
 .screen {
   display: none;
   width: 1280px;
-  height: 710px;
+  height: 720px;
   position: relative;
 }
 
@@ -93,7 +93,7 @@ body {
 }
 
 /* ============================================================
-   Screen 0 — בחירת דמות
+   Screen 0 â€” ×‘×—×™×¨×ª ×“×ž×•×ª
    ============================================================ */
 [data-screen="0"] {
   background: #ffffff;
@@ -127,6 +127,28 @@ body {
   height: 360px;
   object-fit: contain;
   margin-top: 0;
+}
+
+[data-screen="0"] .s6-text-block {
+  align-items: stretch;
+}
+
+[data-screen="0"] .s25-text-small {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+[data-screen="0"] .s25-text-large {
+  text-align: center;
+}
+
+.s0-text-hint {
+  font-family: 'Assistant', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #303030;
+  text-align: center;
 }
 
 .s0-content {
@@ -245,7 +267,7 @@ body {
 }
 
 /* ============================================================
-   Screen 1 — הוק קנה מידה
+   Screen 1 â€” ×”×•×§ ×§× ×” ×ž×™×“×”
    ============================================================ */
 [data-screen="1"] {
   background: #ffffff;
@@ -328,7 +350,7 @@ body {
   font-weight: 700;
 }
 
-/* ── Scale zone ── */
+/* â”€â”€ Scale zone â”€â”€ */
 .scale-zone {
   display: flex;
   flex-direction: row;
@@ -457,7 +479,7 @@ body {
   align-self: center;
 }
 
-/* ── Character widget ── */
+/* â”€â”€ Character widget â”€â”€ */
 .character-widget {
   position: absolute;
   left: 16px;
@@ -539,10 +561,10 @@ body {
 }
 
 /* ============================================================
-   Screen 3 — FlipCardsReveal
+   Screen 3 â€” FlipCardsReveal
    ============================================================ */
 
-/* select-* — aliases ל-s0 conventions */
+/* select-* â€” aliases ×œ-s0 conventions */
 .select-content {
   flex: 1;
   display: flex;
@@ -821,7 +843,7 @@ body {
 }
 
 /* ============================================================
-   Screen 4 — נגן וידאו (VideoPlayer)
+   Screen 4 â€” × ×’×Ÿ ×•×™×“××• (VideoPlayer)
    ============================================================ */
 
 [data-screen="4"] {
@@ -878,7 +900,7 @@ body {
   font-weight: 700;
 }
 
-/* Player container — aspect ratio ~16:9 בתוך 1280px canvas */
+/* Player container â€” aspect ratio ~16:9 ×‘×ª×•×š 1280px canvas */
 .s4-player-wrap {
   position: relative;
   width: 780px;
@@ -892,7 +914,7 @@ body {
   flex-shrink: 0;
 }
 
-/* Placeholder (לפני לחיצה) */
+/* Placeholder (×œ×¤× ×™ ×œ×—×™×¦×”) */
 .s4-placeholder {
   position: absolute;
   inset: 0;
@@ -943,7 +965,7 @@ body {
   transition: width 0.15s linear;
 }
 
-/* כפתור "להתחיל" — מעוגן לתחתית הנגן */
+/* ×›×¤×ª×•×¨ "×œ×”×ª×—×™×œ" â€” ×ž×¢×•×’×Ÿ ×œ×ª×—×ª×™×ª ×”× ×’×Ÿ */
 .s4-start-btn {
   position: absolute;
   bottom: 20px;
@@ -965,7 +987,7 @@ body {
 
 .s4-start-btn:hover { opacity: 0.88; }
 
-/* Bottom bar screen 4 — restore absolute positioning overridden by .s3-bottom-bar */
+/* Bottom bar screen 4 â€” restore absolute positioning overridden by .s3-bottom-bar */
 [data-screen="4"] .bottom-bar {
   position: absolute;
   bottom: 0;
@@ -974,7 +996,7 @@ body {
 }
 
 /* ============================================================
-   Screen 5 — SingleChoiceQuestion
+   Screen 5 â€” SingleChoiceQuestion
    ============================================================ */
 
 [data-screen="5"] {
@@ -986,7 +1008,7 @@ body {
   display: block;
 }
 
-/* ── Scrollable body (full height minus bottom bar, no header) ── */
+/* â”€â”€ Scrollable body (full height minus bottom bar, no header) â”€â”€ */
 .s5-body {
   position: absolute;
   top: 0;
@@ -999,13 +1021,13 @@ body {
   box-sizing: border-box;
 }
 
-/* Q1 wrapper — gives the question block its top padding and centering context */
+/* Q1 wrapper â€” gives the question block its top padding and centering context */
 .s5-q1-wrap {
   padding: 56px 46px 32px;
   direction: rtl;
 }
 
-/* ── Question block ── */
+/* â”€â”€ Question block â”€â”€ */
 .s5-question-block {
   display: flex;
   flex-direction: row;
@@ -1040,7 +1062,7 @@ body {
   gap: 16px;
 }
 
-/* "בדוק" sits below second option, aligned to physical LEFT (flex-end in RTL col) */
+/* "×‘×“×•×§" sits below second option, aligned to physical LEFT (flex-end in RTL col) */
 .s5-btn-check {
   align-self: flex-end;
 }
@@ -1064,7 +1086,7 @@ body {
   width: 100%;
 }
 
-/* ── Answer options ── */
+/* â”€â”€ Answer options â”€â”€ */
 .s5-answers {
   display: flex;
   flex-direction: column;
@@ -1142,12 +1164,12 @@ body {
 /* Disabled (after submit) */
 .s5-opt:disabled { cursor: default; }
 
-/* ── Bottom bar — only המשך on the left, no right element ── */
+/* â”€â”€ Bottom bar â€” only ×”×ž×©×š on the left, no right element â”€â”€ */
 #s5-bottom-bar {
   justify-content: flex-end;
 }
 
-/* ── Inline feedback — in-flow below the בדוק button ── */
+/* â”€â”€ Inline feedback â€” in-flow below the ×‘×“×•×§ button â”€â”€ */
 .s5-inline-feedback {
   display: flex;
   flex-direction: row;
@@ -1162,14 +1184,14 @@ body {
 .s5-inline-feedback.s5-fb--correct  { background: #F2FFE8; }
 .s5-inline-feedback.s5-fb--incorrect { background: #FFDBDC; }
 
-/* Screen 5 character image — same size as screen 1/2 */
+/* Screen 5 character image â€” same size as screen 1/2 */
 #s5-char-img {
   width: 140px;
   object-fit: contain;
   border-radius: 16px;
 }
 
-/* ── Informational text section ── */
+/* â”€â”€ Informational text section â”€â”€ */
 .s5-info-section {
   margin-top: 230px;
   padding: 0 46px 56px;
@@ -1236,7 +1258,7 @@ body {
 
 #s21 .s5-inline-feedback { align-items: flex-start; }
 
-/* Screen 22 — help tooltip */
+/* Screen 22 â€” help tooltip */
 #s22 { position: relative; }
 #s22 .s5-inline-feedback { align-items: flex-start; }
 #s22 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
@@ -1295,7 +1317,7 @@ body {
   margin-top: 4px;
 }
 
-/* ── Q2: dropdown fill-in-the-blank ── */
+/* â”€â”€ Q2: dropdown fill-in-the-blank â”€â”€ */
 .s5-q2-wrap {
   margin-top: 230px;
   padding: 0 46px 80px;
@@ -1429,7 +1451,7 @@ body {
   background: #f0f0f0;
 }
 
-/* ── Screens 6 + 15: מסך מעבר ── */
+/* â”€â”€ Screens 6 + 15: ×ž×¡×š ×ž×¢×‘×¨ â”€â”€ */
 [data-screen="15"] .s0-content,
 [data-screen="17"] .s0-content {
   justify-content: flex-start;
@@ -1449,7 +1471,7 @@ body {
 }
 
 /* ============================================================
-   Screen 7 — עמוד הקניה (Guided Practice)
+   Screen 7 â€” ×¢×ž×•×“ ×”×§× ×™×” (Guided Practice)
    ============================================================ */
 
 .s7-header {
@@ -1544,7 +1566,7 @@ body {
   margin: 0;
 }
 
-/* ── Screen 8: highlighted text ── */
+/* â”€â”€ Screen 8: highlighted text â”€â”€ */
 .s8-highlight {
   background-color: #CE82FF;
   color: #303030;
@@ -1552,7 +1574,7 @@ body {
   padding: 0 2px;
 }
 
-/* ── Screen 8: flex layout (card right + popup left, equal height) ── */
+/* â”€â”€ Screen 8: flex layout (card right + popup left, equal height) â”€â”€ */
 .s8-layout {
   position: absolute;
   top: 130px;
@@ -1566,7 +1588,7 @@ body {
   align-items: stretch;
 }
 
-/* Card override inside s8-layout — remove global margin/auto */
+/* Card override inside s8-layout â€” remove global margin/auto */
 .s8-card {
   width: 800px !important;
   margin: 0 !important;
@@ -1574,7 +1596,7 @@ body {
   justify-content: flex-start;
 }
 
-/* Popup — fixed height, aligned to top of layout */
+/* Popup â€” fixed height, aligned to top of layout */
 .s8-popup {
   flex: 1;
   height: 200px;
@@ -1653,7 +1675,7 @@ body {
   height: 230px;
 }
 
-/* Screen 11 — answer reveal */
+/* Screen 11 â€” answer reveal */
 .s11-black {
   color: #303030 !important;
 }
@@ -1679,7 +1701,7 @@ body {
   margin: 0;
 }
 
-/* Character widget for screen 7 — override position + size */
+/* Character widget for screen 7 â€” override position + size */
 #s7-char-widget {
   left: 16px;
   bottom: 84px;
@@ -1702,7 +1724,7 @@ body {
   border-radius: 16px;
 }
 
-/* Screen 12 — black text in card, character same as s7 */
+/* Screen 12 â€” black text in card, character same as s7 */
 #s12 .s7-card-q,
 #s12 .s7-opt {
   color: #303030;
@@ -1718,7 +1740,7 @@ body {
   height: auto;
 }
 
-/* Screen 13 + 14 — selective black text + wide buttons */
+/* Screen 13 + 14 â€” selective black text + wide buttons */
 #s13 .s13-black,
 #s14 .s13-black {
   color: #303030;
@@ -1750,7 +1772,7 @@ body {
   top: 60%;
 }
 
-/* Screen 16 — content wrapper (no scroll) */
+/* Screen 16 â€” content wrapper (no scroll) */
 .s16-content {
   position: absolute;
   top: 0;
@@ -1774,7 +1796,7 @@ body {
   flex-shrink: 0;
 }
 
-/* Screen 16 — no image, hint button */
+/* Screen 16 â€” no image, hint button */
 .s16-no-img {
   display: block;
 }
@@ -1783,7 +1805,7 @@ body {
   max-width: 620px;
 }
 
-/* Screen 16 — hint button (bottom bar) */
+/* Screen 16 â€” hint button (bottom bar) */
 .s16-hint-continue-group {
   display: flex;
   flex-direction: row;
@@ -1816,7 +1838,7 @@ body {
   background: #8300D91A;
 }
 
-/* Screen 16 — hint popup overlay */
+/* Screen 16 â€” hint popup overlay */
 #s16 {
   position: relative;
 }
@@ -1961,7 +1983,7 @@ body {
 }
 
 /* ============================================================
-   Screen 18 — שאלת השלמת טקסט
+   Screen 18 â€” ×©××œ×ª ×”×©×œ×ž×ª ×˜×§×¡×˜
    ============================================================ */
 
 #s18 { position: relative; }
@@ -2145,6 +2167,7 @@ body {
 }
 
 .s18-q-left {
+  position: relative;
   flex: 1;
   display: flex;
   align-items: flex-start;
@@ -2327,7 +2350,7 @@ body {
 }
 .s18-hint-btn:hover { background: #8300D91A; }
 
-/* ── Destination screens (24, 25) ── */
+/* â”€â”€ Destination screens (24, 25) â”€â”€ */
 .dest-screen-title {
   position: absolute;
   top: 50%; left: 50%;
@@ -2439,6 +2462,34 @@ body {
   max-width: 220px;
 }
 
+.s6-bubble {
+  position: absolute;
+  left: 60px;
+  top: 25%;
+  transform: translateY(-50%);
+  display: inline-block;
+  line-height: 0;
+}
+
+.s6-bubble-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 140px;
+  height: 91px;
+  display: flex;
+  align-items: center;
+  padding: 12px 16px 12px 12px;
+  font-family: 'Assistant', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #303030;
+  text-align: right;
+  line-height: 1.5;
+  direction: rtl;
+  word-break: break-word;
+}
+
 [data-screen="0"] .s25-bubble::after,
 [data-screen="6"] .s25-bubble::after {
   top: 50%;
@@ -2457,7 +2508,7 @@ body {
   top: 33%;
 }
 
-/* ── Screens 1-5, 7-8 — center s18-nav ── */
+/* â”€â”€ Screens 1-5, 7-8 â€” center s18-nav â”€â”€ */
 #s1 .s18-nav  { left: 50%; transform: translateX(-50%); }
 #s2 .s18-nav  { left: 50%; transform: translateX(-50%); }
 #s3 .s18-nav  { left: 50%; transform: translateX(-50%); }
@@ -2466,13 +2517,13 @@ body {
 #s7 .s18-nav  { left: 50%; transform: translateX(-50%); }
 #s8 .s18-nav  { left: 50%; transform: translateX(-50%); }
 
-/* ── Screen 38 ── */
+/* â”€â”€ Screen 38 â”€â”€ */
 #s38 { position: relative; }
 #s38 .s18-nav { left: 50%; transform: translateX(-50%); }
 #s38 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
 #s38 .s18-console-img  { max-height: 280px; max-width: 100%; }
 
-/* ── Screen 37 ── */
+/* â”€â”€ Screen 37 â”€â”€ */
 #s37 { position: relative; }
 #s37 .s18-nav {
   left: 50%;
@@ -2483,11 +2534,12 @@ body {
 #s37 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
 #s37 .s18-console-img  { max-height: 425px; max-width: 100%; margin-top: 0; }
 
-/* ── Screen 26: תרגול בסיסי שאלה 1 ── */
+/* â”€â”€ Screen 26: ×ª×¨×’×•×œ ×‘×¡×™×¡×™ ×©××œ×” 1 â”€â”€ */
 #s1 { position: relative; }
 #s1 .s5-inline-feedback { align-items: flex-start; }
 #s1 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
-#s1 .s18-console-img { max-width: 85%; max-height: none; }
+#s1 .s18-console-img { width: 100% !important; max-width: 100% !important; max-height: 100% !important; object-fit: contain; }
+#s1 .s18-q-left { flex: none !important; width: 520px !important; height: 520px !important; }
 
 
 .s26-equation {
@@ -2509,7 +2561,7 @@ body {
 }
 
 
-/* ── Screen 23: no-image single-column question ── */
+/* â”€â”€ Screen 23: no-image single-column question â”€â”€ */
 #s23 { position: relative; }
 #s23 .s5-inline-feedback { align-items: flex-start; }
 #s23 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
@@ -2518,11 +2570,12 @@ body {
 .s23-q-inner { max-width: 820px; }
 #s23 .s5-opt { width: 762px; }
 
-/* ── Screen 27 ── */
+/* â”€â”€ Screen 27 â”€â”€ */
 #s2 { position: relative; }
-#s2 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
+#s2 .s18-feedback-bar { max-width: 700px; left: 40px; transform: none; }
 #s2 .s18-console-img { max-width: 100%; max-height: none; }
-#s2 .s18-q-right { width: 780px; }
+#s2 .s18-q-right { width: 740px; flex-shrink: 0; }
+#s2 .s18-q-left { flex: none !important; width: 460px !important; height: 460px !important; }
 
 .s27-sentence {
   display: block;
@@ -2545,19 +2598,19 @@ body {
   margin: 0 4px;
 }
 
-/* ── Screen 28 ── */
+/* â”€â”€ Screen 28 â”€â”€ */
 #s3 { position: relative; }
 #s3 .s5-opt-circle { border-radius: 4px; }
 #s3 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
 #s3 .s18-console-img { max-height: 264px; max-width: 100%; }
 
-/* ── Screen 29 ── */
+/* â”€â”€ Screen 29 â”€â”€ */
 #s4 { position: relative; }
 #s4 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
 #s4 .s18-console-img { max-height: 273px; max-width: 100%; }
 #s4 .s16-hint-popup { height: 430px; }
 
-/* ── Screen 30 ── */
+/* â”€â”€ Screen 30 â”€â”€ */
 #s5 { position: relative; }
 #s5 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
 #s5 .s18-console-img { max-width: 100%; }
@@ -2588,7 +2641,7 @@ body {
   white-space: nowrap;
 }
 
-/* ── Screen 32 ── */
+/* â”€â”€ Screen 32 â”€â”€ */
 #s7 { position: relative; }
 #s7 .s18-nav {
   left: 50%;
@@ -2598,7 +2651,7 @@ body {
 #s7 .s18-console-img  { max-height: 260px; max-width: 100%; }
 #s7 .s18-q-left       { align-items: flex-start; padding-top: 30px; }
 
-/* ── Screen 33 ── */
+/* â”€â”€ Screen 33 â”€â”€ */
 #s8 { position: relative; }
 #s8 .s18-nav {
   left: 50%;
@@ -2607,7 +2660,7 @@ body {
 #s8 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
 #s8 .s18-console-img  { max-height: 260px; max-width: 100%; }
 
-/* ── Screen 34 ── */
+/* â”€â”€ Screen 34 â”€â”€ */
 [data-screen="34"] .select-content {
   gap: 32px;
   padding: 32px 80px 74px;
@@ -2680,7 +2733,7 @@ body {
   height: auto;
 }
 
-/* ── Screen 35 ── */
+/* â”€â”€ Screen 35 â”€â”€ */
 [data-screen="35"] .select-content {
   gap: 32px;
   padding: 32px 80px 74px;
@@ -2758,7 +2811,7 @@ body {
   object-fit: contain;
 }
 
-/* ── Screen 39 — DragAndDrop (מידות אמיתיות) ── */
+/* â”€â”€ Screen 39 â€” DragAndDrop (×ž×™×“×•×ª ××ž×™×ª×™×•×ª) â”€â”€ */
 
 #s39 .s18-nav {
   left: 50%;
@@ -2975,7 +3028,7 @@ body {
   user-select: none;
 }
 
-/* ── DDQ result badges (✓/✗ on targets after 2nd wrong) ── */
+/* â”€â”€ DDQ result badges (âœ“/âœ— on targets after 2nd wrong) â”€â”€ */
 .ddq-badge {
   position: absolute;
   top: -12px;
@@ -2991,7 +3044,7 @@ body {
 
 .ddq-badge svg { display: block; }
 
-/* ── Screen 40 ── */
+/* â”€â”€ Screen 40 â”€â”€ */
 #s40 { position: relative; }
 #s40 .s18-nav         { left: 50%; transform: translateX(-50%); }
 #s40 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
@@ -2999,7 +3052,7 @@ body {
 #s40 .s18-q-left       { align-items: flex-start; padding-top: 20px; }
 #s40 .s5-inline-feedback { align-items: flex-start; }
 
-/* ── Screen 41 ── */
+/* â”€â”€ Screen 41 â”€â”€ */
 #s41 { position: relative; }
 #s41 .s18-nav          { left: 50%; transform: translateX(-50%); }
 #s41 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
@@ -3007,14 +3060,14 @@ body {
 #s41 .s18-q-left       { padding-top: 80px; align-items: flex-start; }
 #s41 .s18-ruler        { cursor: grab; left: -2.2787px; top: 2.62888px; height: auto; max-height: 500px; }
 
-/* ── Screen 42 ── */
+/* â”€â”€ Screen 42 â”€â”€ */
 #s42 { position: relative; }
 #s42 .s18-nav          { left: 50%; transform: translateX(-50%); }
 #s42 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
 #s42 .s18-console-img  { max-height: 205px; margin-top: 57px; }
 #s42 .s18-q-left       { padding-top: 80px; align-items: flex-start; }
 
-/* ── Screen 47 ── */
+/* â”€â”€ Screen 47 â”€â”€ */
 #s47 { position: relative; }
 #s47 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
 #s47 .s18-console-img  { max-height: 390px; max-width: 100%; }
@@ -3068,7 +3121,7 @@ body {
 }
 
 .s47-checkbox:checked + .s47-checkbox-custom::after {
-  content: '✓';
+  content: 'âœ“';
   color: white;
   font-size: 20px;
   font-weight: bold;
@@ -3084,14 +3137,14 @@ body {
   text-align: right;
 }
 
-/* ── Screen 45 ── */
+/* â”€â”€ Screen 45 â”€â”€ */
 #s45 { position: relative; }
 #s45 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
 #s45 .s18-console-img  { max-height: 390px; max-width: 100%; }
 #s45 .s18-q-left       { align-items: flex-start; padding-top: 20px; }
 #s45 .s5-inline-feedback { align-items: flex-start; }
 
-/* ── Screen 44 ── */
+/* â”€â”€ Screen 44 â”€â”€ */
 #s44 {
   position: relative;
   overflow: hidden;
@@ -3144,7 +3197,7 @@ body {
   margin-bottom: 0;
 }
 
-/* ── Screen 48 (override) ── */
+/* â”€â”€ Screen 48 (override) â”€â”€ */
 #s48 .s44-content {
   justify-content: flex-start;
 }
@@ -3153,7 +3206,7 @@ body {
   max-width: 500px;
 }
 
-/* ── Screen 50 (override) ── */
+/* â”€â”€ Screen 50 (override) â”€â”€ */
 #s50 .s44-content {
   justify-content: flex-start;
   align-items: flex-end;
@@ -3167,7 +3220,7 @@ body {
   margin-left: auto;
 }
 
-/* ── Screen 52 (override) ── */
+/* â”€â”€ Screen 52 (override) â”€â”€ */
 #s52 .s44-content {
   justify-content: flex-start;
   align-items: flex-end;
@@ -3181,7 +3234,7 @@ body {
   margin-left: auto;
 }
 
-/* ── Screen 51 ── */
+/* â”€â”€ Screen 51 â”€â”€ */
 #s51 { position: relative; }
 #s51 .s18-feedback-bar { max-width: 600px; left: 40px; transform: none; }
 #s51 .s18-console-img  { max-width: 557px; object-fit: contain; display: block; }
@@ -3194,7 +3247,7 @@ body {
   width: 726px;
 }
 
-/* ── Screen 49 ── */
+/* â”€â”€ Screen 49 â”€â”€ */
 #s49 { position: relative; }
 #s49 .s18-question { padding-left: 0; }
 #s49 .s18-q-layout { gap: 0; }
@@ -3238,7 +3291,7 @@ body {
 }
 #s49 .s18-console-img { max-width: 36%; margin-top: 37px; }
 
-/* ── Screen 43 ── */
+/* â”€â”€ Screen 43 â”€â”€ */
 [data-screen="43"] .s0-content {
   justify-content: flex-start;
   padding-top: 60px;
@@ -3253,7 +3306,7 @@ body {
 
 
 /* ============================================================
-   GLOBAL — FLAG / REPORT ISSUE BUTTON
+   GLOBAL â€” FLAG / REPORT ISSUE BUTTON
    ============================================================ */
 .flag-btn {
   position: absolute;
@@ -3581,17 +3634,18 @@ body {
 }
 
 
-/* ── Custom scrollbar ── */
+/* â”€â”€ Custom scrollbar â”€â”€ */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-/* ── Screens 1-5, 7-8: layout matches s18 ── */
+/* â”€â”€ Screens 1-5, 7-8: layout matches s18 â”€â”€ */
 #s1 .s18-q-layout, #s2 .s18-q-layout, #s3 .s18-q-layout,
 #s4 .s18-q-layout, #s5 .s18-q-layout, #s7 .s18-q-layout, #s8 .s18-q-layout { gap: 16px; }
 
-#s1 .s18-q-right, #s2 .s18-q-right, #s3 .s18-q-right,
+#s1 .s18-q-right { width: 670px; flex-shrink: 0; }
+#s3 .s18-q-right,
 #s4 .s18-q-right, #s5 .s18-q-right, #s7 .s18-q-right, #s8 .s18-q-right { width: 804px; flex-shrink: 0; }
 
 #s1 .s18-q-left, #s2 .s18-q-left, #s3 .s18-q-left,
@@ -3629,4 +3683,86 @@ body {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ── Image Zoom ── */
+.img-zoom-btn {
+  appearance: none;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  z-index: 10;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.img-zoom-btn .zoom-icon-hover { display: none; }
+.img-zoom-btn:hover .zoom-icon-normal { display: none; }
+.img-zoom-btn:hover .zoom-icon-hover { display: block; }
+.img-zoom-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 999;
+}
+.img-zoom-overlay[hidden] { display: none; }
+.img-zoom-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.78);
+}
+.img-zoom-modal__panel {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: 660px;
+  height: 660px;
+  background: rgb(255, 255, 255);
+  border-radius: 24px;
+  box-shadow: rgba(0,0,0,0.18) 0px 18px 50px;
+  overflow: hidden;
+}
+.img-zoom-modal__close {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.img-zoom-modal__close .zoom-close-hover { display: none; }
+.img-zoom-modal__close:hover .zoom-close-normal { display: none; }
+.img-zoom-modal__close:hover .zoom-close-hover { display: block; }
+.img-zoom-modal__stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.img-zoom-modal__stage > .img-zoom-clone {
+  width: 100%;
+  height: 100%;
+}
+.img-zoom-modal__stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
 }

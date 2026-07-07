@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 function announce(msg) {
   var el = document.getElementById('a11y-announcer');
@@ -7,14 +7,19 @@ function announce(msg) {
   setTimeout(function () { el.textContent = msg; }, 50);
 }
 
-const TOTAL_SCREENS = 18;
+const TOTAL_SCREENS = 6;
 let currentScreen = 0;
 window.lomdaState = { selectedCharacter: null, selectedDesign: null };
 const _savedChar = localStorage.getItem('lomdaCharacter');
 if (_savedChar) window.lomdaState.selectedCharacter = _savedChar;
 
-/* Final assessment tracking (screens 43-52) */
-let finalAssessmentScore = { correct: 0 };
+(function preloadCharacterImages() {
+  var char = window.lomdaState.selectedCharacter === 'video' ? 'Character2' : 'Character1';
+  var other = char === 'Character1' ? 'Character2' : 'Character1';
+  [char, other].forEach(function(c) {
+    var img = new Image(); img.src = './assets/images/' + c + '.png';
+  });
+})();
 
 let frcRevealed = [false, false, false];
 let frcDone = false;
@@ -113,10 +118,15 @@ function updateNavBar(navEl, currentQ, results, screens) {
 }
 
 /* ── Navigation ── */
+function goToNextModule() {
+  window.location.href = '../methodica-math-scale-01-05/index.html';
+}
+
 function goTo(n) {
   if (n < 0 || n >= TOTAL_SCREENS) return;
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const nextScreen = document.querySelector(`[data-screen="${n}"]`);
+  if (!nextScreen) return;
   nextScreen.classList.add('active');
   currentScreen = n;
   resetScreenState(n);
@@ -132,12 +142,6 @@ function resetScreenState(n) {
   if (n === 3)  { s39Enter(); }
   if (n === 4)  { s40Enter(); }
   if (n === 5)  { s41Enter(); }
-  if (n === 6)  { s42Enter(); }
-  if (n === 9)  { s45Enter(); }
-  if (n === 11) { s47Enter(); }
-  if (n === 13) { s49Enter(); }
-  if (n === 15) { s51Enter(); }
-  if (n === 17) { s53Enter(); }
 }
 
 
@@ -632,7 +636,7 @@ function ddqCheck() {
   var checkSvg = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var xSvg     = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-  fb.classList.remove('s5-fb--correct', 's5-fb--incorrect');
+  fb.classList.remove('s5-fb--correct', 's5-fb--incorrect', 's5-fb--try-again');
 
   if (allCorrect) {
     ddqChecked = true;
@@ -644,7 +648,7 @@ function ddqCheck() {
     });
     fbBold.textContent = 'נכון מאוד!​';
     announce('נכון מאוד!​');
-    fbReg.textContent  = 'נמיר את המידות במציאות לסנטימטרים ונקבל אורך 1,200 ס"מ וגובה 600 ס"מ. ​\nבתמונה של יובל (קנה מידה 1:50) נחלק את המידות ב-50 ונקבל: אורך 24 ס"מ, גובה 12 ס"מ.​\nבתמונה של ליאור (קנה מידה 1:20) נחלק את המידות ב-20 ונקבל: אורך 60 ס"מ, גובה 30 ס"מ.​';
+    fbReg.innerHTML  = 'נמיר את המידות במציאות לסנטימטרים ונקבל אורך 1,200 ס"מ וגובה 600 ס"מ. ​<br>בתמונה של יובל (קנה מידה 1:50) נחלק את המידות ב-50 ונקבל: אורך 24 ס"מ, גובה 12 ס"מ.​<br>בתמונה של ליאור (קנה מידה 1:20) נחלק את המידות ב-20 ונקבל: אורך 60 ס"מ, גובה 30 ס"מ.​';
     fbIcon.innerHTML   = checkSvg;
     fb.classList.add('s5-fb--correct');
     fb.hidden = false;
@@ -660,7 +664,7 @@ function ddqCheck() {
     announce('לא מדויק, ננסה שוב?');
     fbReg.textContent  = '';
     fbIcon.innerHTML   = xSvg;
-    fb.classList.add('s5-fb--incorrect');
+    fb.classList.add('s5-fb--incorrect', 's5-fb--try-again');
     fb.hidden = false;
     if (hintBtn) hintBtn.hidden = false;
 
@@ -695,7 +699,7 @@ function ddqCheck() {
 
     fbBold.textContent = 'לא מדויק, בואו נבין למה:​';
     announce('לא מדויק, בואו נבין למה:​');
-    fbReg.textContent  = 'נמיר את המידות במציאות לסנטימטרים ונקבל אורך 1,200 ס"מ וגובה 600 ס"מ. ​\nבתמונה של יובל (קנה מידה 1:50) נחלק את המידות ב-50 ונקבל: אורך 24 ס"מ, גובה 12 ס"מ.​\nבתמונה של ליאור (קנה מידה 1:20) נחלק את המידות ב-20 ונקבל: אורך 60 ס"מ, גובה 30 ס"מ.​';
+    fbReg.innerHTML  = 'נמיר את המידות במציאות לסנטימטרים ונקבל אורך 1,200 ס"מ וגובה 600 ס"מ. ​<br>בתמונה של יובל (קנה מידה 1:50) נחלק את המידות ב-50 ונקבל: אורך 24 ס"מ, גובה 12 ס"מ.​<br>בתמונה של ליאור (קנה מידה 1:20) נחלק את המידות ב-20 ונקבל: אורך 60 ס"מ, גובה 30 ס"מ.​';
     fbIcon.innerHTML   = xSvg;
     fb.classList.add('s5-fb--incorrect');
     fb.hidden = false;
@@ -908,7 +912,7 @@ function s41CloseHint() {
 }
 
 function s41Submit() {
-  if (s41Solved) { goTo(6); return; }
+  if (s41Solved) { goToNextModule(); return; }
   if (s41Selected === null) return;
 
   var correct = (s41Selected === S41_CORRECT);
@@ -939,8 +943,8 @@ function s41Submit() {
     fb.classList.add('s5-fb--correct');
     fb.hidden = false;
     cont.disabled    = false;
-    cont.textContent = 'שנמשיך?';
-    cont.onclick     = function() { goTo(6); };
+    cont.textContent = 'המשך';
+    cont.onclick  = function() { goToNextModule(); };
 
   } else if (s41Attempts === 1) {
     fbBold.textContent = 'זה לא מדויק, ננסה שוב?';
@@ -968,8 +972,8 @@ function s41Submit() {
     fb.classList.add('s5-fb--incorrect');
     fb.hidden = false;
     cont.disabled    = false;
-    cont.textContent = 'שנמשיך?';
-    cont.onclick     = function() { goTo(6); };
+    cont.textContent = 'המשך';
+    cont.onclick  = function() { goToNextModule(); };
   }
 }
 
@@ -1121,560 +1125,6 @@ function s42CloseHint() {
   var popup = document.getElementById('s42-hint-popup');
   if (popup) { popup.hidden = true; announce('רמז נסגר'); }
 }
-
-/* ════════════════════════════════════════════
-   Screen 45 — Q4: קנה מידה של המפה
-   ════════════════════════════════════════════ */
-
-var s45Attempts = 0;
-var s45Done     = false;
-
-
-function s45Enter() {
-  if (s45Done) return;
-  finalAssessmentScore.correct = 0;
-  s45Attempts = 0;
-  var input = document.getElementById('s45-answer-input');
-  if (input) { input.value = ''; input.disabled = false; }
-  var fb = document.getElementById('s45-feedback');
-  if (fb) { fb.hidden = true; fb.className = 's5-inline-feedback s18-feedback-bar'; }
-  var fbBold = document.getElementById('s45-fb-bold');
-  var fbReg  = document.getElementById('s45-fb-regular');
-  var fbIcon = document.getElementById('s45-fb-icon');
-  if (fbBold) fbBold.textContent = '';
-  if (fbReg)  fbReg.textContent  = '';
-  if (fbIcon) fbIcon.innerHTML   = '';
-  var btn = document.getElementById('s45-check');
-  if (btn) { btn.disabled = true; btn.textContent = 'המשך'; btn.onclick = function() { s45Check(); }; }
-  var hintBtn = document.getElementById('s45-hint-btn');
-  if (hintBtn) hintBtn.hidden = true;
-  var hintPopup = document.getElementById('s45-hint-popup');
-  if (hintPopup) hintPopup.hidden = true;
-}
-
-function s45OnInput() {
-  if (s45Done) return;
-  var input = document.getElementById('s45-answer-input');
-  var btn   = document.getElementById('s45-check');
-  if (btn) btn.disabled = !(input && input.value.trim() !== '');
-}
-
-function s45Check() {
-  if (s45Done) { goTo(10); return; }
-  var input   = document.getElementById('s45-answer-input');
-  var val     = parseFloat((input ? input.value : '').replace(',', ''));
-  var correct = (val === 25000);
-  s45Attempts++;
-
-  var fb      = document.getElementById('s45-feedback');
-  var fbBold  = document.getElementById('s45-fb-bold');
-  var fbReg   = document.getElementById('s45-fb-regular');
-  var fbIcon  = document.getElementById('s45-fb-icon');
-  var btn     = document.getElementById('s45-check');
-  var hintBtn = document.getElementById('s45-hint-btn');
-
-  var checkSvg = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var xSvg     = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-  fb.classList.remove('s5-fb--correct', 's5-fb--incorrect');
-
-  if (correct) {
-    s45Done = true;
-    finalAssessmentScore.correct++;
-    if (input) input.disabled = true;
-    fbBold.textContent = 'תשובה יפה!​';
-    announce('תשובה יפה!​');
-    fbReg.innerHTML    = 'המרחק במציאות הוא 2 ק"מ, שהם 2,000 מטרים, שהם 200,000 ס"מ, ואורך המסלול על המסך הוא 8 ס"מ. ​<br>לכן, היחס בין אורך המסלול במפה לאורך המסלול במציאות הוא 200,000 : 8.​<br>נצמצם ב-8, ונקבל שקנה המידה הוא 25,000 : 1.​';
-    fbIcon.innerHTML   = checkSvg;
-    fb.classList.add('s5-fb--correct');
-    fb.hidden = false;
-    btn.disabled    = false;
-    btn.textContent = 'שנמשיך?';
-    btn.onclick     = function() { goTo(10); };
-
-  } else if (s45Attempts === 1) {
-    fbBold.textContent = 'לא מדויק, ננסה שוב?';
-    announce('לא מדויק, ננסה שוב?');
-    fbReg.textContent  = '';
-    fbIcon.innerHTML   = xSvg;
-    fb.classList.add('s5-fb--incorrect');
-    fb.hidden = false;
-    if (hintBtn) hintBtn.hidden = false;
-
-  } else {
-    s45Done = true;
-    if (input) input.disabled = true;
-    fbBold.textContent = 'זו טעות, אבל זה בסדר גמור, כך בדיוק לומדים!​';
-    announce('זו טעות, אבל זה בסדר גמור, כך בדיוק לומדים!​');
-    fbReg.innerHTML    = 'המרחק במציאות הוא 2 ק"מ, שהם 2,000 מטרים, שהם 200,000 ס"מ, ואורך המסלול על המסך הוא 8 ס"מ. ​<br>לכן, היחס בין אורך המסלול במפה לאורך המסלול במציאות הוא 200,000 : 8.​<br>נצמצם ב-8, ונקבל שקנה המידה הוא 25,000 : 1.​';
-    fbIcon.innerHTML   = xSvg;
-    fb.classList.add('s5-fb--incorrect');
-    fb.hidden = false;
-    btn.disabled    = false;
-    btn.textContent = 'שנמשיך?';
-    btn.onclick     = function() { goTo(10); };
-  }
-}
-
-function s14ToggleHelp() {
-  var tooltip = document.getElementById('s14-help-tooltip');
-  if (tooltip) tooltip.classList.toggle('visible');
-}
-
-function s45ToggleHelp() {
-  var tooltip = document.getElementById('s45-help-tooltip');
-  if (tooltip) tooltip.classList.toggle('visible');
-}
-
-function s45ToggleHint() {
-  var popup = document.getElementById('s45-hint-popup');
-  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
-}
-
-function s45CloseHint() {
-  var popup = document.getElementById('s45-hint-popup');
-  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
-}
-
-/* ════════════════════════════════════════════
-   Screen 47 — Q5ב: Multiple choice (checkboxes)
-   ════════════════════════════════════════════ */
-
-var s47Selected  = new Set();
-var s47Attempts  = 0;
-var s47Solved    = false;
-var S47_CORRECT  = new Set([0, 2]); // Options 1 and 3 in human terms = indices 0 and 2
-
-function s47Enter() {
-  if (s47Solved) return;
-  s47Selected  = new Set();
-  s47Attempts  = 0;
-
-  document.querySelectorAll('[data-screen="11"] .s47-checkbox').forEach(function(checkbox) {
-    checkbox.checked  = false;
-    checkbox.disabled = false;
-  });
-  document.querySelectorAll('[data-screen="11"] .s47-option').forEach(function(opt) {
-    opt.classList.remove('is-correct', 'is-incorrect');
-  });
-
-  var fb = document.getElementById('s47-feedback');
-  if (fb) { fb.hidden = true; fb.classList.remove('s5-fb--correct', 's5-fb--incorrect'); }
-  var fbBold = document.getElementById('s47-fb-bold');
-  var fbReg  = document.getElementById('s47-fb-regular');
-  var fbIcon = document.getElementById('s47-fb-icon');
-  if (fbBold) fbBold.textContent = '';
-  if (fbReg)  fbReg.textContent  = '';
-  if (fbIcon) fbIcon.innerHTML   = '';
-
-  var btn = document.getElementById('s47-check');
-  if (btn) { btn.disabled = true; btn.textContent = 'המשך'; btn.onclick = function() { s47Check(); }; }
-  var hintBtn = document.getElementById('s47-hint-btn');
-  if (hintBtn) hintBtn.hidden = true;
-  var hintPopup = document.getElementById('s47-hint-popup');
-  if (hintPopup) hintPopup.hidden = true;
-}
-
-function s47Toggle(idx) {
-  if (s47Solved) return;
-  if (s47Selected.has(idx)) {
-    s47Selected.delete(idx);
-  } else {
-    s47Selected.add(idx);
-  }
-  s47UpdateCheckBtn();
-}
-
-function s47UpdateCheckBtn() {
-  var btn = document.getElementById('s47-check');
-  if (btn) btn.disabled = (s47Selected.size === 0);
-}
-
-function s47Check() {
-  if (s47Solved) { goTo(12); return; }
-
-  var correct = (s47Selected.size === S47_CORRECT.size &&
-                 Array.from(s47Selected).every(i => S47_CORRECT.has(i)));
-  s47Attempts++;
-
-  var fb      = document.getElementById('s47-feedback');
-  var fbBold  = document.getElementById('s47-fb-bold');
-  var fbReg   = document.getElementById('s47-fb-regular');
-  var fbIcon  = document.getElementById('s47-fb-icon');
-  var btn     = document.getElementById('s47-check');
-  var hintBtn = document.getElementById('s47-hint-btn');
-  var checkboxes = Array.from(document.querySelectorAll('[data-screen="11"] .s47-checkbox'));
-
-  var checkSvg = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var xSvg     = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-  fb.classList.remove('s5-fb--correct', 's5-fb--incorrect');
-
-  if (correct) {
-    s47Solved = true;
-    finalAssessmentScore.correct++;
-    checkboxes.forEach(function(cb) { cb.disabled = true; });
-    fbBold.textContent = 'מצוין!​';
-    announce('מצוין!​');
-    fbReg.innerHTML    = 'אורך הכבלים הכולל הוא 1,050 מטרים. מרחק הפריסה הנדרש הוא 1 ק"מ (שהם 1,000 מטרים), ולכן האפשרות הראשונה נכונה.​<br>קנה המידה הוא 25,000 : 1. כלומר, כל 1 ס"מ במפה מייצג 250 מטרים במציאות.​<br>המרחק בין האוהל לאגם הוא 1 ק"מ, שהם 1,000 מטרים. ​<br>אם 250 מטרים במציאות הם 1 ס"מ במפה, ​<br>1,000 מטרים במציאות הם 4 ס"מ במפה.​';
-    fbIcon.innerHTML   = checkSvg;
-    fb.classList.add('s5-fb--correct');
-    fb.hidden = false;
-    btn.disabled    = false;
-    btn.textContent = 'המשך';
-    btn.onclick     = function() { goTo(12); };
-
-  } else if (s47Attempts === 1) {
-    fbBold.textContent = 'זה לא מדויק, ננסה שוב?';
-    announce('זה לא מדויק, ננסה שוב?');
-    fbReg.textContent  = '';
-    fbIcon.innerHTML   = xSvg;
-    fb.classList.add('s5-fb--incorrect');
-    fb.hidden = false;
-    if (hintBtn) hintBtn.hidden = false;
-    s47Selected = new Set();
-    checkboxes.forEach(function(cb) { cb.checked = false; });
-    s47UpdateCheckBtn();
-
-  } else {
-    s47Solved = true;
-    checkboxes.forEach(function(cb) {
-      var idx   = parseInt(cb.getAttribute('data-index'), 10);
-      var label = cb.closest('.s47-option');
-      if (S47_CORRECT.has(idx)) {
-        cb.checked = true;
-        if (label) label.classList.add('is-correct');
-      } else if (s47Selected.has(idx)) {
-        cb.checked = false;
-        if (label) label.classList.add('is-incorrect');
-      }
-      cb.disabled = true;
-    });
-    fbBold.textContent = 'זה לא מדויק. נסביר:​';
-    announce('זה לא מדויק. נסביר:​');
-    fbReg.innerHTML    = 'אורך הכבלים הכולל הוא 1,050 מטרים. מרחק הפריסה הנדרש הוא 1 ק"מ (שהם 1,000 מטרים), ולכן האפשרות הראשונה נכונה.​<br>קנה המידה הוא 25,000 : 1. כלומר, כל 1 ס"מ במפה מייצג 250 מטרים במציאות.​<br>המרחק בין האוהל לאגם הוא 1 ק"מ, שהם 1,000 מטרים. ​<br>אם 250 מטרים במציאות הם 1 ס"מ במפה, ​<br>1,000 מטרים במציאות הם 4 ס"מ במפה.​';
-    fbIcon.innerHTML   = xSvg;
-    fb.classList.add('s5-fb--incorrect');
-    fb.hidden = false;
-    btn.disabled    = false;
-    btn.textContent = 'המשך';
-    btn.onclick     = function() { goTo(12); };
-  }
-}
-
-function s47ToggleHint() {
-  var popup = document.getElementById('s47-hint-popup');
-  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
-}
-
-function s47CloseHint() {
-  var popup = document.getElementById('s47-hint-popup');
-  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
-}
-
-/* ════════════════════════════════════════════
-   Screen 49 — ג: Zoom effect on scale
-   ════════════════════════════════════════════ */
-
-var s49Selected  = null;
-var s49Attempts  = 0;
-var s49Solved    = false;
-var S49_CORRECT  = 1; // Noa (option index 1)
-
-function s49Enter() {
-  if (s49Solved) return;
-  s49Selected  = null;
-  s49Attempts  = 0;
-
-  document.querySelectorAll('[data-screen="13"] .s5-opt').forEach(function(opt) {
-    opt.classList.remove('is-selected', 'is-correct', 'is-incorrect');
-    opt.disabled = false;
-  });
-
-  var fb = document.getElementById('s49-feedback');
-  if (fb) { fb.hidden = true; fb.classList.remove('s5-fb--correct', 's5-fb--incorrect'); }
-  var fbBold = document.getElementById('s49-fb-bold');
-  var fbReg  = document.getElementById('s49-fb-regular');
-  var fbIcon = document.getElementById('s49-fb-icon');
-  if (fbBold) fbBold.textContent = '';
-  if (fbReg)  fbReg.textContent  = '';
-  if (fbIcon) fbIcon.innerHTML   = '';
-
-  var cont = document.getElementById('s49-continue');
-  if (cont) { cont.disabled = true; cont.textContent = 'המשך'; cont.onclick = function() { s49Submit(); }; }
-  var hintBtn = document.getElementById('s49-hint-btn');
-  if (hintBtn) hintBtn.hidden = true;
-  var hintPopup = document.getElementById('s49-hint-popup');
-  if (hintPopup) hintPopup.hidden = true;
-}
-
-function s49Select(idx) {
-  if (s49Solved) return;
-  s49Selected = idx;
-  document.querySelectorAll('[data-screen="13"] .s5-opt').forEach(function(opt, i) {
-    opt.classList.toggle('is-selected', i === idx);
-  });
-  var cont = document.getElementById('s49-continue');
-  if (cont) cont.disabled = false;
-}
-
-function s49ToggleHint() {
-  var popup = document.getElementById('s49-hint-popup');
-  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
-}
-
-function s49CloseHint() {
-  var popup = document.getElementById('s49-hint-popup');
-  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
-}
-
-function s49Submit() {
-  if (s49Solved) { goTo(14); return; }
-  if (s49Selected === null) return;
-
-  var correct = (s49Selected === S49_CORRECT);
-  s49Attempts++;
-
-  var fb      = document.getElementById('s49-feedback');
-  var fbBold  = document.getElementById('s49-fb-bold');
-  var fbReg   = document.getElementById('s49-fb-regular');
-  var fbIcon  = document.getElementById('s49-fb-icon');
-  var cont    = document.getElementById('s49-continue');
-  var hintBtn = document.getElementById('s49-hint-btn');
-  var opts    = Array.from(document.querySelectorAll('[data-screen="13"] .s5-opt'));
-
-  var checkSvg = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var xSvg     = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-  fb.classList.remove('s5-fb--correct', 's5-fb--incorrect');
-
-  if (correct) {
-    s49Solved = true;
-    finalAssessmentScore.correct++;
-    opts[s49Selected].classList.remove('is-selected');
-    opts[s49Selected].classList.add('is-correct');
-    opts.forEach(function(o) { o.disabled = true; });
-    fbBold.textContent = 'זה נכון מאוד!​';
-    announce('זה נכון מאוד!​');
-    fbReg.innerHTML    = 'זום הגדלה עובד הפוך מהאינטואיציה: ​<br>אם התמונה גדלה פי 4, המספר בקנה המידה המייצג את המציאות קטן פי 4. ​<br> במקום קנה מידה של 25,000 : 1 נקבל קנה מידה של 6,250 : 1 (6,250 = 4 : 25,000)';
-    fbIcon.innerHTML   = checkSvg;
-    fb.classList.add('s5-fb--correct');
-    fb.hidden = false;
-    cont.disabled    = false;
-    cont.textContent = 'שנמשיך?';
-    cont.onclick     = function() { goTo(14); };
-
-  } else if (s49Attempts === 1) {
-    fbBold.textContent = 'זה לא מדויק, ננסה שוב?';
-    announce('זה לא מדויק, ננסה שוב?');
-    fbReg.textContent  = '';
-    fbIcon.innerHTML   = xSvg;
-    fb.classList.add('s5-fb--incorrect');
-    fb.hidden = false;
-    if (hintBtn) hintBtn.hidden = false;
-    opts[s49Selected].classList.remove('is-selected');
-    s49Selected = null;
-    cont.disabled = true;
-
-  } else {
-    s49Solved = true;
-    opts.forEach(function(o, i) {
-      if (i === S49_CORRECT)      o.classList.add('is-correct');
-      else if (i === s49Selected) o.classList.add('is-incorrect');
-      o.disabled = true;
-    });
-    fbBold.textContent = 'זה לא מדויק. נסביר:​';
-    announce('זה לא מדויק. נסביר:​');
-    fbReg.innerHTML    = 'זום הגדלה עובד הפוך מהאינטואיציה: ​<br>אם התמונה גדלה פי 4, המספר בקנה המידה המייצג את המציאות קטן פי 4. ​<br> במקום קנה מידה של 25,000 : 1 נקבל קנה מידה של 6,250 : 1 (6,250 = 4 : 25,000)​​';
-    fbIcon.innerHTML   = xSvg;
-    fb.classList.add('s5-fb--incorrect');
-    fb.hidden = false;
-    cont.disabled    = false;
-    cont.textContent = 'שנמשיך?';
-    cont.onclick     = function() { goTo(14); };
-  }
-}
-
-/* ════════════════════════════════════════════
-   Screen 51 — ד: Helicopter landing clearance
-   ════════════════════════════════════════════ */
-
-var s51Selected  = null;
-var s51Attempts  = 0;
-var s51Solved    = false;
-var S51_CORRECT  = 0; // Option 1 (רחפן א')
-
-function s51Enter() {
-  if (s51Solved) return;
-  s51Selected  = null;
-  s51Attempts  = 0;
-
-  document.querySelectorAll('[data-screen="15"] .s5-opt').forEach(function(opt) {
-    opt.classList.remove('is-selected', 'is-correct', 'is-incorrect');
-    opt.disabled = false;
-  });
-
-  var fb = document.getElementById('s51-feedback');
-  if (fb) { fb.hidden = true; fb.classList.remove('s5-fb--correct', 's5-fb--incorrect'); }
-  var fbBold = document.getElementById('s51-fb-bold');
-  var fbReg  = document.getElementById('s51-fb-regular');
-  var fbIcon = document.getElementById('s51-fb-icon');
-  if (fbBold) fbBold.textContent = '';
-  if (fbReg)  fbReg.textContent  = '';
-  if (fbIcon) fbIcon.innerHTML   = '';
-
-  var cont = document.getElementById('s51-continue');
-  if (cont) { cont.disabled = true; cont.textContent = 'המשך'; cont.onclick = function() { s51Submit(); }; }
-  var hintBtn = document.getElementById('s51-hint-btn');
-  if (hintBtn) hintBtn.hidden = true;
-  var hintPopup = document.getElementById('s51-hint-popup');
-  if (hintPopup) hintPopup.hidden = true;
-}
-
-function s51Select(idx) {
-  if (s51Solved) return;
-  s51Selected = idx;
-  document.querySelectorAll('[data-screen="15"] .s5-opt').forEach(function(opt, i) {
-    opt.classList.toggle('is-selected', i === idx);
-  });
-  var cont = document.getElementById('s51-continue');
-  if (cont) cont.disabled = false;
-}
-
-function s51ToggleHint() {
-  var popup = document.getElementById('s51-hint-popup');
-  if (popup) { popup.hidden = !popup.hidden; if (!popup.hidden) announce('רמז נפתח'); }
-}
-
-function s51CloseHint() {
-  var popup = document.getElementById('s51-hint-popup');
-  if (popup) { popup.hidden = true; announce('רמז נסגר'); }
-}
-
-function s51Submit() {
-  if (s51Solved) { goTo(16); return; }
-  if (s51Selected === null) return;
-
-  var correct = (s51Selected === S51_CORRECT);
-  s51Attempts++;
-
-  var fb      = document.getElementById('s51-feedback');
-  var fbBold  = document.getElementById('s51-fb-bold');
-  var fbReg   = document.getElementById('s51-fb-regular');
-  var fbIcon  = document.getElementById('s51-fb-icon');
-  var cont    = document.getElementById('s51-continue');
-  var hintBtn = document.getElementById('s51-hint-btn');
-  var opts    = Array.from(document.querySelectorAll('[data-screen="15"] .s5-opt'));
-
-  var checkSvg = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#58A700"/><path d="M8 16.5L13.5 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var xSvg     = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#B20010"/><path d="M11 11L21 21M21 11L11 21" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-  fb.classList.remove('s5-fb--correct', 's5-fb--incorrect');
-
-  if (correct) {
-    s51Solved = true;
-    finalAssessmentScore.correct++;
-    opts[s51Selected].classList.remove('is-selected');
-    opts[s51Selected].classList.add('is-correct');
-    opts.forEach(function(o) { o.disabled = true; });
-    fbBold.textContent = 'בדיוק!​';
-    announce('בדיוק!​');
-    fbReg.innerHTML    = 'רחפן א: ס"מ אחד בצילום מייצג 6,250 ס"מ במציאות, שהם 62.5 מטרים. ​<br>רחפן ב: ס"מ אחד בצילום מייצג 2,000 ס"מ במציאות, ולכן ​<br>   2 ס"מ בצילום מייצגים 4,000 ס"מ במציאות, שהם 40 מטרים. ​<br>האורך של קרחת היער שצילם רחפן א גדול מ-50  מטרים, ולכן היא זו שמתאימה להנחתה.​';
-    fbIcon.innerHTML   = checkSvg;
-    fb.classList.add('s5-fb--correct');
-    fb.hidden = false;
-    cont.disabled    = false;
-    cont.textContent = 'שנמשיך?';
-    cont.onclick     = function() { goTo(16); };
-
-  } else if (s51Attempts === 1) {
-    fbBold.textContent = 'זה לא מדויק, ננסה שוב?';
-    announce('זה לא מדויק, ננסה שוב?');
-    fbReg.textContent  = '';
-    fbIcon.innerHTML   = xSvg;
-    fb.classList.add('s5-fb--incorrect');
-    fb.hidden = false;
-    if (hintBtn) hintBtn.hidden = false;
-    opts[s51Selected].classList.remove('is-selected');
-    s51Selected = null;
-    cont.disabled = true;
-
-  } else {
-    s51Solved = true;
-    opts.forEach(function(o, i) {
-      if (i === S51_CORRECT)      o.classList.add('is-correct');
-      else if (i === s51Selected) o.classList.add('is-incorrect');
-      o.disabled = true;
-    });
-    fbBold.textContent = 'זה לא מדויק. בואו נראה למה:​';
-    announce('זה לא מדויק. בואו נראה למה:​');
-    fbReg.innerHTML    = 'רחפן א: ס"מ אחד בצילום מייצג 6,250 ס"מ במציאות, שהם 62.5 מטרים. ​<br>רחפן ב: ס"מ אחד בצילום מייצג 2,000 ס"מ במציאות, ולכן​<br>2 ס"מ בצילום מייצגים 4,000 ס"מ במציאות, שהם 40 מטרים. ​<br>האורך של קרחת היער שצילם רחפן א גדול מ-50  מטרים, ולכן היא זו שמתאימה להנחתה.​';
-    fbIcon.innerHTML   = xSvg;
-    fb.classList.add('s5-fb--incorrect');
-    fb.hidden = false;
-    cont.disabled    = false;
-    cont.textContent = 'שנמשיך?';
-    cont.onclick     = function() { goTo(16); };
-  }
-}
-
-/* ════════════════════════════════════════════
-   Screen 53 — Final Assessment Result
-   ════════════════════════════════════════════ */
-
-function s53Enter() {
-  var successDiv = document.getElementById('s53-success');
-  var retryDiv   = document.getElementById('s53-retry');
-  var gif        = document.getElementById('s53-gif');
-
-  if (!successDiv || !retryDiv) return;
-
-  var passed    = finalAssessmentScore.correct >= 3;
-  var character = localStorage.getItem('lomdaCharacter') || 'text';
-  var charNum   = character === 'video' ? '2' : '1';
-  var mood      = passed ? 'Happy' : 'Sad';
-
-  if (gif) {
-    gif.src = './assets/gifs/Character' + charNum + ' GIF ' + mood + '.gif';
-  }
-
-  if (passed) {
-    successDiv.hidden = false;
-    retryDiv.hidden   = true;
-  } else {
-    successDiv.hidden = true;
-    retryDiv.hidden   = false;
-  }
-}
-
-/* ── Quiz score + routing ── */
-// חידון — 5 תרגילים, סף מעבר לתרגול כיתה: 4/5
-// תרגיל 1: מסך 18       (שאלה 1)
-// תרגיל 2: מסך 19 + 20  (שאלה 2 — א+ב, שניהם יחד)
-// תרגיל 3: מסך 21       (שאלה 3)
-// תרגיל 4: מסך 22       (שאלה 4)
-// תרגיל 5: מסך 23       (שאלה 5)
-function getQuizScore() {
-  var count = 0;
-  if (s18Correct)                count++; // שאלה 1
-  if (s19Correct && s20Correct)  count++; // שאלה 2 (א+ב יחד)
-  if (s21Correct)                count++; // שאלה 3
-  if (s22Correct)                count++; // שאלה 4
-  if (s23Correct)                count++; // שאלה 5
-  return count;
-}
-
-// â‰¥4 נכון â†' תרגול כיתה (מסך 24) | <4 â†' תרגול בסיסי (מסך 25)
-function routeAfterQuiz() {
-  goTo(getQuizScore() >= 4 ? 24 : 25);
-}
-
-/* ── Basic practice score + routing ── */
-// תרגול בסיסי — 4 תרגילים, סף מעבר לתרגול כיתה: 3/4
-// תרגיל 1: מסך 26       (שאלה 1)
-// תרגיל 2: מסך 27       (שאלה 2)
-// תרגיל 3: מסך 28       (שאלה 3)
-// תרגיל 4: מסך 29 + 30  (שאלה 4 — א+ב, שניהם יחד)
 
 /* ── Dev tool bridge (index_dev.html postMessage) ── */
 window.addEventListener('message', function(e) {
@@ -2020,3 +1470,30 @@ document.querySelectorAll('.s5-inline-feedback').forEach(function(el) {
 document.querySelectorAll('section.screen').forEach(function(s) {
   s.setAttribute('tabindex', '-1');
 });
+
+function openImgZoom(overlayId) {
+  var overlay = document.getElementById(overlayId);
+  if (!overlay) return;
+  var activeScreen = document.querySelector('.screen.active');
+  if (activeScreen && overlay.parentElement !== activeScreen) {
+    activeScreen.appendChild(overlay);
+  }
+  overlay.removeAttribute('hidden');
+}
+function closeImgZoom(overlayId) {
+  if (overlayId) {
+    var overlay = document.getElementById(overlayId);
+    if (overlay) overlay.setAttribute('hidden', '');
+  } else {
+    document.querySelectorAll('.img-zoom-overlay').forEach(function(el) {
+      el.setAttribute('hidden', '');
+    });
+  }
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeImgZoom();
+});
+
+
+
+
