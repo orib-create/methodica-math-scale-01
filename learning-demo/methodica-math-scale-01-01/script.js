@@ -32,14 +32,51 @@ let frcDone = false;
 let s4VideoEnded = false;
 let s4Playing = false;
 let s4YTPlayer = null;
+let s4PlayerReady = false;
 
 window.onYouTubeIframeAPIReady = function () {
-  s4YTPlayer = new YT.Player('s4-yt-player', {
+  var playerConfig = {
     videoId: 'AllYTxb3ezk',
-    playerVars: { rel: 0, modestbranding: 1 },
-    events: { onStateChange: s4OnPlayerStateChange }
-  });
+    host: 'https://www.youtube.com',
+    playerVars: {
+      rel: 0,
+      modestbranding: 1,
+      playsinline: 1,
+      enablejsapi: 1
+    },
+    events: {
+      onReady: s4OnPlayerReady,
+      onStateChange: s4OnPlayerStateChange,
+      onError: s4OnPlayerError
+    }
+  };
+
+  if (window.location && window.location.origin && window.location.origin !== 'null') {
+    playerConfig.origin = window.location.origin;
+  }
+
+  s4YTPlayer = new YT.Player('s4-yt-player', playerConfig);
 };
+
+function s4OnPlayerReady() {
+  s4PlayerReady = true;
+  console.log('s4 YouTube player ready', window.location.origin);
+}
+
+function s4OnPlayerError(e) {
+  s4PlayerReady = false;
+  s4Playing = false;
+  console.warn('YouTube player error', e && e.data);
+  var cover = document.getElementById('s4-video-cover');
+  var playBtn = document.getElementById('s4-play-btn');
+  if (cover) cover.style.display = '';
+  if (playBtn) playBtn.style.display = '';
+  var errMsg = document.getElementById('s4-player-error');
+  if (errMsg) {
+    errMsg.textContent = 'שגיאת נגן YouTube: ' + (e && e.data ? e.data : 'Unknown');
+    errMsg.style.display = 'block';
+  }
+}
 
 function s4OnPlayerStateChange(e) {
   if (e.data === YT.PlayerState.ENDED) {
