@@ -54,157 +54,20 @@ let ddqDone        = false;
 let ddqChecked     = false;
 let ddqAttempts    = 0;
 let ddqDragActive  = null;
+let ddqDropHandled = false;
 let ddqKeySelected = null;
 
-/* ═══════════════════════════════════════════════════════════
-   Pointer-based drag-and-drop helper.
-   Replaces native HTML5 drag so screens work on touch devices
-   (tablet, both orientations) without losing mouse support.
-
-   Usage:
-     const dnd = createPointerDnd({
-       canDrag: (dragId, elem) => boolean,
-       onPick:  (dragId, elem) => void,    // pointerdown accepted
-       onDrop:  (dragId, targetId) => void,
-       onCancel:(dragId) => void,          // dropped outside a target
-     });
-     dnd.attachSource(elem, dragId);   // safe to call repeatedly
-     dnd.attachTarget(elem, targetId);
-
-   Ghost element (a clone of the source) follows the pointer
-   in viewport-fixed positioning and is scaled to match the
-   #app transform so it visually matches the source. The scale
-   is read live from #app on every move — never cached — since
-   it changes on window resize mid-drag.
-   ═══════════════════════════════════════════════════════════ */
-function createPointerDnd(opts) {
-  var targets = new Map(); // elem → targetId
-  var active = null;
-
-  function getAppScale() {
-    var app = document.getElementById('app');
-    var m = app && app.style.transform.match(/scale\(([^)]+)\)/);
-    return m ? parseFloat(m[1]) : 1;
-  }
-
-  function attachSource(elem, dragId) {
-    if (!elem) return;
-    elem.dataset.pdragId = dragId;
-    if (elem.dataset.pdragAttached === '1') return;
-    elem.dataset.pdragAttached = '1';
-    elem.style.touchAction = 'none';
-    elem.addEventListener('pointerdown', onSourceDown);
-  }
-
-  function attachTarget(elem, targetId) {
-    if (!elem) return;
-    targets.set(elem, targetId);
-  }
-
-  function onSourceDown(e) {
-    var elem = e.currentTarget;
-    var dragId = elem.dataset.pdragId;
-    if (opts.canDrag && !opts.canDrag(dragId, elem)) return;
-    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
-    e.preventDefault();
-
-    var rect = elem.getBoundingClientRect();
-    var ghost = elem.cloneNode(true);
-    ghost.removeAttribute('id');
-    ghost.querySelectorAll('[id]').forEach(function (n) { n.removeAttribute('id'); });
-    ghost.style.position      = 'fixed';
-    ghost.style.left          = rect.left + 'px';
-    ghost.style.top           = rect.top + 'px';
-    ghost.style.width         = rect.width + 'px';
-    ghost.style.height        = rect.height + 'px';
-    ghost.style.margin        = '0';
-    ghost.style.pointerEvents = 'none';
-    ghost.style.zIndex        = '99999';
-    ghost.style.transformOrigin = 'top left';
-    ghost.classList.add('pdrag-ghost');
-    document.body.appendChild(ghost);
-
-    active = {
-      dragId: dragId,
-      ghost: ghost,
-      startClientX: e.clientX,
-      startClientY: e.clientY,
-      startLeft: rect.left,
-      startTop: rect.top,
-      overTargetId: null
-    };
-
-    document.addEventListener('pointermove', onMove);
-    document.addEventListener('pointerup', onUp);
-    document.addEventListener('pointercancel', onCancel);
-
-    if (opts.onPick) opts.onPick(dragId, elem);
-  }
-
-  function onMove(e) {
-    if (!active) return;
-    var scale = getAppScale();
-    var dx = e.clientX - active.startClientX;
-    var dy = e.clientY - active.startClientY;
-    active.ghost.style.left      = (active.startLeft + dx) + 'px';
-    active.ghost.style.top       = (active.startTop + dy) + 'px';
-    active.ghost.style.transform = 'scale(' + scale + ')';
-
-    var elAtPoint = document.elementFromPoint(e.clientX, e.clientY);
-    var overTargetId = null;
-    targets.forEach(function (tid, telem) {
-      if (telem === elAtPoint || telem.contains(elAtPoint)) overTargetId = tid;
-    });
-    targets.forEach(function (tid, telem) {
-      telem.classList.toggle('drag-over', tid === overTargetId);
-    });
-    active.overTargetId = overTargetId;
-  }
-
-  function cleanup() {
-    document.removeEventListener('pointermove', onMove);
-    document.removeEventListener('pointerup', onUp);
-    document.removeEventListener('pointercancel', onCancel);
-    if (active && active.ghost && active.ghost.parentNode) {
-      active.ghost.parentNode.removeChild(active.ghost);
-    }
-    targets.forEach(function (tid, telem) { telem.classList.remove('drag-over'); });
-  }
-
-  function onUp() {
-    if (!active) return;
-    var dragId = active.dragId;
-    var overTargetId = active.overTargetId;
-    cleanup();
-    active = null;
-    if (overTargetId && opts.onDrop) opts.onDrop(dragId, overTargetId);
-    else if (opts.onCancel) opts.onCancel(dragId);
-  }
-
-  function onCancel() {
-    if (!active) return;
-    var dragId = active.dragId;
-    cleanup();
-    active = null;
-    if (opts.onCancel) opts.onCancel(dragId);
-  }
-
-  return { attachSource: attachSource, attachTarget: attachTarget };
-}
-
-/* ── Viewport scaling ──────────────────────────────────────────
-   scale = min(vpW/1280, vpH/720) → no distortion.
-   #app width/height are then set to viewport/scale (in design
-   coordinates) so the canvas STRETCHES to fill the viewport instead
-   of letterboxing — edge-anchored chrome reaches the real screen edge. */
+/* ── Viewport scaling ── */
 function scaleApp() {
+  const scaleX = window.innerWidth / 1280;
+  const scaleY = window.innerHeight / 710;
+  const scale = Math.min(scaleX, scaleY);
+  const left = (window.innerWidth - 1280 * scale) / 2;
+  const top = (window.innerHeight - 710 * scale) / 2;
   const el = document.getElementById('app');
-  const scale = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
-  el.style.width = (window.innerWidth / scale) + 'px';
-  el.style.height = (window.innerHeight / scale) + 'px';
   el.style.transform = `scale(${scale})`;
-  el.style.left = '0px';
-  el.style.top = '0px';
+  el.style.left = left + 'px';
+  el.style.top = top + 'px';
 }
 
 window.addEventListener('resize', scaleApp);
@@ -550,6 +413,7 @@ function s39Enter() {
   if (ddqDone) return;
   Object.keys(ddqPlacement).forEach(function(k) { ddqPlacement[k] = 'source'; });
   ddqDragActive  = null;
+  ddqDropHandled = false;
   ddqChecked     = false;
   ddqAttempts    = 0;
   ddqRender();
@@ -583,9 +447,10 @@ function ddqRender() {
     card.classList.toggle('ghost', !inSource);
     if (ddqChecked) {
       card.classList.add('locked');
+      card.draggable = false;
     } else {
       card.classList.remove('locked');
-      ddqDnd.attachSource(card, dragId);
+      card.draggable = true;
     }
   });
 
@@ -608,9 +473,11 @@ function ddqRender() {
       card.setAttribute('role', 'button');
       card.setAttribute('aria-label', 'מספר ' + placedId.replace('drag-', '') + ', לחץ להחזרה למגש');
       if (!ddqChecked) {
+        card.draggable = true;
         (function(id) {
-          ddqDnd.attachSource(card, id);
-          card.addEventListener('keydown', function(ev) { ddqChipKeyDown(ev, id); });
+          card.addEventListener('dragstart', function(ev) { ddqPlacedDragStart(ev, id); });
+          card.addEventListener('dragend',   function(ev) { ddqDragEnd(ev); });
+          card.addEventListener('keydown',   function(ev) { ddqChipKeyDown(ev, id); });
         })(placedId);
       } else {
         card.classList.add('locked');
@@ -622,43 +489,44 @@ function ddqRender() {
   ddqUpdateCheckBtn();
 }
 
-/* Pointer-based replacement for the old native dragstart/dragover/drop/
-   dragend handlers. Picking up a placed chip un-places it immediately
-   (mirroring the old ddqPlacedDragStart), dropping on a target evicts
-   whoever was already there, and dropping outside any target snaps the
-   chip back to source (mirroring the old ddqDragEnd fallback). */
-var ddqDnd = createPointerDnd({
-  canDrag: function() { return !ddqChecked; },
-  onPick: function(dragId, elem) {
-    ddqDragActive = dragId;
-    if (elem.classList.contains('ddq-placed-card')) {
-      ddqPlacement[dragId] = 'source';
-      ddqRender();
-    }
+function ddqDragStart(event, dragId) {
+  if (ddqChecked) { event.preventDefault(); return; }
+  ddqDragActive  = dragId;
+  ddqDropHandled = false;
+  event.dataTransfer.setData('text/plain', dragId);
+  event.dataTransfer.effectAllowed = 'move';
+  setTimeout(function() {
     var card = document.getElementById(dragId);
     if (card) card.classList.add('dragging');
-  },
-  onDrop: function(dragId, targetId) {
-    Object.keys(ddqPlacement).forEach(function(id) {
-      if (ddqPlacement[id] === targetId) ddqPlacement[id] = 'source';
-    });
-    ddqPlacement[dragId] = targetId;
-    var card = document.getElementById(dragId);
-    if (card) card.classList.remove('dragging');
-    ddqDragActive = null;
-    ddqRender();
-  },
-  onCancel: function(dragId) {
+  }, 0);
+}
+
+function ddqPlacedDragStart(event, dragId) {
+  if (ddqChecked) { event.preventDefault(); return; }
+  ddqDragActive  = dragId;
+  ddqDropHandled = false;
+  event.dataTransfer.setData('text/plain', dragId);
+  event.dataTransfer.effectAllowed = 'move';
+  setTimeout(function() {
     ddqPlacement[dragId] = 'source';
+    ddqRender();
     var card = document.getElementById(dragId);
-    if (card) card.classList.remove('dragging');
-    ddqDragActive = null;
+    if (card) card.classList.add('dragging');
+  }, 0);
+}
+
+function ddqDragEnd(event) {
+  if (!ddqDropHandled && ddqDragActive) {
+    ddqPlacement[ddqDragActive] = 'source';
     ddqRender();
   }
-});
-Object.keys(DDQ.correctMap).forEach(function(targetId) {
-  ddqDnd.attachTarget(document.getElementById(targetId), targetId);
-});
+  if (ddqDragActive) {
+    var card = document.getElementById(ddqDragActive);
+    if (card) card.classList.remove('dragging');
+  }
+  ddqDragActive  = null;
+  ddqDropHandled = false;
+}
 
 function ddqAnnounce(msg) {
   var el = document.getElementById('ddq-announcer');
@@ -706,6 +574,33 @@ function ddqTargetKeyDown(event, targetId) {
   var targetEl = document.getElementById(targetId);
   var label = targetEl ? targetEl.getAttribute('aria-label') : targetId;
   ddqAnnounce('הנחת ' + dragId.replace('drag-', '') + ' ב' + label);
+}
+
+function ddqDragOver(event, targetId) {
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'move';
+  var t = document.getElementById(targetId);
+  if (t) t.classList.add('drag-over');
+}
+
+function ddqDragLeave(event, targetId) {
+  var t = document.getElementById(targetId);
+  if (t) t.classList.remove('drag-over');
+}
+
+function ddqDrop(event, targetId) {
+  event.preventDefault();
+  if (ddqChecked) return;
+  var dragId = event.dataTransfer.getData('text/plain') || ddqDragActive;
+  if (!dragId) return;
+  ddqDropHandled = true;
+  var target = document.getElementById(targetId);
+  if (target) target.classList.remove('drag-over');
+  Object.keys(ddqPlacement).forEach(function(id) {
+    if (ddqPlacement[id] === targetId) ddqPlacement[id] = 'source';
+  });
+  ddqPlacement[dragId] = targetId;
+  ddqRender();
 }
 
 function ddqUpdateCheckBtn() {
@@ -1102,7 +997,7 @@ function s41RulerDown(e) {
   e.preventDefault();
 }
 
-document.addEventListener('pointermove', function(e) {
+document.addEventListener('mousemove', function(e) {
   if (!s41RulerDrag) return;
   var ruler = document.getElementById('s41-ruler');
   if (!ruler) return;
@@ -1112,7 +1007,7 @@ document.addEventListener('pointermove', function(e) {
   ruler.style.top  = (s41RulerDrag.startTop  + dy) + 'px';
 });
 
-document.addEventListener('pointerup', function() {
+document.addEventListener('mouseup', function() {
   if (!s41RulerDrag) return;
   var ruler = document.getElementById('s41-ruler');
   if (ruler) ruler.style.cursor = 'grab';
@@ -1379,8 +1274,8 @@ function reportCheckSubmit() {
     }
   });
 
-  list.addEventListener('pointerdown', function() { pickingOpt = true; });
-  list.addEventListener('pointerup',   function() { pickingOpt = false; });
+  list.addEventListener('mousedown', function() { pickingOpt = true; });
+  list.addEventListener('mouseup',   function() { pickingOpt = false; });
 
   btn.addEventListener('blur', function() {
     if (!pickingOpt && wasOpened && !hidden.value) showError();
@@ -1512,8 +1407,7 @@ document.addEventListener('keydown', function(event) {
   function attachDrag(el) {
     if (el.dataset.dragAttached) return;
     el.dataset.dragAttached = '1';
-    el.style.touchAction = 'none';
-    el.addEventListener('pointerdown', function (e) {
+    el.addEventListener('mousedown', function (e) {
       if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
       e.preventDefault();
       if (!el.dataset.lifted) liftFeedback(el);
@@ -1528,11 +1422,11 @@ document.addEventListener('keydown', function(event) {
       }
       function onUp() {
         el.style.cursor = 'grab';
-        document.removeEventListener('pointermove', onMove);
-        document.removeEventListener('pointerup',   onUp);
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup',   onUp);
       }
-      document.addEventListener('pointermove', onMove);
-      document.addEventListener('pointerup',   onUp);
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup',   onUp);
     });
   }
 

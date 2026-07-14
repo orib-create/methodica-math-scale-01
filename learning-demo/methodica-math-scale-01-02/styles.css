@@ -19,15 +19,12 @@
 body {
   overflow: hidden;
   font-family: 'Assistant', sans-serif;
-  background: #ffffff;
 }
 
 /* ============================================================
    Canvas & Viewport Scaling
    ============================================================ */
 #app {
-  /* 1280x720 fallback keeps the page sensible before scaleApp() runs;
-     scaleApp() overrides width/height at runtime to fill the viewport. */
   width: 1280px;
   height: 720px;
   position: absolute;
@@ -40,11 +37,10 @@ body {
    Screen System
    ============================================================ */
 .screen {
-  /* inset:0 (not a fixed 1280x720) so .screen fills the stretched #app —
-     edge-anchored chrome reaches the real viewport edge, not the design grid. */
   display: none;
-  position: absolute;
-  inset: 0;
+  width: 1280px;
+  height: 720px;
+  position: relative;
 }
 
 .screen.active {
@@ -156,8 +152,7 @@ body {
 
 .s0-content {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 235px;
   top: 64px;
   width: 810px;
   height: 550.82px;

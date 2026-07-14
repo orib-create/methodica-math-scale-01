@@ -36,19 +36,17 @@ let s4Timer = null;
 let s7Timer = null;
 let s8Timer = null;
 
-/* ── Viewport scaling ──────────────────────────────────────────
-   scale = min(vpW/1280, vpH/720) → no distortion.
-   #app width/height are then set to viewport/scale (in design
-   coordinates) so the canvas STRETCHES to fill the viewport instead
-   of letterboxing — edge-anchored chrome reaches the real screen edge. */
+/* ── Viewport scaling ── */
 function scaleApp() {
+  const scaleX = window.innerWidth / 1280;
+  const scaleY = window.innerHeight / 710;
+  const scale = Math.min(scaleX, scaleY);
+  const left = (window.innerWidth - 1280 * scale) / 2;
+  const top = (window.innerHeight - 710 * scale) / 2;
   const el = document.getElementById('app');
-  const scale = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
-  el.style.width = (window.innerWidth / scale) + 'px';
-  el.style.height = (window.innerHeight / scale) + 'px';
   el.style.transform = `scale(${scale})`;
-  el.style.left = '0px';
-  el.style.top = '0px';
+  el.style.left = left + 'px';
+  el.style.top = top + 'px';
 }
 
 window.addEventListener('resize', scaleApp);
@@ -1301,8 +1299,8 @@ function reportCheckSubmit() {
     }
   });
 
-  list.addEventListener('pointerdown', function() { pickingOpt = true; });
-  list.addEventListener('pointerup',   function() { pickingOpt = false; });
+  list.addEventListener('mousedown', function() { pickingOpt = true; });
+  list.addEventListener('mouseup',   function() { pickingOpt = false; });
 
   btn.addEventListener('blur', function() {
     if (!pickingOpt && wasOpened && !hidden.value) showError();
@@ -1411,8 +1409,7 @@ document.addEventListener('keydown', function(event) {
   function attachDrag(el) {
     if (el.dataset.dragAttached) return;
     el.dataset.dragAttached = '1';
-    el.style.touchAction = 'none';
-    el.addEventListener('pointerdown', function (e) {
+    el.addEventListener('mousedown', function (e) {
       if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
       e.preventDefault();
       if (!el.dataset.lifted) liftFeedback(el);
@@ -1427,11 +1424,11 @@ document.addEventListener('keydown', function(event) {
       }
       function onUp() {
         el.style.cursor = 'grab';
-        document.removeEventListener('pointermove', onMove);
-        document.removeEventListener('pointerup',   onUp);
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup',   onUp);
       }
-      document.addEventListener('pointermove', onMove);
-      document.addEventListener('pointerup',   onUp);
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup',   onUp);
     });
   }
 
