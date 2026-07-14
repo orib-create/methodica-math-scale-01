@@ -12,7 +12,8 @@ this repo. The four rules below are the enforceable summary.
 **Mechanical enforcement:** a pre-commit hook at
 [.githooks/pre-commit](.githooks/pre-commit) blocks commits that violate
 these rules. Activate it once per clone with:
-`git config core.hooksPath .githooks`. If a commit is blocked, fix the
+`git config core.hooksPath learning-demo/.githooks` (path is relative to the
+repo root, not this `learning-demo` folder). If a commit is blocked, fix the
 issue — do not bypass with `--no-verify` unless explicitly authorized.
 
 ---
@@ -21,17 +22,17 @@ issue — do not bypass with `--no-verify` unless explicitly authorized.
 
 ### R1 — Fixed design grid, no per-breakpoint reflow
 
-Every screen is laid out in absolute coordinates against a **1280×710**
+Every screen is laid out in absolute coordinates against a **1280×720**
 design grid. Do not add CSS media queries that re-flow content at tablet
 widths. Do not resize or reposition per-screen content on window resize.
 The canvas scales; the layout does not.
 
 ### R2 — Scale-to-fit AND extend the canvas
 
-`scaleApp()` must (a) compute `scale = min(vpW/1280, vpH/710)` so content
+`scaleApp()` must (a) compute `scale = min(vpW/1280, vpH/720)` so content
 is never distorted, AND (b) set `#app` width/height to `viewport / scale`
 so the canvas fills the viewport in design coordinates. `.screen` uses
-`inset: 0` — **never** a fixed `1280×710`. Chrome anchored to
+`inset: 0` — **never** a fixed `1280×720`. Chrome anchored to
 `top: 0` / `bottom: 0` on `.screen` must reach the actual viewport edge
 on tablet aspect ratios. If you see letterboxing, R2 is broken.
 
@@ -74,10 +75,10 @@ debugging a cache.
 
 ## When adding a new screen
 
-- Position content absolutely against the 1280×710 grid.
+- Position content absolutely against the 1280×720 grid.
 - Persistent chrome (top bar, bottom bar, corner buttons) anchors to
   `.screen` with `top: 0` / `bottom: 0`, not to fixed pixel offsets from
-  a `710px` bottom.
+  a `720px` bottom.
 - Expose the screen in `window.goTo` / the screen array so `viewer.html`
   can jump to it.
 - Test all drag interactions with Chrome DevTools device toolbar in
@@ -91,7 +92,7 @@ If you see any of these in a diff, stop and flag it:
   `createPointerDnd()`.
 - Any `mousemove` / `mouseup` inside a drag or popup handler → replace
   with pointer events.
-- Fixed `width: 1280px; height: 710px` on `.screen` → replace with
+- Fixed `width: 1280px; height: 720px` on `.screen` → replace with
   `inset: 0`.
 - `scaleApp()` computing `left`/`top` offsets to center the canvas →
   R2 is being undone; the canvas must stretch, not center.

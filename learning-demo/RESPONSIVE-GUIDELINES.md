@@ -4,7 +4,7 @@
 > lesson / kiosk-style HTML app) that has to run on **desktop and tablet**
 > (both orientations) without redesigning per breakpoint.
 >
-> These rules exist because the naive "just center a 1280×710 canvas" approach
+> These rules exist because the naive "just center a 1280×720 canvas" approach
 > letterboxes on tablet aspect ratios (top/bottom bars floating with empty white
 > space above and below), and native HTML5 drag-and-drop silently does nothing
 > on touch devices. Both bit us in production — the rules below are the fix.
@@ -13,7 +13,7 @@
 
 ## TL;DR — the four rules
 
-1. **Design at a fixed grid (e.g. 1280×710). Never re-flow per breakpoint.**
+1. **Design at a fixed grid (e.g. 1280×720). Never re-flow per breakpoint.**
 2. **Scale-to-fit without distortion, but stretch the canvas to fill the viewport.**
    Content stays on the design grid; chrome anchored to the canvas edges
    (top bars, bottom bars, corner buttons) reaches the *actual* screen edges.
@@ -30,7 +30,7 @@ If you follow only rule 3 you'll still ship letterboxing. Do all four.
 
 ## Rule 1 — Fix the design grid
 
-Pick a single design size (we use **1280×710**, matching the 720 reference
+Pick a single design size (we use **1280×720**, matching the 720 reference
 engine) and lay every screen out in absolute coordinates against it.
 
 ```css
@@ -43,8 +43,8 @@ html, body {
 #app {
   position: absolute;
   /* Width/height are set dynamically by scaleApp() at runtime.
-     The 1280×710 fallback keeps the page sensible if JS is still booting. */
-  width: 1280px; height: 710px;
+     The 1280×720 fallback keeps the page sensible if JS is still booting. */
+  width: 1280px; height: 720px;
   transform-origin: top left;
   background: #fff;
   overflow: hidden;
@@ -52,7 +52,7 @@ html, body {
 
 .screen {
   position: absolute; inset: 0;
-  /* NO fixed 1280×710 here — .screen fills #app (which fills the viewport).
+  /* NO fixed 1280×720 here — .screen fills #app (which fills the viewport).
      Per-screen content is positioned via absolute layout against the
      1280-wide design grid. */
   display: none; overflow: hidden;
@@ -61,7 +61,7 @@ html, body {
 ```
 
 **Why no fixed size on `.screen`?** Because rule 2 stretches `#app` beyond
-1280×710 on non-16:9 viewports. Anything anchored to `.screen`'s
+1280×720 on non-16:9 viewports. Anything anchored to `.screen`'s
 `bottom: 0` / `top: 0` (persistent action bars, flag/menu buttons, decorative
 bottom strips) must reach the *stretched* edge — otherwise it floats inside
 the design grid with empty space behind it.
@@ -70,21 +70,21 @@ the design grid with empty space behind it.
 
 ## Rule 2 — Scale-to-fit **and extend the canvas**
 
-The trap: `scale = min(w/1280, h/710)` alone will letterbox. You must also
+The trap: `scale = min(w/1280, h/720)` alone will letterbox. You must also
 grow the canvas (in design coordinates) so it fills the viewport.
 
 ```js
 /* ─── Scale App ──────────────────────────────────────────────
-   Scale-to-fit the 1280×710 design while EXTENDING the canvas
+   Scale-to-fit the 1280×720 design while EXTENDING the canvas
    to fill the viewport so chrome anchored to canvas edges
    (flag button at top, bottom bars at bottom) reaches the
    actual screen edges instead of letterboxing.
-   - scale  = min(viewportW/1280, viewportH/710)  → no distortion
+   - scale  = min(viewportW/1280, viewportH/720)  → no distortion
    - canvas = viewport / scale  → in design coords, fills viewport
    ─────────────────────────────────────────────────────────── */
 function scaleApp() {
   const app = document.getElementById('app');
-  const scale   = Math.min(window.innerWidth / 1280, window.innerHeight / 710);
+  const scale   = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
   const canvasW = window.innerWidth  / scale;
   const canvasH = window.innerHeight / scale;
   app.style.width     = canvasW + 'px';
@@ -99,7 +99,7 @@ scaleApp();
 
 **How to think about it:** `scale` guarantees no distortion (uniform x/y).
 `canvasW`/`canvasH` are the viewport size expressed in *design coordinates*
-— always ≥ 1280 in one axis and ≥ 710 in the other. Content that lives on
+— always ≥ 1280 in one axis and ≥ 720 in the other. Content that lives on
 the 1280-wide grid renders identically; only the extra room around it gets
 absorbed into `#app`, which is why edge-anchored chrome reaches the physical
 screen edge.
@@ -108,7 +108,7 @@ screen edge.
 
 | Content type                                | How to position                                           |
 | ------------------------------------------- | --------------------------------------------------------- |
-| Illustrations, hero art, per-screen content | Absolute against the 1280×710 design grid — **do not** shift on resize. |
+| Illustrations, hero art, per-screen content | Absolute against the 1280×720 design grid — **do not** shift on resize. |
 | Persistent top bars, flag/menu buttons      | `top: 0` (or `top: 16` etc.) on `.screen` — reaches viewport top. |
 | Persistent bottom bars, action strips       | `bottom: 0` on `.screen` — reaches viewport bottom.       |
 | Centered overlays / modals                  | `left: 50%; transform: translateX(-50%)` against the stretched canvas — auto-centers on any ratio. |
@@ -243,7 +243,7 @@ iframe `src` and the screen list, and you're done.
 | CSS media queries to re-flow layout at tablet widths  | Fixed design grid + scale-to-fit                           |
 | `draggable="true"` + `ondragstart` / `ondrop` attrs   | `createPointerDnd()` (pointer events)                      |
 | `addEventListener('mousemove', ...)` for drag         | `addEventListener('pointermove', ...)`                     |
-| Fixed 1280×710 on `.screen`                           | `inset: 0` on `.screen`, let `#app` control size           |
+| Fixed 1280×720 on `.screen`                           | `inset: 0` on `.screen`, let `#app` control size           |
 | Scaling with `scale = min(...)` and centering with margins | Scaling with `scale = min(...)` and stretching `#app` |
 | Body background different from canvas background      | Match them — hides subpixel letterbox flashes              |
 | Testing "it works on my laptop"                       | Test via `viewer.html` on all three device presets         |
@@ -256,7 +256,7 @@ iframe `src` and the screen list, and you're done.
 Open `viewer.html` and cycle through every screen at every preset:
 
 - [ ] **Desktop 1920×1080** — content centered on the 1280-wide grid, chrome flush against viewport edges.
-- [ ] **Tablet Landscape 1024×768** — canvas taller than 710 in design coords; bottom bar and top bar reach viewport edges, no empty white strips.
+- [ ] **Tablet Landscape 1024×768** — canvas taller than 720 in design coords; bottom bar and top bar reach viewport edges, no empty white strips.
 - [ ] **Tablet Portrait 768×1024** — canvas much taller; same edge-flush check. Content still centered horizontally.
 - [ ] **Every drag interaction** works with mouse **and** with touch simulation (Chrome DevTools → toggle device toolbar → set to touch).
 - [ ] **Every draggable popup** works with mouse and touch.
@@ -294,4 +294,4 @@ Everything above is live in this repo:
 - Device-preview viewer: [methodica-science-mass-measure-01-01/viewer.html](methodica-science-mass-measure-01-01/viewer.html)
 
 Copy the four pieces, adjust the design grid dimensions if your project
-uses something other than 1280×710, and you're on the paved road.
+uses something other than 1280×720, and you're on the paved road.

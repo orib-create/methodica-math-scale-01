@@ -53,7 +53,7 @@ if [ -n "$mouse_hits" ]; then
          "$mouse_hits"
 fi
 
-# ─── R1/R2: no fixed 1280x710 on .screen ─────────────────────
+# ─── R1/R2: no fixed 1280x720 on .screen ─────────────────────
 css_files=$(echo "$scan_files" | grep -E '\.css$' || true)
 for f in $css_files; do
   # Multiline match: .screen { ... width: 1280px ... }
@@ -70,11 +70,11 @@ js_files=$(echo "$scan_files" | grep -E '\.(js|ts)$' || true)
 for f in $js_files; do
   if grep -qE 'function scaleApp' "$f" 2>/dev/null; then
     # Old-style centering: computing left/top offsets from innerWidth - 1280*scale
-    if grep -qE '(innerWidth\s*-\s*1280\s*\*\s*scale|innerHeight\s*-\s*710\s*\*\s*scale)' "$f" 2>/dev/null; then
+    if grep -qE '(innerWidth\s*-\s*1280\s*\*\s*scale|innerHeight\s*-\s*720\s*\*\s*scale)' "$f" 2>/dev/null; then
       report "scaleApp() centers the canvas with left/top offsets — must stretch instead" \
              "R2 (extend canvas to fill viewport)" \
              "$f" \
-             "  Expected: app.style.width = innerWidth/scale, app.style.left = '0px'"
+             "  Expected: app.style.width = innerWidth/scale (720 grid), app.style.left = '0px'"
     fi
   fi
 done
