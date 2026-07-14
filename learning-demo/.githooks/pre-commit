@@ -30,11 +30,18 @@ report() {
 
 # ─── R3: no HTML5 drag attributes ────────────────────────────
 # Only draggable="true" is a violation — draggable="false" is opting out
-# of HTML5 drag, which is correct.
-drag_pattern='draggable=["'"'"']?true|ondragstart|ondragover|\bondrop\b|ondragend'
+# of HTML5 drag, which is correct. Likewise ondragstart="return false"
+# paired with draggable="false" just disables the browser's native
+# image-drag ghost — it isn't implementing drag-and-drop, so it's fine.
+# Any other ondragstart (a real handler) is still a violation.
+drag_pattern='draggable=["'"'"']?true|ondragover|\bondrop\b|ondragend'
 html5_drag=$(echo "$scan_files" | xargs -r grep -lE "$drag_pattern" 2>/dev/null || true)
+ondragstart_viol=$(echo "$scan_files" | xargs -r grep -lE 'ondragstart' 2>/dev/null | while read -r f; do
+  grep -E 'ondragstart' "$f" 2>/dev/null | grep -qvE 'ondragstart\s*=\s*["'"'"']return false["'"'"']' && echo "$f"
+done || true)
+html5_drag=$(printf '%s\n%s\n' "$html5_drag" "$ondragstart_viol" | grep -v '^$' | sort -u || true)
 if [ -n "$html5_drag" ]; then
-  hits=$(echo "$scan_files" | xargs -r grep -nE "$drag_pattern" 2>/dev/null || true)
+  hits=$(echo "$html5_drag" | xargs -r grep -nE "$drag_pattern|ondragstart" 2>/dev/null | grep -vE 'ondragstart\s*=\s*["'"'"']return false["'"'"']' || true)
   report "HTML5 drag attribute found — use createPointerDnd() instead" \
          "R3 (pointer events only)" \
          "$html5_drag" \
