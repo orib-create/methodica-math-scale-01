@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+# ─────────────────────────────────────────────────────────────
+# Responsive lomda — pre-commit enforcement
+# Blocks commits that violate the four responsive rules.
+# See CLAUDE.md and RESPONSIVE-GUIDELINES.md for the rules.
+#
+# To activate on your machine, run once:
+#   git config core.hooksPath .githooks
+# ─────────────────────────────────────────────────────────────
+
+set -u
+fail=0
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$staged" ] && exit 0
+
+# Filter to files we care about — anything under a lomda project.
+scan_files=$(echo "$staged" | grep -E '\.(html|js|ts|css)$' || true)
+[ -z "$scan_files" ] && exit 0
+
+report() {
+  fail=1
+  echo ""
+  echo "  BLOCKED  $1"
+  echo "  Rule:    $2"
+  echo "  File(s): $3"
+  [ -n "${4:-}" ] && echo "$4"
+  echo "  See:     RESPONSIVE-GUIDELINES.md"
+}
+
+# ─── R3: no HTML5 drag attributes ────────────────────────────
+# Only draggable="true" is a violation — draggable="false" is opting out
+# of HTML5 drag, which is correct.
+drag_pattern='draggable=["'"'"']?true|ondragstart|ondragover|\bondrop\b|ondragend'
+html5_drag=$(echo "$scan_files" | xargs -r grep -lE "$drag_pattern" 2>/dev/null || true)
+if [ -n "$html5_drag" ]; then
+  hits=$(echo "$scan_files" | xargs -r grep -nE "$drag_pattern" 2>/dev/null || true)
+  report "HTML5 drag attribute found — use createPointerDnd() instead" \
+         "R3 (pointer events only)" \
+         "$html5_drag" \
+         "$hits"
+fi
+
+# ─── R3: no mouse events in drag handlers ────────────────────
+# Any addEventListener('mousedown'|'mousemove'|'mouseup') almost always means
+# drag/popup handling and must be a pointer event instead.
+mouse_hits=$(echo "$scan_files" | xargs -r grep -nE "addEventListener\(['\"]mouse(down|move|up)" 2>/dev/null || true)
+if [ -n "$mouse_hits" ]; then
+  mouse_files=$(echo "$mouse_hits" | cut -d: -f1 | sort -u)
+  report "mouse event listener found — use pointer events (pointerdown/move/up)" \
+         "R3 (pointer events only)" \
+         "$mouse_files" \
+         "$mouse_hits"
+fi
+
+# ─── R1/R2: no fixed 1280x710 on .screen ─────────────────────
+css_files=$(echo "$scan_files" | grep -E '\.css$' || true)
+for f in $css_files; do
+  # Multiline match: .screen { ... width: 1280px ... }
+  if awk '/\.screen[[:space:]]*\{/,/\}/' "$f" 2>/dev/null | grep -qE 'width:\s*1280px'; then
+    report "Fixed width:1280px on .screen — must use inset:0 so canvas can stretch" \
+           "R2 (extend canvas to fill viewport)" \
+           "$f" \
+           ""
+  fi
+done
+
+# ─── R2: scaleApp() must stretch canvas, not center it ───────
+js_files=$(echo "$scan_files" | grep -E '\.(js|ts)$' || true)
+for f in $js_files; do
+  if grep -qE 'function scaleApp' "$f" 2>/dev/null; then
+    # Old-style centering: computing left/top offsets from innerWidth - 1280*scale
+    if grep -qE '(innerWidth\s*-\s*1280\s*\*\s*scale|innerHeight\s*-\s*710\s*\*\s*scale)' "$f" 2>/dev/null; then
+      report "scaleApp() centers the canvas with left/top offsets — must stretch instead" \
+             "R2 (extend canvas to fill viewport)" \
+             "$f" \
+             "  Expected: app.style.width = innerWidth/scale, app.style.left = '0px'"
+    fi
+  fi
+done
+
+# ─── Cache-bust reminder when CSS/JS files change ────────────
+# If any css/js changed, ensure index.html includes bumped ?v= param.
+core_changed=$(echo "$scan_files" | grep -E '\.(css|js)$' | grep -v -E '\.githooks/' || true)
+if [ -n "$core_changed" ]; then
+  index_files=$(echo "$staged" | grep -E 'index\.html$' || true)
+  if [ -z "$index_files" ]; then
+    # index.html not touched but css/js changed — likely forgot to bump ?v=
+    echo ""
+    echo "  WARNING  css/js changed but index.html not in this commit."
+    echo "           Remember to bump ?v=N on the <link> and <script> tags,"
+    echo "           or dev browsers will serve a cached copy."
+    echo "           Files: $core_changed"
+    echo ""
+  fi
+fi
+
+if [ "$fail" -ne 0 ]; then
+  echo ""
+  echo "─────────────────────────────────────────────────────────"
+  echo "Commit BLOCKED by responsive lomda rules."
+  echo ""
+  echo "Fix the issues above. If you truly need to bypass"
+  echo "(you almost never do), use:  git commit --no-verify"
+  echo "─────────────────────────────────────────────────────────"
+  exit 1
+fi
+
+exit 0
