@@ -137,7 +137,8 @@ body {
 
 .s0-content {
   position: absolute;
-  left: 235px;
+  left: 50%;
+  transform: translateX(-50%);
   top: 64px;
   width: 810px;
   height: 550.82px;
